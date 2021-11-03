@@ -46,7 +46,7 @@ workflows:
   build-and-test: # Name of the workflow, can change it to better match workflow.
     # Inside the workflow, define the jobs want to run.
     jobs:
-      - build-and-test
+      - build-and-test:
         filters:
           branches:
             only: master
