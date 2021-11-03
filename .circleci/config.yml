@@ -9,7 +9,7 @@ jobs:
       name: node/default
     steps:
       - checkout
-      - node/with-cache:
+      - node:
           steps:
             - run:
                 name: Install Project Dependencies
