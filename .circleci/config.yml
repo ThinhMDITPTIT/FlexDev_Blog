@@ -9,20 +9,20 @@ jobs:
       name: node/default
     steps:
       - checkout
-      - node:
-          steps:
-            - run:
-                name: Install Project Dependencies
-                command: npm install
-            - run:
-                name: Run Lint (Analyse code for potential errors)
-                command: npm run lint
-            - run:
-                name: Run Formatter (Check Format)
-                command: npm run check-format:all
-            - run:
-                name: Build Project
-                command: npm run build
+      - node/install-packages:
+          cache-path: ~/project/node_modules
+          name: Install Project Dependencies
+          override-ci-command: npm install
+          pkg-manager: npm
+      - node/run:
+          name: Run Lint (Analyse code for potential errors)
+          override-ci-command: npm run lint
+      - node/run:
+          name: Run Formatter (Check Format)
+          override-ci-command: npm run check-format:all
+      - node/run:
+          name: Build Project
+          override-ci-command: npm run build
 
 workflows:
   build-and-test: # Name of the workflow, can change it to better match workflow.
