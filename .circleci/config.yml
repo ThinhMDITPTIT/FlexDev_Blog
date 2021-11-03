@@ -26,9 +26,9 @@ jobs:
           # cache-path: ~/project/node_modules
           override-ci-command: npm install
           pkg-manager: npm
-      - run:
-          name: Run Lint (Analyse code for potential errors)
-          command: npm run lint
+      # - run:
+      #     name: Run Lint (Analyse code for potential errors)
+      #     command: npm run lint
       - run:
           name: Formatter (Use Prettier)
           command: npm run format:all
