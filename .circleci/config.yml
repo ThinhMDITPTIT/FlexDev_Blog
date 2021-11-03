@@ -9,18 +9,19 @@ jobs:
       name: node/default
     steps:
       - checkout
-      - run: |
-          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
-          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-      - run: |
-          node -v
-      - run: |
-          [[ -s $HOME/.nvm/nvm.sh ]] && . $HOME/.nvm/nvm.sh  # This loads NVM
-          nvm install v12
-          node -v
-          nvm alias default 12.19.0
-      - run: |
-          node -v
+      - run:
+          name: install node@12.14.1
+          command: |
+            set +e
+            touch $BASH_ENV
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
+            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+            echo nvm install 12.14.1 >> $BASH_ENV
+            echo nvm alias default 12.14.1 >> $BASH_ENV
+      - run:
+          name: verify node version
+          command: node --version
       - node/install-packages:
           cache-path: ~/project/node_modules
           override-ci-command: npm install
