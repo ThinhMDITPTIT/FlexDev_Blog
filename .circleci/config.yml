@@ -23,7 +23,7 @@ jobs:
           name: verify node version
           command: node --version
       - node/install-packages:
-          cache-path: ~/project/node_modules
+          # cache-path: ~/project/node_modules
           override-ci-command: npm install
           pkg-manager: npm
       - run:
