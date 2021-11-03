@@ -38,6 +38,9 @@ jobs:
       - run:
           name: Build Project
           command: npm run build
+      - run:
+          name: Deploy to Firebase
+          command: npm run fire base -- deploy --token "$FIREBASE_TOKEN" --only hosting
 
 workflows:
   build-and-test: # Name of the workflow, can change it to better match workflow.

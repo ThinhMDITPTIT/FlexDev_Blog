@@ -9,8 +9,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "format:all": "prettier --single-quote --check --write 'src/**/*.{ts,html,sass}'",
-    "check-format:all": "prettier --single-quote --check 'src/**/*.{ts,html,sass}'"
+    "format:all": "prettier --single-quote --check --write 'src/**/*.{ts,html,css}'",
+    "check-format:all": "prettier --single-quote --check 'src/**/*.{ts,html,css}'",
+    "firebase": "firebase"
   },
   "private": true,
   "dependencies": {
@@ -36,6 +37,7 @@
     "@angular/compiler-cli": "~12.2.0",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
+    "firebase-tools": "^9.21.0",
     "jasmine-core": "~3.8.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
