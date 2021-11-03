@@ -15,6 +15,7 @@ jobs:
       - run: |
           node -v
       - run: |
+          [[ -s $HOME/.nvm/nvm.sh ]] && . $HOME/.nvm/nvm.sh  # This loads NVM
           nvm install v12
           node -v
           nvm alias default 12.19.0
