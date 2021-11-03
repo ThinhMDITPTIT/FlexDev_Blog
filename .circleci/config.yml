@@ -30,6 +30,9 @@ jobs:
       #     name: Run Lint (Analyse code for potential errors)
       #     command: npm run lint
       - run:
+          name: Formatter (Use Prettier)
+          command: npm run format:all
+      - run:
           name: Run Formatter (Check Format)
           command: npm run check-format:all
       - run:
