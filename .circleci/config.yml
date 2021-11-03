@@ -1,0 +1,52 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.7
+
+jobs:
+  build-and-test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - run:
+          name: install node@14.15.0
+          command: |
+            set +e
+            touch $BASH_ENV
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
+            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+            echo nvm install 14.15.0 >> $BASH_ENV
+            echo nvm alias default 14.15.0 >> $BASH_ENV
+      - run:
+          name: verify node version
+          command: node --version
+      - node/install-packages:
+          cache-path: ~/project/node_modules
+          override-ci-command: npm install
+          pkg-manager: npm
+      - run:
+          name: Run Lint (Analyse code for potential errors)
+          command: npm run lint
+      - run:
+          name: Formatter (Use Prettier)
+          command: npm run format:all
+      - run:
+          name: Run Formatter (Check Format)
+          command: npm run check-format:all
+      - run:
+          name: Build Project
+          command: npm run build
+      - run:
+          name: Deploy to Firebase
+          command: npm run firebase -- deploy --token "$FIREBASE_TOKEN" --only hosting
+
+workflows:
+  build-and-test: # Name of the workflow, can change it to better match workflow.
+    # Inside the workflow, define the jobs want to run.
+    jobs:
+      - build-and-test:
+        filters:
+          branches:
+            only: master
