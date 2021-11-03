@@ -26,9 +26,9 @@ jobs:
           # cache-path: ~/project/node_modules
           override-ci-command: npm install
           pkg-manager: npm
-      # - run:
-      #     name: Run Lint (Analyse code for potential errors)
-      #     command: npm run lint
+      - run:
+          name: Run Lint (Analyse code for potential errors)
+          command: npm run lint
       - run:
           name: Formatter (Use Prettier)
           command: npm run format:all
@@ -40,7 +40,7 @@ jobs:
           command: npm run build
       - run:
           name: Deploy to Firebase
-          command: npm run fire base -- deploy --token "$FIREBASE_TOKEN" --only hosting
+          command: npm run firebase -- deploy --token "$FIREBASE_TOKEN" --only hosting
 
 workflows:
   build-and-test: # Name of the workflow, can change it to better match workflow.
