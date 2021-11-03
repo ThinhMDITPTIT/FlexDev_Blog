@@ -100,14 +100,14 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "projects/flexdev-blog/src/**/*.ts",
-              "projects/flexdev-blog/src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }
     }
   },
-  "defaultProject": "flexdev-blog"
+  "defaultProject": "flexdev-blog",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
