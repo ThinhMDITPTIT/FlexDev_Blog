@@ -7,8 +7,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarModule } from './commons/shared-modules/navbar/navbar.module';
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, NgbModule, NavbarModule],
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    NgbModule,
+    NavbarModule
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
