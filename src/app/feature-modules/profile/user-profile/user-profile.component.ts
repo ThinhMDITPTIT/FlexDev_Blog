@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-profile',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent {
-  constructor() {}
+  defaultUser: string = "ThinhMD";
+  defaultBio: string = "Mô tả..."
+
+  constructor(private readonly router: Router) {}
+
+  toSetting() {
+    this.router.navigate(['settings']);
+  }
 }

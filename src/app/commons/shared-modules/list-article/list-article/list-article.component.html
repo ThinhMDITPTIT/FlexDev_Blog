@@ -1,8 +1,12 @@
 <nav class="cursor__pointer">
-  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <a class="nav-link active">Your Feed</a>
-    <a class="nav-link">Global Feed</a>
-  </div>
+  <ul ngbNav class="nav-tabs">
+    <li ngbNavItem>
+      <a ngbNavLink>Your Feed</a>
+    </li>
+    <li ngbNavItem>
+      <a ngbNavLink>Global Feed</a>
+    </li>
+  </ul>
 </nav>
 <div class="tab-content">
   <div class="row row-cols-3">

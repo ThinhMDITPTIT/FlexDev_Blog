@@ -6,10 +6,12 @@ const routes: Routes = [
   {
     path: '',
     component: UserProfileComponent,
-  },
-  {
-    path: 'favorites',
-    component: UserProfileComponent,
+    children: [
+      {
+        path: 'favorites',
+        component: UserProfileComponent,
+      },
+    ],
   },
 ];
 @NgModule({

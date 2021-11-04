@@ -1,3 +1,23 @@
-<p>
-  signup works!
-</p>
+<div class="w-50 mx-auto text-center">
+  <div class="mt-5 mb-4">
+    <h1 class="text-secondary mb-3">Sign up</h1>
+  </div>
+  <form class="d-flex flex-column">
+    <div class="form-group">
+      <input type="text" class="form-control py-4" placeholder="Username">
+    </div>
+    <div class="form-group">
+      <input type="email" class="form-control py-4" placeholder="Email">
+    </div>
+    <div class="form-group">
+      <input type="password" class="form-control py-4" placeholder="Password">
+    </div>
+    <div class="form-group">
+      <input type="password" class="form-control py-4" placeholder="Confirm your password">
+    </div>
+    <div class="align-self-end pt-3">
+      <a class="text-primary" [routerLink]="['', 'login']" routerLinkActive="router-link-active">I'm already have an account!</a>
+      <button type="button" class="btn btn-primary ml-4 py-3 px-4">Sign up</button>
+    </div>
+  </form>
+</div>
