@@ -1,3 +1,59 @@
-.dropdownBtn {
-  z-index: 9999;
+$bg-color: #8f8e8e;
+$bg-color-second: #f8f9fa;
+$text-color: #ffffff;
+
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:ital,wght@1,500&display=swap');
+
+.banner {
+  background-image: url('../../../../assets/images/banner.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 500px;
+  position: relative;
+
+  a, button {
+    color: $text-color;
+
+    &:hover {
+      color: #000;
+    }
+  }
+
+  nav {
+    background-color: $bg-color;
+    opacity: 0.7;
+  }
+
+  .dropdownBtn {
+    background-color: #000;
+    z-index: 9999;
+
+    button:hover{
+      color: #000000;
+      background-color: #c4c4c4;
+    }
+  }
+
+  .title {
+    font-family: 'Roboto', sans-serif;
+    position: absolute;
+    top: 50%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+  }
+
 }
+
+.hide {
+  display: none;
+}
+
+
+
+
+
+
+
+
