@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class SingleArticleComponent {
   @Input()
-  public articleId: any;
+  public articleObj: any;
 
   constructor() {}
 }

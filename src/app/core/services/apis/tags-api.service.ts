@@ -3,15 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TagsApiService {
-
   baseUrl: string = 'http://localhost:3000/api';
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {}
 
-  getAllTag(): Observable<any> {
+  // no need auth
+  public getTags(): Observable<any> {
     return this.http.get(`${this.baseUrl}/tags`);
   }
 }

@@ -1,11 +1,14 @@
 <div class="card col-12">
   <div class="card-body">
-    <h5 class="card-title">Card title</h5>
+    <h5 class="card-title">{{ articleObj?.title }}</h5>
     <hr />
     <p class="card-text">
-      Some quick example text to build on the card title and make up the bulk of
-      the card's content.
+      {{ articleObj?.description }}
     </p>
-    <a class="btn btn-primary" [routerLink]="[articleId]">Read more</a>
+    <div class="d-flex justify-content-end">
+      <a class="btn btn-primary" [routerLink]="'article/' + articleObj?.slug">
+        Read more
+      </a>
+    </div>
   </div>
 </div>

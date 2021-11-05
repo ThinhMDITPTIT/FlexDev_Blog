@@ -1,29 +1,21 @@
 <nav class="cursor__pointer">
   <ul ngbNav class="nav-tabs">
     <li ngbNavItem>
-      <a ngbNavLink>Your Feed</a>
+      <a ngbNavLink (click)="showFeed()">Your Feed</a>
     </li>
     <li ngbNavItem>
-      <a ngbNavLink>Global Feed</a>
+      <a ngbNavLink (click)="showGlobal()">Global Feed</a>
     </li>
   </ul>
 </nav>
 <div class="tab-content">
-  <div class="row row-cols-3">
-    <div class="col p-3">
-      <app-single-article [articleId]="'article/randomId'"></app-single-article>
-    </div>
-    <div class="col p-3">
-      <app-single-article [articleId]="'article/randomId'"></app-single-article>
-    </div>
-    <div class="col p-3">
-      <app-single-article [articleId]="'article/randomId'"></app-single-article>
-    </div>
-    <div class="col p-3">
-      <app-single-article [articleId]="'article/randomId'"></app-single-article>
-    </div>
-    <div class="col p-3">
-      <app-single-article [articleId]="'article/randomId'"></app-single-article>
+  <div class="p-3 mt-3" *ngIf="currentArticle.length === 0">
+    <p class="h5">No articles are here... yet.</p>
+  </div>
+  <div class="custom__height">
+    <div class="col p-3" *ngFor="let article of currentArticle">
+      <app-single-article [articleObj]="article"></app-single-article>
     </div>
   </div>
+  <app-pagination *ngIf="currentArticle.length !== 0"></app-pagination>
 </div>
