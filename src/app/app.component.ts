@@ -9,10 +9,21 @@ import { ArticlesApiService } from './core/services/apis/articles-api.service';
 export class AppComponent implements OnInit {
   title = 'flexdev-blog';
 
+    article = {
+      title: "How to train your dragon",
+      description: "Ever wonder how?",
+      body: "Very carefully.",
+      tagList: [
+          "dragons",
+          "training"
+      ],
+      comments: []
+  }
+
   constructor(private articleApiService: ArticlesApiService) {}
 
   ngOnInit(){
-    this.articleApiService.getArticleByAuthor('johnjacob').subscribe(data => {
+    this.articleApiService.getFeed().subscribe(data => {
       console.log(data);
 
     })
