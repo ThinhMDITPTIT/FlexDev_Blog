@@ -1,3 +1,41 @@
-<div class="mt-5 bg-info">
-  <p>article-editor-details works!</p>
+<div class="mt-5">
+  <div class="alert alert-info">
+    {{ markdownForm.value | json }}
+  </div>
+  <form [formGroup]="markdownForm">
+    <div class="form-group">
+      <label for="Title">Title</label>
+      <input
+        formControlName="title"
+        class="form-control"
+        id="Title"
+        aria-describedby="Title"
+      />
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <input
+        formControlName="description"
+        class="form-control"
+        id="Description"
+        aria-describedby="Description"
+      />
+    </div>
+    <div class="form-group">
+      <label>Content</label>
+      <app-markdown-editor [control]="contentRawControl"></app-markdown-editor>
+    </div>
+    <div class="form-group">
+      <label>Tag</label>
+      <input
+        formControlName="tags"
+        class="form-control"
+        id="Tags"
+        aria-describedby="Tags"
+      />
+    </div>
+    <div class="d-flex justify-content-end">
+      <button type="button" class="btn btn-success">Post</button>
+    </div>
+  </form>
 </div>

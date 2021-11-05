@@ -1,4 +1,10 @@
 import { Component } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-article-editor-details',
@@ -6,5 +12,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./article-editor-details.component.scss'],
 })
 export class ArticleEditorDetailsComponent {
-  constructor() {}
+  public markdownForm: FormGroup;
+
+  constructor(private _fb: FormBuilder) {
+    this.markdownForm = _fb.group({
+      title: ['', Validators.required],
+      description: [''],
+      content: [''],
+      tags: [],
+    });
+  }
+
+  public get contentRawControl() {
+    return this.markdownForm.controls.content as FormControl;
+  }
 }
