@@ -1,7 +1,6 @@
 <div class="mb-3">
   <div class="border rounded p-3">
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum,
-    perferendis.
+    {{ commentContent }}
   </div>
   <div class="bg-light d-flex justify-content-between border border-top-0">
     <div class="d-flex pl-2">
@@ -17,7 +16,7 @@
         <p class="mb-0 text-dark"><em>Publish Date</em></p>
       </div>
     </div>
-    <a class="btn">
+    <a class="btn" (click)="deleteComment()">
       <span>
         <i class="fas fa-trash"></i>
       </span>

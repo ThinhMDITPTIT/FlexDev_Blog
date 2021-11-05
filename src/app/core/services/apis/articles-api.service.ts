@@ -4,46 +4,47 @@ import { Observable } from 'rxjs';
 import { IArticle } from './../../../commons/models/IArticle';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ArticlesApiService {
-
   baseUrl: string = 'http://localhost:3000/api/articles';
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {}
 
-  //need auth
-  getFeed(): Observable<any>{
+  // need auth
+  getFeed(): Observable<any> {
     return this.http.get(`${this.baseUrl}/feed`);
   }
 
-  //no need auth
+  // no need auth
   getAllArticle(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}`);
   }
 
-  //no need auth
+  // no need auth
+  public getArticleBySlug(slug: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${slug}`);
+  }
+
+  // no need auth
   getArticleByAuthor(author: string): Observable<any> {
-    const params = new HttpParams()
-      .set('author', author)
+    const params = new HttpParams().set('author', author);
     return this.http.get(`${this.baseUrl}`, { params });
   }
 
-  //no need auth
+  // no need auth
   getArticleFavoriteByUsername(username: string): Observable<any> {
-    const params = new HttpParams()
-      .set('favorited', username)
+    const params = new HttpParams().set('favorited', username);
     return this.http.get(`${this.baseUrl}`, { params });
   }
 
-  //no need auth
+  // no need auth
   getArticleByTag(tag: string): Observable<any> {
-    const params = new HttpParams()
-      .set('tag', tag)
+    const params = new HttpParams().set('tag', tag);
     return this.http.get(`${this.baseUrl}`, { params });
   }
 
-  //need auth
+  // need auth
   createArticle(article: any): Observable<any> {
     return this.http.post(`${this.baseUrl}`, article);
   }

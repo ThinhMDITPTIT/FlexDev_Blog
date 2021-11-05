@@ -6,7 +6,8 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarModule } from './commons/shared-modules/navbar/navbar.module';
 import { FooterModule } from './commons/shared-modules/footer/footer.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthItcInterceptor } from './core/interceptors/auth-itc.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,9 +16,16 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     NgbModule,
     NavbarModule,
-    FooterModule
+    FooterModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthItcInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

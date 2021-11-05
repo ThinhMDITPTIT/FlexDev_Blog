@@ -4,16 +4,10 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomepageComponent } from './homepage/homepage.component';
 import { ListArticleModule } from 'src/app/commons/shared-modules/list-article/list-article.module';
 import { TagComponent } from './tag/tag.component';
-import { PaginationModule } from 'src/app/commons/shared-modules/pagination/pagination.module';
 
 @NgModule({
   declarations: [HomepageComponent, TagComponent],
-  imports: [
-    CommonModule,
-    HomeRoutingModule,
-    ListArticleModule,
-    PaginationModule,
-  ],
+  imports: [CommonModule, HomeRoutingModule, ListArticleModule],
   exports: [HomepageComponent],
 })
 export class HomeModule {}
