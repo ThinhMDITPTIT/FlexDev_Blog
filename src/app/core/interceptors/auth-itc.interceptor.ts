@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class AuthItcInterceptor implements HttpInterceptor {
   public fakeToken: string =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODI2MDAzMWQ0ODE0YTgzNGZmZGNmNSIsInVzZXJuYW1lIjoiam9obmphY29iIiwiZXhwIjoxNjQxMjg3OTU1LCJpYXQiOjE2MzYxMDM5NTV9.GM6Vvh_6jXNdIs6qUZtU4UH8aZACgJpraN44_6G77SU';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODI1ZjRhNzY4YmM5YzQ0ZmE0MzIxMiIsInVzZXJuYW1lIjoiam9obmphY29iIiwiZXhwIjoxNjQxMzA3MDAxLCJpYXQiOjE2MzYxMjMwMDF9.YEHmnXyYZcK4nOULv2M_TqxS_oLBckJTzqD--T-ORxQ';
 
   constructor() {}
 
