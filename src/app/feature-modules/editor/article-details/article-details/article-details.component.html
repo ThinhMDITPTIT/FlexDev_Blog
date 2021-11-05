@@ -1,3 +1,84 @@
-<p>
-  article-details works!
-</p>
+<div class="p-3 bg-dark">
+  <p class="h2 text-white">Title</p>
+  <div class="d-flex justify-content-between mt-4">
+    <div class="d-flex">
+      <div>
+        <img
+          src="https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg"
+          alt="avt"
+          width="50"
+          class="rounded-circle"
+        />
+      </div>
+      <div class="text-white ml-3 mr-3">
+        <p class="mb-0">Author</p>
+        <p class="mb-0 text-white-50">Publish Date</p>
+      </div>
+    </div>
+    <div class="d-flex">
+      <a class="btn btn-outline-light mr-3 d-flex align-items-center">
+        <span> <i class="fas fa-plus"></i> &nbsp; Follow </span>
+      </a>
+      <a class="btn btn-outline-success mr-3 d-flex align-items-center">
+        <i class="fas fa-heart"></i> &nbsp; Favorite
+      </a>
+      <a
+        class="btn btn-outline-light mr-3 d-flex align-items-center"
+        (click)="goToEditArticleDetails()"
+      >
+        <i class="fas fa-edit"></i> &nbsp; Edit
+      </a>
+      <a class="btn btn-outline-danger mr-3 d-flex align-items-center">
+        <i class="fas fa-trash"></i> &nbsp; Delete
+      </a>
+    </div>
+  </div>
+</div>
+<div class="p-3 border border-top-0">
+  Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo totam,
+  praesentium consectetur quia in veniam. Exercitationem suscipit, provident
+  animi, labore quod eum ut iste voluptatum explicabo ducimus corrupti. Officiis
+  quas enim laboriosam quibusdam illum saepe harum sit voluptatibus sunt, dicta
+  distinctio expedita. Explicabo velit provident, cupiditate voluptas et eveniet
+  consequatur libero alias ea, ducimus rem temporibus! Nobis minima est
+  dignissimos animi accusantium repellat vero eligendi non blanditiis veniam,
+  laborum iste magni laboriosam corrupti neque, in facilis ea architecto
+  numquam! Libero aspernatur perspiciatis, velit illo deserunt eaque repudiandae
+  atque ipsa cupiditate delectus esse culpa voluptates eos voluptatem hic
+  blanditiis. Blanditiis, pariatur!
+</div>
+<div class="p-3 form-group mb-0">
+  <div class="alert alert-info">
+    {{ commentForm.value | json }}
+  </div>
+  <form [formGroup]="commentForm">
+    <div class="form-group mb-0">
+      <textarea
+        formControlName="content"
+        class="form-control"
+        placeholder="Write a comment..."
+        rows="3"
+      ></textarea>
+    </div>
+    <div
+      class="bg-light border border-top-0 d-flex justify-content-between p-3"
+    >
+      <div class="pl-2">
+        <img
+          src="https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg"
+          alt="avt"
+          width="50"
+          class="rounded-circle"
+        />
+      </div>
+      <a type="button" class="btn btn-success d-flex align-items-center">
+        <span>Comment</span></a
+      >
+    </div>
+  </form>
+</div>
+<div class="p-3">
+  <app-comment-details></app-comment-details>
+  <app-comment-details></app-comment-details>
+  <app-comment-details></app-comment-details>
+</div>

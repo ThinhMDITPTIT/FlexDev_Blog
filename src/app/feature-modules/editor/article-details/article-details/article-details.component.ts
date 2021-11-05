@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-article-details',
@@ -6,5 +8,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./article-details.component.scss'],
 })
 export class ArticleDetailsComponent {
-  constructor() {}
+  public commentForm: FormGroup;
+
+  constructor(private _fb: FormBuilder, private router: Router) {
+    this.commentForm = _fb.group({
+      content: ['', Validators.required],
+    });
+  }
+
+  public goToEditArticleDetails() {
+    this.router.navigate(['editor/demoId']);
+  }
 }
