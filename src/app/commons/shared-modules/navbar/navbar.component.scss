@@ -2,7 +2,6 @@ $bg-color: #8f8e8e;
 $bg-color-second: #f8f9fa;
 $text-color: #ffffff;
 
-@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:ital,wght@1,500&display=swap');
 
 .banner {
@@ -26,7 +25,7 @@ $text-color: #ffffff;
     opacity: 0.7;
   }
 
-  .dropdownBtn {
+  .dropdown-menu {
     background-color: #000;
     min-width: 112% !important;
 
