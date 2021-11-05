@@ -15,8 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     NgbModule,
     NavbarModule,
-    FooterModule,
-    HttpClientModule
+    FooterModule
   ],
   providers: [],
   bootstrap: [AppComponent],
