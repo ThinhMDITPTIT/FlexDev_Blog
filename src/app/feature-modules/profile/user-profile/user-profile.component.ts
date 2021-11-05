@@ -1,10 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.sass'],
+  styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent {
-  constructor() {}
+  defaultUser: string = "ThinhMD";
+  defaultBio: string = "Description...";
+
+  constructor(private readonly router: Router) {}
+
+  toSetting() {
+    this.router.navigate(['settings']);
+  }
 }

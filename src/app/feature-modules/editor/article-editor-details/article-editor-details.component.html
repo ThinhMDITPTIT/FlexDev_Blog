@@ -1,3 +1,86 @@
-<p>
-  article-editor-details works!
-</p>
+<div class="mt-5">
+  <div class="alert alert-info">
+    {{ markdownForm.value | json }}
+  </div>
+  <form [formGroup]="markdownForm" (ngSubmit)="submitForm(markdownForm)">
+    <div class="form-group">
+      <label for="Title">Title <span class="text-danger">*</span></label>
+      <input
+        formControlName="title"
+        class="form-control"
+        id="Title"
+        aria-describedby="Title"
+      />
+    </div>
+    <div>
+      <ul
+        class="text-danger"
+        *ngIf="
+          (markdownForm.get('title')?.invalid &&
+            markdownForm.get('title')?.dirty) ||
+          (markdownForm.get('title')?.invalid &&
+            markdownForm.get('title')?.touched)
+        "
+      >
+        <li *ngIf="markdownForm.get('title')?.hasError('required')">
+          Title is required
+        </li>
+      </ul>
+    </div>
+    <div class="form-group">
+      <label>Description <span class="text-danger">*</span></label>
+      <input
+        formControlName="description"
+        class="form-control"
+        id="Description"
+        aria-describedby="Description"
+      />
+    </div>
+    <div>
+      <ul
+        class="text-danger"
+        *ngIf="
+          (markdownForm.get('description')?.invalid &&
+            markdownForm.get('description')?.dirty) ||
+          (markdownForm.get('description')?.invalid &&
+            markdownForm.get('description')?.touched)
+        "
+      >
+        <li *ngIf="markdownForm.get('description')?.hasError('required')">
+          Description is required
+        </li>
+      </ul>
+    </div>
+    <div class="form-group">
+      <label>Content <span class="text-danger">*</span></label>
+      <app-markdown-editor [control]="contentRawControl"></app-markdown-editor>
+    </div>
+    <div>
+      <ul
+        class="text-danger"
+        *ngIf="
+          (markdownForm.get('content')?.invalid &&
+            markdownForm.get('content')?.dirty) ||
+          (markdownForm.get('content')?.invalid &&
+            markdownForm.get('content')?.touched)
+        "
+      >
+        <li *ngIf="markdownForm.get('content')?.hasError('required')">
+          Content is required
+        </li>
+      </ul>
+    </div>
+    <div class="form-group">
+      <label>Tag</label>
+      <input
+        formControlName="tags"
+        class="form-control"
+        id="Tags"
+        aria-describedby="Tags"
+      />
+    </div>
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn btn-success">Post</button>
+    </div>
+  </form>
+</div>
