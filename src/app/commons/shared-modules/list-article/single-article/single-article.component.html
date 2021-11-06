@@ -1,6 +1,29 @@
 <div class="card col-12">
   <div class="card-body">
-    <h5 class="card-title">{{ articleObj?.title }}</h5>
+    <div class="d-flex justify-content-between">
+      <h5 class="card-title">{{ articleObj?.title }}</h5>
+      <ng-container
+        *ngIf="!articleObj?.favorited; then Favorite; else Unfavorite"
+      ></ng-container>
+      <ng-template #Favorite>
+        <a
+          class="btn btn-outline-success d-flex align-items-center"
+          (click)="favoriteArticle()"
+        >
+          <i class="fas fa-heart"></i> &nbsp; Favorite &nbsp;
+          <span>({{ articleObj?.favoritesCount }})</span>
+        </a>
+      </ng-template>
+      <ng-template #Unfavorite>
+        <a
+          class="btn btn-outline-success d-flex align-items-center"
+          (click)="unFavoriteArticle()"
+        >
+          <i class="fas fa-heart"></i> &nbsp; Unfavorite &nbsp;
+          <span>({{ articleObj?.favoritesCount }})</span>
+        </a>
+      </ng-template>
+    </div>
     <hr />
     <p class="card-text">
       {{ articleObj?.description }}

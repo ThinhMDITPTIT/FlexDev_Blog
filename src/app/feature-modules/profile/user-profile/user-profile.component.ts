@@ -7,10 +7,13 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent {
-  defaultUser: string = "ThinhMD";
-  defaultBio: string = "Description...";
+  defaultUser: string = 'ThinhMD';
+  defaultBio: string = 'Description...';
+  public featuresProfile: string[];
 
-  constructor(private readonly router: Router) {}
+  constructor(private readonly router: Router) {
+    this.featuresProfile = ['My Articles', 'Favorites Articles'];
+  }
 
   toSetting() {
     this.router.navigate(['settings']);

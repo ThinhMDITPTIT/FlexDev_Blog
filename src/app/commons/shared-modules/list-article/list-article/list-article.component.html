@@ -1,10 +1,7 @@
 <nav class="cursor__pointer">
   <ul ngbNav class="nav-tabs">
-    <li ngbNavItem>
-      <a ngbNavLink (click)="showFeed()">Your Feed</a>
-    </li>
-    <li ngbNavItem>
-      <a ngbNavLink (click)="showGlobal()">Global Feed</a>
+    <li ngbNavItem *ngFor="let feature of featuresArr">
+      <a ngbNavLink (click)="showData(feature)">{{ feature }}</a>
     </li>
   </ul>
 </nav>

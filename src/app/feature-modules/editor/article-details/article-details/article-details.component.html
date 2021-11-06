@@ -17,12 +17,12 @@
     </div>
     <div class="d-flex">
       <ng-container
-        *ngIf="!articleObj?.favorited; then Favorite; else Unfavorite"
-      ></ng-container>
-      <ng-container
         *ngIf="!articleObj?.author?.following; then Follow; else Unfollow"
       ></ng-container>
-      <ng-template #Favorite>
+      <ng-container
+        *ngIf="!articleObj?.favorited; then Favorite; else Unfavorite"
+      ></ng-container>
+      <ng-template #Follow>
         <a
           class="btn btn-outline-light mr-3 d-flex align-items-center"
           (click)="followUser()"
@@ -30,7 +30,7 @@
           <span> <i class="fas fa-plus"></i> &nbsp; Follow </span>
         </a>
       </ng-template>
-      <ng-template #Unfavorite>
+      <ng-template #Unfollow>
         <a
           class="btn btn-outline-light mr-3 d-flex align-items-center"
           (click)="unFollowUser()"
@@ -38,7 +38,7 @@
           <span> <i class="fas fa-plus"></i> &nbsp; Unfollow </span>
         </a>
       </ng-template>
-      <ng-template #Follow>
+      <ng-template #Favorite>
         <a
           class="btn btn-outline-success mr-3 d-flex align-items-center"
           (click)="favoriteArticle()"
@@ -46,7 +46,7 @@
           <i class="fas fa-heart"></i> &nbsp; Favorite
         </a>
       </ng-template>
-      <ng-template #Unfollow>
+      <ng-template #Unfavorite>
         <a
           class="btn btn-outline-success mr-3 d-flex align-items-center"
           (click)="unFavoriteArticle()"
