@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IArticle } from 'src/app/commons/models/IArticle';
 import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
 import { CommentsApiService } from 'src/app/core/services/apis/comments-api.service';
 
