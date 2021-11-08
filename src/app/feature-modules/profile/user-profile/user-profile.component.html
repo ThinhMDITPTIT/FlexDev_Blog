@@ -19,8 +19,35 @@
   </div>
 </div>
 <div class="mt-5">
-  <app-list-article
-    [featuresArr]="featuresProfile"
-    [userData]="defaultUser"
-  ></app-list-article>
+  <ul ngbNav class="nav-tabs">
+    <li ngbNavItem>
+      <a
+        ngbNavLink
+        [routerLink]="['', 'profile', defaultUser]"
+        routerLinkActive="router-link-active"
+        >My Articles</a
+      >
+    </li>
+    <li ngbNavItem>
+      <a
+        ngbNavLink
+        [routerLink]="['favorites']"
+        routerLinkActive="router-link-active"
+        >Favorites Articles</a
+      >
+    </li>
+  </ul>
+</div>
+<div class="tab-content">
+  <div class="row row-cols-3">
+    <div class="col p-3">
+      <app-single-article></app-single-article>
+    </div>
+    <div class="col p-3">
+      <app-single-article></app-single-article>
+    </div>
+    <div class="col p-3">
+      <app-single-article></app-single-article>
+    </div>
+  </div>
 </div>

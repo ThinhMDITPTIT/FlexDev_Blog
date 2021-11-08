@@ -9,11 +9,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class UserProfileComponent {
   defaultUser: string = 'ThinhMD';
   defaultBio: string = 'Description...';
-  public featuresProfile: string[];
 
-  constructor(private readonly router: Router) {
-    this.featuresProfile = ['My Articles', 'Favorites Articles'];
-  }
+  constructor(private readonly router: Router) {}
 
   toSetting() {
     this.router.navigate(['settings']);
