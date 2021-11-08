@@ -8,6 +8,7 @@ import { NavbarModule } from './commons/shared-modules/navbar/navbar.module';
 import { FooterModule } from './commons/shared-modules/footer/footer.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthItcInterceptor } from './core/interceptors/auth-itc.interceptor';
+import { NgxWebstorageModule } from 'ngx-webstorage';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,6 +19,7 @@ import { AuthItcInterceptor } from './core/interceptors/auth-itc.interceptor';
     NavbarModule,
     FooterModule,
     HttpClientModule,
+    NgxWebstorageModule.forRoot()
   ],
   providers: [
     {

@@ -12,7 +12,8 @@ $text-color: #ffffff;
   height: 500px;
   position: relative;
 
-  a, button {
+  a,
+  button {
     color: $text-color;
 
     &:hover {
@@ -27,9 +28,8 @@ $text-color: #ffffff;
 
   .dropdown-menu {
     background-color: #000;
-    min-width: 112% !important;
 
-    button:hover{
+    button:hover {
       color: #000000;
       background-color: #c4c4c4;
     }
@@ -45,14 +45,11 @@ $text-color: #ffffff;
 
 }
 
+.dropdown-menu {
+  min-width: 112% !important;
+}
+
 .hide {
   display: none;
 }
-
-
-
-
-
-
-
 

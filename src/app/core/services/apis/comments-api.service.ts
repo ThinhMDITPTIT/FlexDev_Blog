@@ -21,12 +21,7 @@ export class CommentsApiService {
   }
 
   // need auth
-  public deleteCommentToAnArticle(
-    slug: string,
-    commentId: any
-  ): Observable<any> {
-    return this.http.delete(
-      `${this.baseUrl}/articles/${slug}/comments/${commentId}`
-    );
+  public deleteCommentToAnArticle(slug: string, commentId: any): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/articles/${slug}/comments/${commentId}`);
   }
 }
