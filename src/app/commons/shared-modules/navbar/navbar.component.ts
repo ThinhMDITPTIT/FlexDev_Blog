@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationStart, Event as NavigationEnd } from '@angular/router';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +11,7 @@ export class NavbarComponent implements OnInit {
   public defaultUser: string = 'ThinhMD';
   showBanner?: boolean;
 
-  constructor(private readonly router: Router) {}
+  constructor(private readonly router: Router, private readonly localStorage: LocalStorageService) {}
 
   ngOnInit(): void{
     this.displayBanner();
@@ -20,8 +21,9 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['profile', this.defaultUser]);
   }
 
-  toLogout() {
-    console.log('logout');
+  logout() {
+    this.localStorage.clear('token');
+    this.router.navigate(['']);
   }
 
   displayBanner(){

@@ -10,6 +10,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthItcInterceptor } from './core/interceptors/auth-itc.interceptor';
 import { MarkdownModule } from 'ngx-markdown';
 import { SecurityContext } from '@angular/core';
+import { NgxWebstorageModule } from 'ngx-webstorage';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,6 +25,7 @@ import { SecurityContext } from '@angular/core';
     MarkdownModule.forRoot({
       sanitize: SecurityContext.NONE,
     }),
+    NgxWebstorageModule.forRoot(),
   ],
   providers: [
     {
