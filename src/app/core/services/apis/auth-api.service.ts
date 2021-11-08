@@ -18,7 +18,7 @@ export class AuthApiService {
     return this.http.post(`${this.baseUrl}/users`, user);
   }
 
-  login(user: IUserLogin): Observable<any> {
+  login(user: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/users/login`, user);
   }
 

@@ -1,15 +1,28 @@
 <div class="w-50 mx-auto">
   <h1 class="text-center text-secondary my-5">Sign in</h1>
-  <form class="d-flex flex-column">
+  <form class="d-flex flex-column" [formGroup]="signInForm" (ngSubmit)="login()">
     <div class="form-group">
-      <input type="email" class="form-control py-4" placeholder="Email">
+      <input type="email" class="form-control py-4" placeholder="Email" formControlName="email" required
+            [ngClass]="{'error' : email.invalid && email.touched}">
+      <div *ngIf="email.invalid && (email.touched || email.dirty)" class="text-danger">
+        <span *ngIf="email.errors?.required">
+          Email is required!
+        </span>
+      </div>
     </div>
     <div class="form-group">
-      <input type="password" class="form-control py-4" placeholder="Password">
+      <input type="password" class="form-control py-4" placeholder="Password" formControlName="password" required
+            [ngClass]="{'error' : password.invalid && password.touched}">
+      <div *ngIf="password.invalid && (password.touched || password.dirty)" class="text-danger">
+        <span *ngIf="password.errors?.required">
+          Password is required!
+        </span>
+      </div>
     </div>
+    <pre>{{ signInForm.value | json }}</pre>
     <div class="align-self-end pt-4">
       <a [routerLink]="['', 'register']" routerLinkActive="router-link-active">Register an account?</a>
-      <button type="button" class="btn btn-primary ml-4 py-3 px-4">Sign in</button>
+      <button class="btn btn-primary ml-4 py-3 px-4">Sign in</button>
     </div>
   </form>
 </div>

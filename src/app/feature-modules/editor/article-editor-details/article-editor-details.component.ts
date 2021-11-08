@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -83,16 +83,18 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
         },
       };
       if (!this.currentSlug) {
-        this.articlesApiService.createArticle(articleObj).subscribe(() => {
-          console.log('Create new done');
-          this.redirectHome();
-        });
+        this.articlesApiService
+          .createArticle(articleObj)
+          .subscribe((data: any) => {
+            console.log('Create new done');
+            this.redirectArticleDetails(data.article.slug);
+          });
       } else {
         this.articlesApiService
           .updateAticle(this.currentSlug, articleObj)
-          .subscribe(() => {
+          .subscribe((data: any) => {
             console.log('Update done');
-            this.redirectHome();
+            this.redirectArticleDetails(data.article.slug);
           });
       }
     } else {
@@ -106,7 +108,7 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public redirectHome() {
-    this.router.navigate(['']);
+  public redirectArticleDetails(slug: any) {
+    this.router.navigate(['article', slug]);
   }
 }

@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { MarkdownConfiguration } from './markdown-setting';
+import '@github/markdown-toolbar-element';
 
 @Component({
   selector: 'app-markdown-editor',
@@ -9,16 +8,28 @@ import { MarkdownConfiguration } from './markdown-setting';
   styleUrls: ['./markdown-editor.component.scss'],
 })
 export class MarkdownEditorComponent implements OnInit {
+  public controlId: string;
   @Input()
   public control: FormControl;
 
-  public config: AngularEditorConfig = MarkdownConfiguration;
+  @HostBinding('class.focus') isFocus: boolean;
 
   constructor() {
     this.control = new FormControl();
+    this.controlId = '';
+    this.isFocus = false;
   }
 
   ngOnInit(): void {
+    this.controlId = `MarkdownEditor-${Math.floor(100000 * Math.random())}`;
     this.control = this.control ?? new FormControl();
+  }
+
+  public focus() {
+    this.isFocus = true;
+  }
+
+  public blur() {
+    this.isFocus = false;
   }
 }

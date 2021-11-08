@@ -7,8 +7,8 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent {
-  defaultUser: string = "ThinhMD";
-  defaultBio: string = "Description...";
+  defaultUser: string = 'ThinhMD';
+  defaultBio: string = 'Description...';
 
   constructor(private readonly router: Router) {}
 

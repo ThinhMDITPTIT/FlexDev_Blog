@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IArticle } from './../../../commons/models/IArticle';
 
 @Injectable({
   providedIn: 'root',
@@ -63,5 +62,19 @@ export class ArticlesApiService {
 
   unfavoriteArticle(slug: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${slug}/favorite`);
+  }
+
+  getArticleByPage(offetNumber: number, limitNumber: number): Observable<any> {
+    const params = new HttpParams()
+      .set('offset', offetNumber)
+      .set('limit', limitNumber)
+    return this.http.get(`${this.baseUrl}`, { params })
+  }
+
+  getFeedByPage(offetNumber: number, limitNumber: number): Observable<any> {
+    const params = new HttpParams()
+      .set('offset', offetNumber)
+      .set('limit', limitNumber)
+    return this.http.get(`${this.baseUrl}/feed`, { params });
   }
 }
