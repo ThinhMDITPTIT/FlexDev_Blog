@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
 
 @Component({
@@ -10,7 +11,10 @@ export class SingleArticleComponent {
   @Input()
   public articleObj: any;
 
-  constructor(private readonly articlesApiService: ArticlesApiService) {}
+  constructor(
+    private readonly articlesApiService: ArticlesApiService,
+    private readonly router: Router
+  ) {}
 
   public favoriteArticle() {
     this.articlesApiService
@@ -25,5 +29,9 @@ export class SingleArticleComponent {
       .subscribe(() => {
         console.log('Unfavorite Article');
       });
+  }
+
+  public seeArticleDetails(slug: string) {
+    this.router.navigate(['article', slug]);
   }
 }
