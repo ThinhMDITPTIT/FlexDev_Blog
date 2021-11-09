@@ -32,23 +32,23 @@ const routes: Routes = [
   {
     path: Route.EDITOR,
     loadChildren: () =>
-      import('./feature-modules/editor/editor.module').then(
-        (m) => m.EditorModule
-      ),
+      import(
+        './feature-modules/editor/article-editor-details/article-editor-details.module'
+      ).then((m) => m.ArticleEditorDetailsModule),
   },
   {
     path: Route.EDITOR_ID,
     loadChildren: () =>
-      import('./feature-modules/editor/editor.module').then(
-        (m) => m.EditorModule
-      ),
+      import(
+        './feature-modules/editor/article-editor-details/article-editor-details.module'
+      ).then((m) => m.ArticleEditorDetailsModule),
   },
   {
     path: Route.ARTICLE_ID,
     loadChildren: () =>
-      import('./feature-modules/editor/editor.module').then(
-        (m) => m.EditorModule
-      ),
+      import(
+        './feature-modules/editor/article-details/article-details.module'
+      ).then((m) => m.ArticleDetailsModule),
   },
   {
     path: Route.PROFILE_USER,

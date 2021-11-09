@@ -7,7 +7,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "sass"
+          "style": "scss"
         },
         "@schematics/angular:application": {
           "strict": true
@@ -25,21 +25,30 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "sass",
+            "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "src/styles.sass",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/prismjs/themes/prism-okaidia.css",
+              "node_modules/katex/dist/katex.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/marked/lib/marked.js",
+              "node_modules/prismjs/prism.js",
+              "node_modules/prismjs/components/prism-csharp.min.js",
+              "node_modules/prismjs/components/prism-css.min.js",
+              "node_modules/emoji-toolkit/lib/js/joypixels.min.js",
+              "node_modules/katex/dist/katex.min.js"
+            ]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -91,9 +100,9 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "inlineStyleLanguage": "sass",
+            "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.sass"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         },

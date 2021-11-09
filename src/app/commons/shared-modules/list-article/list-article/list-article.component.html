@@ -1,0 +1,18 @@
+<nav class="cursor__pointer">
+  <ul ngbNav class="nav-tabs">
+    <li ngbNavItem *ngFor="let feature of featuresArr">
+      <a ngbNavLink (click)="showData(feature)">{{ feature }}</a>
+    </li>
+  </ul>
+</nav>
+<div class="tab-content">
+  <div class="p-3 mt-3" *ngIf="currentArticle.length === 0">
+    <p class="h5">No articles are here... yet.</p>
+  </div>
+  <div class="custom__height">
+    <div class="col p-3" *ngFor="let article of currentArticle">
+      <app-single-article [articleObj]="article"></app-single-article>
+    </div>
+  </div>
+  <app-pagination *ngIf="currentArticle.length !== 0"></app-pagination>
+</div>

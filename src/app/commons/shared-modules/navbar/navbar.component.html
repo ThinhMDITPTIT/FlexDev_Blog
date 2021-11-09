@@ -1,7 +1,51 @@
-<p>navbar works!</p>
-<a [routerLink]="['login']" routerLinkActive="router-link-active">Login</a>
-<a [routerLink]="['register']" routerLinkActive="router-link-active">SignUp</a>
-<a [routerLink]="['settings']" routerLinkActive="router-link-active">Setting</a>
-<a [routerLink]="['profile', defaultUser]" routerLinkActive="router-link-active"
-  >Profile</a
->
+<div [ngClass]="showBanner ? 'banner' : 'bg-light'">
+  <nav ngbNav class="navbar navbar-expand navbar-light">
+    <a class="navbar-brand" [routerLink]="['']" routerLinkActive="router-link-active">FlexDev</a>
+    <div class="collapse navbar-collapse justify-content-end">
+      <ul class="navbar-nav">
+        <li ngbNavItem>
+          <a ngbNavLink [routerLink]="['']" routerLinkActive="router-link-active">
+            <i class="fas fa-home"></i>
+            Home
+          </a>
+        </li>
+        <li ngbNavItem>
+          <a ngbNavLink [routerLink]="['editor']" routerLinkActive="router-link-active">
+            <i class="fas fa-edit"></i>
+            New Article
+          </a>
+        </li>
+        <li ngbNavItem>
+          <a ngbNavLink [routerLink]="['settings']" routerLinkActive="router-link-active">
+            <i class="fas fa-tools"></i>
+            Setting
+          </a>
+        </li>
+        <li ngbNavItem>
+          <a ngbNavLink [routerLink]="['login']" routerLinkActive="router-link-active">
+            <i class="fas fa-sign-in-alt"></i>
+            Login
+          </a>
+        </li>
+        <li ngbDropdown #drop="ngbDropdown" class="nav-item">
+          <button ngbDropdownAnchor (focus)="drop.open()" class="btn" id="dropdownManual">
+            <img src="https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg"
+                 width="30"
+                 alt="avt"/>
+            Profile
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownManual" class="dropdown-menu">
+            <button ngbDropdownItem (click)="toProfile()">
+              Profile
+            </button>
+            <button ngbDropdownItem (click)="logout()">Logout</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div [ngClass]="showBanner ? 'title' : 'hide'">
+    <h1 class="text-info mb-3">FlexDev Blog</h1>
+    <h4 class="text-info">"The unexamined life is not worth living"</h4>
+  </div>
+</div>

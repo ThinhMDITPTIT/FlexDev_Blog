@@ -1,3 +1,11 @@
-<p>
-  tag works!
-</p>
+<div class="card bg-light col-12 sticky-top">
+  <div class="card-body">
+    <h5 class="card-title">Popular Tags</h5>
+    <hr />
+    <div class="row text-break">
+      <a class="btn btn-info text-uppercase m-1" *ngFor="let tag of tagsList">
+        {{ tag }}
+      </a>
+    </div>
+  </div>
+</div>
