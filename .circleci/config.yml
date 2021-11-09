@@ -47,7 +47,7 @@ workflows:
     # Inside the workflow, define the jobs want to run.
     jobs:
       - build-and-test:
-        filters:
-          branches:
-            only:
-              - master
+          filters:
+            branches:
+              only:
+                - master
