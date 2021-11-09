@@ -1,80 +1,86 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { IArticle } from 'src/app/commons/models/IArticle';
-import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
 
 @Component({
   selector: 'app-list-article',
   templateUrl: './list-article.component.html',
   styleUrls: ['./list-article.component.scss'],
 })
-export class ListArticleComponent implements OnInit {
+export class ListArticleComponent implements OnInit, OnDestroy {
   @Input()
   public featuresArr: string[];
 
-  @Input()
-  public userData: any;
+  public currentFeature: any;
+  public feedArticles: any;
+  public globalArticles: any;
+  public currentArticlesObj: any;
+  public currentArticles: any;
+  public feedArticles_Subscription: Subscription;
+  public globalArticles_Subscription: Subscription;
 
-  public feedArticle: IArticle[];
-  public globalArticle: IArticle[];
-  public myArticle: IArticle[];
-  public favoritedArticle: IArticle[];
-  public currentArticle: IArticle[];
+  public pageSize: number;
+  public maxSize: number;
 
-  constructor(
-    private router: Router,
-    private readonly articlesApiService: ArticlesApiService
-  ) {
+  constructor(private readonly articlesStateService: ArticlesStateService) {
     this.featuresArr = [];
-    this.feedArticle = [];
-    this.globalArticle = [];
-    this.myArticle = [];
-    this.favoritedArticle = [];
-    this.currentArticle = [];
+    this.pageSize = this.articlesStateService.pageSize;
+    this.maxSize = this.articlesStateService.maxSize;
+    this.currentFeature = this.featuresArr[0];
+
+    this.feedArticles_Subscription = new Subscription();
+    this.globalArticles_Subscription = new Subscription();
+
+    this.feedArticles = articlesStateService.feedArticles;
+    this.globalArticles = articlesStateService.globalArticles;
+    this.currentArticlesObj = this.feedArticles;
+    this.initDataForFeature();
   }
 
   ngOnInit() {
-    if (this.featuresArr.includes('Your Feed')) {
-      this.articlesApiService.getFeed().subscribe((data: any) => {
-        console.log(data);
-        this.feedArticle = data.articles;
-        this.currentArticle = this.feedArticle;
+    this.feedArticles_Subscription =
+      this.articlesStateService.feedArticlesEmit.subscribe((data: any) => {
+        this.feedArticles = data;
+        this.currentArticlesObj = this.feedArticles;
+        this.initDataForFeature();
       });
-      this.articlesApiService.getAllArticle().subscribe((data: any) => {
-        console.log(data);
-        this.globalArticle = data.articles;
+    this.globalArticles_Subscription =
+      this.articlesStateService.globalArticlesEmit.subscribe((data: any) => {
+        this.globalArticles = data;
       });
+  }
+
+  ngOnDestroy() {
+    this.feedArticles_Subscription.unsubscribe();
+    this.globalArticles_Subscription.unsubscribe();
+  }
+
+  public getDataByFeature(featureName: string) {
+    if (featureName === 'Your Feed') {
+      this.currentFeature = this.featuresArr[0];
+      this.currentArticlesObj = this.feedArticles;
+      this.initDataForFeature();
     } else {
-      this.articlesApiService
-        .getArticleByAuthor(this.userData)
-        .subscribe((data: any) => {
-          console.log(data);
-          this.myArticle = data.articles;
-          this.currentArticle = this.myArticle;
-        });
+      this.currentFeature = this.featuresArr[1];
+      this.currentArticlesObj = this.globalArticles;
+      this.initDataForFeature();
     }
   }
 
-  public showData(featureName: string) {
-    if (featureName === 'Your Feed') {
-      this.currentArticle = this.feedArticle;
-      return;
-    }
-    if (featureName === 'Global Feed') {
-      this.currentArticle = this.globalArticle;
-      return;
-    }
-    if (featureName === 'My Articles') {
-      // Change this ...
-      this.currentArticle = this.myArticle;
-      this.router.navigate(['', 'profile', this.userData]);
-      return;
-    }
-    if (featureName === 'Favorites Articles') {
-      // Change this ...
-      this.currentArticle = this.favoritedArticle;
-      this.router.navigate(['', 'profile', this.userData, 'favorites']);
-      return;
-    }
+  public initDataForFeature() {
+    this.currentArticles = this.currentArticlesObj?.articles?.slice(
+      0,
+      this.pageSize
+    );
+  }
+
+  public showDataByCurrentPage(page: number) {
+    let start = page === 1 ? 0 : (page - 1) * this.pageSize;
+    let end = page === 1 ? this.pageSize : page * this.pageSize;
+    this.currentArticles = this.currentArticlesObj?.articles?.slice(start, end);
+  }
+
+  public getCurrentPageIndex(event: any) {
+    this.showDataByCurrentPage(Number(event));
   }
 }

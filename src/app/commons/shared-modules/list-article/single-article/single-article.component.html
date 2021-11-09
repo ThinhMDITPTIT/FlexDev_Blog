@@ -29,7 +29,7 @@
       {{ articleObj?.description }}
     </p>
     <div class="d-flex justify-content-end">
-      <a class="btn btn-primary" [routerLink]="'article/' + articleObj?.slug">
+      <a class="btn btn-primary" (click)="seeArticleDetails(articleObj?.slug)">
         Read more
       </a>
     </div>

@@ -11,8 +11,10 @@
         />
       </div>
       <div class="text-white ml-3 mr-3">
-        <p class="mb-0">{{ articleObj?.author?.username }}</p>
-        <p class="mb-0 text-white-50">{{ articleObj?.createdAt }}</p>
+        <p class="mb-0">{{ articleObj?.author?.username | titlecase }}</p>
+        <p class="mb-0 text-white-50">
+          {{ articleObj?.createdAt | date: "longDate" }}
+        </p>
       </div>
     </div>
     <div class="d-flex">
@@ -43,7 +45,8 @@
           class="btn btn-outline-success mr-3 d-flex align-items-center"
           (click)="favoriteArticle()"
         >
-          <i class="fas fa-heart"></i> &nbsp; Favorite
+          <i class="fas fa-heart"></i> &nbsp; Favorite &nbsp;
+          <span>({{ articleObj?.favoritesCount }})</span>
         </a>
       </ng-template>
       <ng-template #Unfavorite>
@@ -51,7 +54,8 @@
           class="btn btn-outline-success mr-3 d-flex align-items-center"
           (click)="unFavoriteArticle()"
         >
-          <i class="fas fa-heart"></i> &nbsp; Unfavorite
+          <i class="fas fa-heart"></i> &nbsp; Unfavorite &nbsp;
+          <span>({{ articleObj?.favoritesCount }})</span>
         </a>
       </ng-template>
       <a
