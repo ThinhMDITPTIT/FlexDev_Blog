@@ -55,7 +55,11 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
             .get('description')
             ?.setValue(this.articleObj.description);
           this.markdownForm.get('content')?.setValue(this.articleObj.body);
-          this.markdownForm.get('tags')?.setValue(this.articleObj.tagList);
+          this.markdownForm
+            .get('tags')
+            ?.setValue(
+              Array(this.articleObj.tagList).join(',').replaceAll(',', ', ')
+            );
           console.log(data);
         });
     }
@@ -79,7 +83,7 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
           title: formValue.value.title,
           description: formValue.value.description,
           body: formValue.value.content,
-          tagList: [formValue.value.tags],
+          tagList: String(formValue.value.tags).trim().split(','),
         },
       };
       if (!this.currentSlug) {

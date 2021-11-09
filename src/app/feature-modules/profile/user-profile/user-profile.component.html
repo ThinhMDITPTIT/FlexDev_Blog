@@ -38,7 +38,7 @@
     </li>
   </ul>
 </div>
-<div class="tab-content">
+<!-- <div class="tab-content">
   <div class="row row-cols-3">
     <div class="col p-3">
       <app-single-article></app-single-article>
@@ -50,4 +50,21 @@
       <app-single-article></app-single-article>
     </div>
   </div>
+</div> -->
+<div class="tab-content">
+  <div class="p-3 mt-3" *ngIf="currentArticlesObj?.articles?.length === 0">
+    <p class="h5">No articles are here... yet.</p>
+  </div>
+  <div class="custom__height">
+    <div class="col p-3" *ngFor="let article of currentArticles">
+      <app-single-article [articleObj]="article"></app-single-article>
+    </div>
+  </div>
+  <app-pagination
+    *ngIf="currentArticlesObj?.articles?.length !== 0"
+    [collectionSize]="currentArticlesObj?.articlesCount"
+    [pageSize]="pageSize"
+    [maxSize]="maxSize"
+    (currentPageClick)="getCurrentPageIndex($event)"
+  ></app-pagination>
 </div>
