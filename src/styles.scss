@@ -3,6 +3,8 @@
 /* Importing Bootstrap SCSS file. */
 @import "~bootstrap/scss/bootstrap";
 
+@import "~ngx-toastr/toastr-bs4-alert";
+
 html,
 body {
   font-family: "Montserrat", sans-serif !important;

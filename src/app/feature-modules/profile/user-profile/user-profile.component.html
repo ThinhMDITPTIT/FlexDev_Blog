@@ -54,6 +54,7 @@
         ngbNavLink
         [routerLink]="['', 'profile', authorProfileObj?.username]"
         routerLinkActive="router-link-active"
+        [routerLinkActiveOptions]="{ exact: true }"
         >My Articles</a
       >
     </li>
@@ -62,6 +63,7 @@
         ngbNavLink
         [routerLink]="['favorites']"
         routerLinkActive="router-link-active"
+        [routerLinkActiveOptions]="{ exact: true }"
         >Favorite Articles</a
       >
     </li>

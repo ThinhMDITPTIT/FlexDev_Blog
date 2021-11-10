@@ -1,6 +1,13 @@
 <div class="container h-100 d-flex flex-column justify-content-between">
   <div>
     <app-navbar></app-navbar>
+    <ngx-spinner
+      name="loading_spinner"
+      [fullScreen]="true"
+      type="square-jelly-box"
+      size="medium"
+    ></ngx-spinner>
+
     <router-outlet></router-outlet>
   </div>
   <app-footer></app-footer>
