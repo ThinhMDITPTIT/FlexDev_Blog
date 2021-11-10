@@ -2,7 +2,10 @@
   <p class="h2 text-white">{{ articleObj?.title }}</p>
   <div class="d-flex justify-content-between mt-4">
     <div class="d-flex">
-      <div>
+      <div
+        class="cursor__pointer"
+        (click)="seeAuthorProfile(articleObj?.author?.username)"
+      >
         <img
           src="https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg"
           alt="avt"
@@ -11,7 +14,12 @@
         />
       </div>
       <div class="text-white ml-3 mr-3">
-        <p class="mb-0">{{ articleObj?.author?.username | titlecase }}</p>
+        <p
+          class="mb-0 cursor__pointer"
+          (click)="seeAuthorProfile(articleObj?.author?.username)"
+        >
+          {{ articleObj?.author?.username | titlecase }}
+        </p>
         <p class="mb-0 text-white-50">
           {{ articleObj?.createdAt | date: "longDate" }}
         </p>
@@ -89,9 +97,11 @@
       <ul
         class="text-danger"
         *ngIf="
-          (commentForm.get('content')?.invalid &&
+          (commentContentError &&
+            commentForm.get('content')?.invalid &&
             commentForm.get('content')?.dirty) ||
-          (commentForm.get('content')?.invalid &&
+          (commentContentError &&
+            commentForm.get('content')?.invalid &&
             commentForm.get('content')?.touched)
         "
       >

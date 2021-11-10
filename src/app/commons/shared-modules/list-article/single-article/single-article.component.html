@@ -1,7 +1,37 @@
-<div class="card col-12">
+<div class="shadow card col-12 border-0">
   <div class="card-body">
-    <div class="d-flex justify-content-between">
+    <div class="row bg-dark p-3">
+      <div
+        class="cursor__pointer"
+        (click)="seeAuthorProfile(articleObj?.author?.username)"
+      >
+        <img
+          src="https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg"
+          alt="avt"
+          width="50"
+          class="rounded-circle"
+        />
+      </div>
+      <div class="text-white ml-3 mr-3">
+        <p
+          class="mb-0 cursor__pointer"
+          (click)="seeAuthorProfile(articleObj?.author?.username)"
+        >
+          {{ articleObj?.author?.username | titlecase }}
+        </p>
+        <p class="mb-0 text-white-50">
+          {{ articleObj?.createdAt | date: "longDate" }}
+        </p>
+      </div>
+    </div>
+    <div class="mt-3">
       <h5 class="card-title">{{ articleObj?.title }}</h5>
+      <p class="card-text">
+        <em>{{ articleObj?.description }}</em>
+      </p>
+    </div>
+    <hr />
+    <div class="d-flex justify-content-between mt-3">
       <ng-container
         *ngIf="!articleObj?.favorited; then Favorite; else Unfavorite"
       ></ng-container>
@@ -23,15 +53,11 @@
           <span>({{ articleObj?.favoritesCount }})</span>
         </a>
       </ng-template>
-    </div>
-    <hr />
-    <p class="card-text">
-      {{ articleObj?.description }}
-    </p>
-    <div class="d-flex justify-content-end">
+      <!-- <div class="d-flex justify-content-end"> -->
       <a class="btn btn-primary" (click)="seeArticleDetails(articleObj?.slug)">
         Read more
       </a>
+      <!-- </div> -->
     </div>
   </div>
 </div>

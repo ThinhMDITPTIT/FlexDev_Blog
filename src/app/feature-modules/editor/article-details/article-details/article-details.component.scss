@@ -1,15 +1,11 @@
-input.ng-invalid.ng-dirty {
-  border: red 1px solid;
-}
+// textarea.ng-invalid.ng-dirty {
+//   border: red 1px solid;
+// }
 
-input.ng-invalid.ng-touched {
-  border: red 1px solid;
-}
+// textarea.ng-invalid.ng-touched {
+//   border: red 1px solid;
+// }
 
-textarea.ng-invalid.ng-dirty {
-  border: red 1px solid;
-}
-
-textarea.ng-invalid.ng-touched {
-  border: red 1px solid;
+.cursor__pointer {
+  cursor: pointer;
 }
