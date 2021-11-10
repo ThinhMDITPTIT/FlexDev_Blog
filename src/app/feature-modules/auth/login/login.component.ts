@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthApiService } from 'src/app/core/services/apis/auth-api.service';
-import { LocalStorageService } from 'ngx-webstorage';
+import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
-import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +12,7 @@ import { AuthStateService } from 'src/app/core/services/states/auth-state.servic
 export class LoginComponent {
   signInForm = this._fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
   constructor(
@@ -32,16 +31,19 @@ export class LoginComponent {
   }
 
   login() {
-    this.authApiService
-      .login({
-        user: {
-          email: this.email.value,
-          password: this.password.value,
-        }
-      })
-      .subscribe((res) => {
-        this.localStorage.store('token', res.user.token);
-        this.router.navigate(['']);
-      });
+    if(!this.signInForm.invalid){
+      this.authApiService
+        .login({
+          user: {
+            email: this.email.value,
+            password: this.password.value,
+          }
+        })
+        .subscribe((res) => {
+          this.localStorage.store('token', res.user.token);
+          this.router.navigate(['']);
+        });
+    }
+
   }
 }
