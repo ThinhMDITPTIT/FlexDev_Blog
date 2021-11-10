@@ -10,23 +10,20 @@ import { LocalStorageService } from 'ngx-webstorage';
 
 @Injectable()
 export class AuthItcInterceptor implements HttpInterceptor {
-
   constructor(private readonly localStorage: LocalStorageService) {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log(request.url);
-
-    if(!request.url.includes('login')){
-
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
+    if (!request.url.includes('login')) {
       let token = this.localStorage.retrieve('token');
-      if(token){
+      if (token) {
         request = request.clone({
-          headers: request.headers.set('Authorization', `Bearer ${token}`)
+          headers: request.headers.set('Authorization', `Bearer ${token}`),
         });
       }
     }
-
-
 
     return next.handle(request);
   }

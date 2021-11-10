@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationStart, Event as NavigationEnd } from '@angular/router';
+import {
+  Router,
+  NavigationStart,
+  Event as NavigationEnd,
+} from '@angular/router';
 import { LocalStorageService } from 'ngx-webstorage';
+import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 
 @Component({
   selector: 'app-navbar',
@@ -8,12 +13,20 @@ import { LocalStorageService } from 'ngx-webstorage';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-  public defaultUser: string = 'ThinhMD';
+  public defaultUser: string = 'huyda';
   showBanner?: boolean;
 
-  constructor(private readonly router: Router, private readonly localStorage: LocalStorageService) {}
+  constructor(
+    private readonly router: Router,
+    private readonly localStorage: LocalStorageService,
+    private readonly authStateService: AuthStateService
+  ) {
+    this.authStateService.currentUserProfileEmit.subscribe((data: any) => {
+      this.defaultUser = data.user.username;
+    });
+  }
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.displayBanner();
   }
 
@@ -26,11 +39,11 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['']);
   }
 
-  displayBanner(){
+  displayBanner() {
     this.router.events.subscribe((event: NavigationEnd) => {
-      if(event instanceof NavigationStart){
+      if (event instanceof NavigationStart) {
         this.showBanner = event.url === '/' ? true : false;
       }
-    })
+    });
   }
 }
