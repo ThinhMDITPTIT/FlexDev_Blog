@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ValidatePassword } from './../../../commons/validators/validate-password';
 import { AuthApiService } from 'src/app/core/services/apis/auth-api.service';
-import { concatMap } from 'rxjs/operators'
+import { concatMap, map, switchMap } from 'rxjs/operators'
 import { LocalStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -41,6 +41,8 @@ export class SignupComponent {
   constructor(
     private readonly _fb: FormBuilder,
     private readonly authApiService: AuthApiService,
+    private readonly route: Router,
+    private readonly localStorage: LocalStorageService,
     private readonly modalService: NgbModal
   ) {}
 
@@ -67,13 +69,18 @@ export class SignupComponent {
           email: this.email.value,
           password: this.password.value,
         }
-      })
-      .subscribe(res => {
-        // console.log(res);
+      }).subscribe(res => {
+        console.log(res);
 
-      }, err => {
-        this.errorMessage = err.error.errors;
-
+        this.authApiService.login({
+          user: {
+            email: res.user.email,
+            password: this.password.value
+          }
+        }).subscribe(res => {
+          this.localStorage.store('token', res.user.token);
+          this.route.navigate(['']);
+        })
       })
     // if(this.signUpForm.valid){
     //   this.modalService.open(ModalNotificationComponent)
