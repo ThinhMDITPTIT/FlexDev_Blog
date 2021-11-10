@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
 
 @Component({
   selector: 'app-comment-details',
@@ -9,9 +10,10 @@ export class CommentDetailsComponent {
   @Input()
   public commentContent: any;
 
-  constructor() {}
+  constructor(private readonly articlesStateService: ArticlesStateService) {}
 
   public deleteComment() {
     console.log('Delete comment');
+    this.articlesStateService.dataChangedEmit.emit();
   }
 }
