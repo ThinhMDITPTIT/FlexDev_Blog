@@ -4,6 +4,7 @@ import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
 import { CommentsApiService } from 'src/app/core/services/apis/comments-api.service';
+import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
 
 @Component({
   selector: 'app-article-details',
@@ -24,7 +25,8 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private readonly articlesApiService: ArticlesApiService,
-    private readonly commentsApiService: CommentsApiService
+    private readonly commentsApiService: CommentsApiService,
+    private readonly articlesStateService: ArticlesStateService
   ) {
     this.commentForm = this._fb.group({
       content: ['', Validators.required],
@@ -87,6 +89,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     console.log('delete');
 
     this.articlesApiService.deleteArticle(this.currentSlug).subscribe(() => {
+      this.articlesStateService.dataChangedEmit.emit();
       this.redirectHome();
     });
   }
@@ -111,6 +114,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
         .addCommentToAnArticle(this.currentSlug, commentObj)
         .subscribe((data: any) => {
           console.log(data);
+          this.articlesStateService.dataChangedEmit.emit();
         });
     } else {
       console.log('Have error');
