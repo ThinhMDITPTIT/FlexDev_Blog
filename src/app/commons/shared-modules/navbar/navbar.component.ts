@@ -8,7 +8,7 @@ import { LocalStorageService } from 'ngx-webstorage';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-  public defaultUser: string = 'ThinhMD';
+  public defaultUser: string = 'huyda';
   showBanner?: boolean;
 
   constructor(private readonly router: Router, private readonly localStorage: LocalStorageService) {}

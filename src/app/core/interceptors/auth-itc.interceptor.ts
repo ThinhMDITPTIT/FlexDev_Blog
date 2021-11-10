@@ -14,10 +14,7 @@ export class AuthItcInterceptor implements HttpInterceptor {
   constructor(private readonly localStorage: LocalStorageService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log(request.url);
-
     if(!request.url.includes('login')){
-
       let token = this.localStorage.retrieve('token');
       if(token){
         request = request.clone({
@@ -25,8 +22,6 @@ export class AuthItcInterceptor implements HttpInterceptor {
         });
       }
     }
-
-
 
     return next.handle(request);
   }
