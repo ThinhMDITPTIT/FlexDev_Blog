@@ -11,7 +11,6 @@ import { AuthStateService } from 'src/app/core/services/states/auth-state.servic
   styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent {
-
   submitted: boolean = false;
 
   isWhitespace = /^[\S]*$/;
@@ -40,23 +39,22 @@ export class SignupComponent {
     private readonly _fb: FormBuilder,
     private readonly authStateService: AuthStateService,
     private readonly route: Router,
-    private readonly modalService: NgbModal
   ) {}
 
   get username() {
-    return this.signUpForm.get('username') as FormControl
+    return this.signUpForm.get('username') as FormControl;
   }
 
   get email() {
-    return this.signUpForm.get('email') as FormControl
+    return this.signUpForm.get('email') as FormControl;
   }
 
   get password() {
-    return this.signUpForm.get('password') as FormControl
+    return this.signUpForm.get('password') as FormControl;
   }
 
   get confirmPassword() {
-    return this.signUpForm.get('confirmPassword') as FormControl
+    return this.signUpForm.get('confirmPassword') as FormControl;
   }
 
   register() {

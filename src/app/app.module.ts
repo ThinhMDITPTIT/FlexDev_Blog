@@ -11,6 +11,9 @@ import { AuthItcInterceptor } from './core/interceptors/auth-itc.interceptor';
 import { MarkdownModule } from 'ngx-markdown';
 import { SecurityContext } from '@angular/core';
 import { NgxWebstorageModule } from 'ngx-webstorage';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +29,14 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
       sanitize: SecurityContext.NONE,
     }),
     NgxWebstorageModule.forRoot(),
+    NgxSpinnerModule,
+    ToastrModule.forRoot({
+      timeOut: 3500,
+      positionClass: 'toast-top-right',
+      tapToDismiss: true,
+      newestOnTop: true,
+    }),
+    BrowserAnimationsModule,
   ],
   providers: [
     {

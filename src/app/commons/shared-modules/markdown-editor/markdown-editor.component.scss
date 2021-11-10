@@ -56,5 +56,10 @@ markdown-toolbar {
 
 .markdown__preview {
   overflow: auto;
+  min-height: 20vh;
   max-height: 50vh;
+}
+
+.dipslay__none {
+  display: none;
 }

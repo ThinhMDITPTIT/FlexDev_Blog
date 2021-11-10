@@ -26,12 +26,16 @@
       </div>
     </div>
     <div class="d-flex">
-      <ng-container
-        *ngIf="!articleObj?.author?.following; then Follow; else Unfollow"
-      ></ng-container>
-      <ng-container
-        *ngIf="!articleObj?.favorited; then Favorite; else Unfavorite"
-      ></ng-container>
+      <ng-container *ngIf="currentUser !== articleObj?.author?.username">
+        <ng-container
+          *ngIf="!articleObj?.author?.following; then Follow; else Unfollow"
+        ></ng-container>
+      </ng-container>
+      <ng-container *ngIf="currentUser !== articleObj?.author?.username">
+        <ng-container
+          *ngIf="!articleObj?.favorited; then Favorite; else Unfavorite"
+        ></ng-container>
+      </ng-container>
       <ng-template #Follow>
         <a
           class="btn btn-outline-light mr-3 d-flex align-items-center"
@@ -67,12 +71,14 @@
         </a>
       </ng-template>
       <a
+        *ngIf="currentUser === articleObj?.author?.username"
         class="btn btn-outline-light mr-3 d-flex align-items-center"
         (click)="goToEditArticleDetails()"
       >
         <i class="fas fa-edit"></i> &nbsp; Edit
       </a>
       <a
+        *ngIf="currentUser === articleObj?.author?.username"
         class="btn btn-outline-danger mr-3 d-flex align-items-center"
         (click)="deleteArticle()"
       >
@@ -84,14 +90,16 @@
 <div class="p-3 border border-top-0">
   Description: {{ articleObj?.description }}
 </div>
+<div class="p-3 border border-top-0">
+  <p class="card-text">
+    Tags: {{ articleObj?.tagList.join(",").replaceAll(",", ", ") || "" }}
+  </p>
+</div>
 <div
   class="p-3 border border-top-0"
   [innerHTML]="articleObj?.body | markdown"
 ></div>
-<div class="p-3 form-group mb-0">
-  <div class="alert alert-info">
-    {{ commentForm.value | json }}
-  </div>
+<div class="pl-3 py-3 form-group mb-0">
   <form [formGroup]="commentForm" (ngSubmit)="submitForm(commentForm)">
     <div>
       <ul

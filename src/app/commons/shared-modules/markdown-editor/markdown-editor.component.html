@@ -1,4 +1,4 @@
-<div class="markdown__editor-custom">
+<div class="markdown__editor-custom" [class.dipslay__none]="showPreview">
   <markdown-toolbar [attr.for]="controlId" class="bg-light pb-3">
     <md-bold title="Bold" aria-label="Bold">
       <button type="button" class="btn">
@@ -217,11 +217,11 @@
   ></textarea>
 </div>
 
-<div class="mt-3">
-  <label class="h6">
+<div [class.dipslay__none]="!showPreview">
+  <!-- <label class="h6">
     Content Preview
     <span class="text-black-50"><em>(Read only)</em></span></label
-  >
+  > -->
   <div class="border rounded p-3 markdown__preview">
     <markdown [data]="control.value"></markdown>
   </div>

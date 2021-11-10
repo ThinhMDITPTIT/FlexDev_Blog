@@ -48,8 +48,7 @@ export class UserProfileComponent implements OnDestroy {
     this.favoritedArticles_Subscription = new Subscription();
 
     this.currentUser =
-      authStateService.currentUserProfile?.user?.username || '';
-    console.log(this.currentUser);
+    this.authStateService.currentUserProfile?.user?.username || '';
 
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {

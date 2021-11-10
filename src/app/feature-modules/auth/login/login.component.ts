@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthApiService } from 'src/app/core/services/apis/auth-api.service';
 import { LocalStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
+import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-
   submitted: boolean = false;
 
   signInForm = this._fb.group({
@@ -21,6 +21,7 @@ export class LoginComponent {
   constructor(
     private readonly _fb: FormBuilder,
     private readonly authApiService: AuthApiService,
+    private readonly authStateService: AuthStateService,
     private readonly localStorage: LocalStorageService,
     private readonly router: Router
   ) {}
@@ -34,19 +35,20 @@ export class LoginComponent {
   }
 
   login() {
-    if(!this.signInForm.invalid){
+    if (!this.signInForm.invalid) {
       this.authApiService
         .login({
           user: {
             email: this.email.value,
             password: this.password.value,
-          }
+          },
         })
         .subscribe((res) => {
           this.localStorage.store('token', res.user.token);
+          this.authStateService.currentUserChangeEmit.emit();
           this.router.navigate(['']);
         });
-      }
+    }
     this.submitted = true;
   }
 }

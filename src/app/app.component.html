@@ -4,6 +4,12 @@
     <div class="container">
       <router-outlet></router-outlet>
     </div>
+    <ngx-spinner
+      name="loading_spinner"
+      [fullScreen]="true"
+      type="square-jelly-box"
+      size="medium"
+    ></ngx-spinner>
   </div>
   <app-footer></app-footer>
 </div>

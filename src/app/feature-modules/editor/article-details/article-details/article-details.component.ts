@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
 import { CommentsApiService } from 'src/app/core/services/apis/comments-api.service';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
+import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 
 @Component({
   selector: 'app-article-details',
@@ -12,6 +13,8 @@ import { ArticlesStateService } from 'src/app/core/services/states/articles-stat
   styleUrls: ['./article-details.component.scss'],
 })
 export class ArticleDetailsComponent implements OnInit, OnDestroy {
+  public currentUser: string;
+
   public commentForm: FormGroup;
   public commentContentError: boolean;
   private currentSlug: any;
@@ -26,8 +29,12 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private readonly articlesApiService: ArticlesApiService,
     private readonly commentsApiService: CommentsApiService,
+    private readonly authStateService: AuthStateService,
     private readonly articlesStateService: ArticlesStateService
   ) {
+    this.currentUser =
+      this.authStateService.currentUserProfile?.user?.username || '';
+
     this.commentForm = this._fb.group({
       content: ['', Validators.required],
     });
@@ -46,13 +53,11 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.articleSubscription = this.articlesApiService
       .getArticleBySlug(this.currentSlug)
       .subscribe((data: any) => {
-        // console.log(data.article);
         this.articleObj = data.article;
       });
     this.commentsSubscription = this.commentsApiService
       .getCommentsFromAnArticle(this.currentSlug)
       .subscribe((data: any) => {
-        // console.log(data.comments);
         this.articleComments = data.comments;
       });
   }
@@ -104,7 +109,6 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
 
   public submitForm(formValue: FormGroup) {
     if (formValue.status === 'VALID') {
-      console.log(formValue);
       let commentObj = {
         comment: {
           body: formValue.value.content,
@@ -113,11 +117,9 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
       this.commentsApiService
         .addCommentToAnArticle(this.currentSlug, commentObj)
         .subscribe((data: any) => {
-          console.log(data);
           this.articlesStateService.dataChangedEmit.emit();
         });
     } else {
-      console.log('Have error');
       this.commentContentError = true;
       let formControlArr = formValue.controls;
       Object.keys(formControlArr).forEach((control) => {
