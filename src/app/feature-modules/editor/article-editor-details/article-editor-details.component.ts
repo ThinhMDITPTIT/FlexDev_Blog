@@ -86,7 +86,6 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
 
   public submitForm(formValue: FormGroup) {
     if (formValue.status === 'VALID') {
-      console.log(formValue);
       let articleObj = {
         article: {
           title: formValue.value.title,
@@ -102,7 +101,6 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
           .subscribe((data: any) => {
             this.articlesStateService.dataChangedEmit.emit();
             setTimeout(() => {
-              console.log('Create new done');
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Create new completed!');
@@ -115,7 +113,6 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
           .subscribe((data: any) => {
             this.articlesStateService.dataChangedEmit.emit();
             setTimeout(() => {
-              console.log('Update done');
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Update completed!');
@@ -123,7 +120,6 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
           });
       }
     } else {
-      console.log('Have error');
       this.toastr.error('Error!', 'Something wrong!');
       let formControlArr = formValue.controls;
       Object.keys(formControlArr).forEach((control) => {

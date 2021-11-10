@@ -1,7 +1,4 @@
 <div class="mt-5">
-  <div class="alert alert-info">
-    {{ markdownForm.value | json }}
-  </div>
   <form [formGroup]="markdownForm" (ngSubmit)="submitForm(markdownForm)">
     <div class="form-group">
       <label for="Title">Title <span class="text-danger">*</span></label>

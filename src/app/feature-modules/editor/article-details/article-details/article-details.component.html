@@ -100,9 +100,6 @@
   [innerHTML]="articleObj?.body | markdown"
 ></div>
 <div class="pl-3 py-3 form-group mb-0">
-  <div class="alert alert-info">
-    {{ commentForm.value | json }}
-  </div>
   <form [formGroup]="commentForm" (ngSubmit)="submitForm(commentForm)">
     <div>
       <ul

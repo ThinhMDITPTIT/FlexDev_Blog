@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthApiService } from 'src/app/core/services/apis/auth-api.service';
-import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
+import { LocalStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 

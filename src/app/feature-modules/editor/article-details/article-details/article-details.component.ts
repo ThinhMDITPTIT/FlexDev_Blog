@@ -53,13 +53,11 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.articleSubscription = this.articlesApiService
       .getArticleBySlug(this.currentSlug)
       .subscribe((data: any) => {
-        // console.log(data.article);
         this.articleObj = data.article;
       });
     this.commentsSubscription = this.commentsApiService
       .getCommentsFromAnArticle(this.currentSlug)
       .subscribe((data: any) => {
-        // console.log(data.comments);
         this.articleComments = data.comments;
       });
   }
@@ -111,7 +109,6 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
 
   public submitForm(formValue: FormGroup) {
     if (formValue.status === 'VALID') {
-      console.log(formValue);
       let commentObj = {
         comment: {
           body: formValue.value.content,
@@ -120,11 +117,9 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
       this.commentsApiService
         .addCommentToAnArticle(this.currentSlug, commentObj)
         .subscribe((data: any) => {
-          console.log(data);
           this.articlesStateService.dataChangedEmit.emit();
         });
     } else {
-      console.log('Have error');
       this.commentContentError = true;
       let formControlArr = formValue.controls;
       Object.keys(formControlArr).forEach((control) => {
