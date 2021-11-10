@@ -4,8 +4,7 @@
   </div>
   <form class="d-flex flex-column" [formGroup]="signUpForm" (ngSubmit)="register()">
     <div class="form-group">
-      <input type="text" class="form-control py-4" placeholder="Username" formControlName="username"
-            [ngClass]="{'error': submitted || username.invalid && (username.touched || username.dirty)} || {'success': username.valid}"/>
+      <input type="text" class="form-control py-4" placeholder="Username" formControlName="username" />
       <div *ngIf="submitted || username.invalid && (username.touched || username.dirty)" class="text-danger">
         <small *ngIf="username.errors?.required">
           Username is required!
@@ -13,14 +12,13 @@
         <small *ngIf="username.errors?.minlength">
           Username must be at least 6 characters!
         </small>
-        <small *ngIf="username.hasError('userAlreadyTaken')">
-          {{ errorMessage.username }}
+        <small *ngIf="username.hasError('usernameAlreadyTaken') && username.dirty">
+          Username is already taken!
         </small>
       </div>
     </div>
     <div class="form-group">
-      <input type="email" class="form-control py-4" placeholder="Email" formControlName="email"
-            [ngClass]="{'error': submitted || email.invalid && (email.touched || email.dirty)} || {'success': email.valid}"/>
+      <input type="email" class="form-control py-4" placeholder="Email" formControlName="email" />
       <div *ngIf="submitted || email.invalid && (email.touched || email.dirty)" class="text-danger">
         <small *ngIf="email.errors?.required">
           Email is required!
@@ -28,16 +26,19 @@
         <small *ngIf="email.errors?.email">
           Please enter the correct email!
         </small>
+        <small *ngIf="email.hasError('emailAlreadyTaken')">
+          Email is already taken!
+        </small>
       </div>
     </div>
     <div class="form-group">
-      <input type="password" class="form-control py-4" placeholder="Password" formControlName="password" required
-            [ngClass]="{'error': submitted || password.invalid && (password.touched || password.dirty)} || {'success': password.valid}"/>
-      <div *ngIf="submitted || password.invalid && (password.touched || password.dirty)" class="d-flex flex-column text-danger">
-        <small *ngIf="password.errors?.required">
+      <input type="password" class="form-control py-4" placeholder="Password" formControlName="password" />
+      <div *ngIf="submitted || password.invalid && (password.touched || password.dirty)"
+        class="d-flex flex-column text-danger">
+        <small *ngIf="password.hasError('required')">
           Password is required!
         </small>
-        <small *ngIf="password.errors?.minlength">
+        <small *ngIf="password.hasError('minlength')">
           Password must be at least 8 characters!
         </small>
         <small *ngIf="password.hasError('hasWhitespace')">
@@ -52,9 +53,10 @@
       </div>
     </div>
     <div class="form-group">
-      <input type="password" class="form-control py-4" placeholder="Confirm your password" formControlName="confirmPassword"
-            [ngClass]="{'error': submitted || confirmPassword.invalid && (confirmPassword.touched || confirmPassword.dirty)} || {'success': confirmPassword.valid}"/>
-      <div *ngIf="submitted || confirmPassword.invalid && (confirmPassword.touched || confirmPassword.dirty)" class="text-danger">
+      <input type="password" class="form-control py-4" placeholder="Confirm your password"
+        formControlName="confirmPassword" />
+      <div *ngIf="submitted || confirmPassword.invalid && (confirmPassword.touched || confirmPassword.dirty)"
+        class="text-danger">
         <small *ngIf="confirmPassword.errors?.required">
           Confirm password is required!
         </small>
@@ -64,9 +66,9 @@
       </div>
     </div>
     <div class="align-self-end pt-3">
-      <a class="text-primary" [routerLink]="['', 'login']" routerLinkActive="router-link-active">I'm already have an account!</a>
+      <a class="text-primary" [routerLink]="['', 'login']" routerLinkActive="router-link-active">I'm already have an
+        account!</a>
       <button class="btn btn-primary ml-4 py-3 px-4">Sign up</button>
     </div>
   </form>
-
 </div>

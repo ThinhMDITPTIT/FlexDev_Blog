@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import {
   Router,
   Event,
@@ -8,9 +8,7 @@ import {
 } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
-import { UserStateService } from 'src/app/core/services/states/user-state.service';
 import { switchMap } from 'rxjs/operators';
-import { AuthApiService } from 'src/app/core/services/apis/auth-api.service';
 import { UserApiService } from 'src/app/core/services/apis/user-api.service';
 import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
@@ -50,8 +48,7 @@ export class UserProfileComponent implements OnDestroy {
     this.favoritedArticles_Subscription = new Subscription();
 
     this.currentUser =
-      this.authStateService.currentUserProfile?.user?.username || '';
-    console.log(this.currentUser);
+    this.authStateService.currentUserProfile?.user?.username || '';
 
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {

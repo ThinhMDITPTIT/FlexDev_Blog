@@ -5,13 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './modal-notification.component.html',
   styleUrls: ['./modal-notification.component.scss']
 })
-export class ModalNotificationComponent implements OnInit {
+export class ModalNotificationComponent {
 
   constructor() { }
-
-  ngOnInit() {
-    console.log('alo');
-
-  }
-
 }

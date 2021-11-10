@@ -6,8 +6,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
+import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spinner.service';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
 
 @Component({
@@ -20,13 +22,16 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
   public articleObj: any;
   private currentSlug: any;
   private articleSubscription: Subscription;
+  public showPreviewMarkdown: boolean;
 
   constructor(
     private _fb: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private readonly articlesApiService: ArticlesApiService,
-    private readonly articlesStateService: ArticlesStateService
+    private readonly articlesStateService: ArticlesStateService,
+    private readonly loadingSpinnerService: LoadingSpinnerService,
+    private readonly toastr: ToastrService
   ) {
     this.markdownForm = this._fb.group({
       title: ['', Validators.required],
@@ -34,6 +39,8 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
       content: ['', Validators.required],
       tags: [],
     });
+
+    this.showPreviewMarkdown = false;
 
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
@@ -79,7 +86,6 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
 
   public submitForm(formValue: FormGroup) {
     if (formValue.status === 'VALID') {
-      console.log(formValue);
       let articleObj = {
         article: {
           title: formValue.value.title,
@@ -89,24 +95,32 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
         },
       };
       if (!this.currentSlug) {
+        this.loadingSpinnerService.showSpinner();
         this.articlesApiService
           .createArticle(articleObj)
           .subscribe((data: any) => {
-            console.log('Create new done');
-            this.redirectArticleDetails(data.article.slug);
             this.articlesStateService.dataChangedEmit.emit();
+            setTimeout(() => {
+              this.redirectArticleDetails(data.article.slug);
+              this.loadingSpinnerService.hideSpinner();
+              this.toastr.success('Success!', 'Create new completed!');
+            }, 2000);
           });
       } else {
+        this.loadingSpinnerService.showSpinner();
         this.articlesApiService
           .updateAticle(this.currentSlug, articleObj)
           .subscribe((data: any) => {
-            console.log('Update done');
-            this.redirectArticleDetails(data.article.slug);
             this.articlesStateService.dataChangedEmit.emit();
+            setTimeout(() => {
+              this.redirectArticleDetails(data.article.slug);
+              this.loadingSpinnerService.hideSpinner();
+              this.toastr.success('Success!', 'Update completed!');
+            }, 2000);
           });
       }
     } else {
-      console.log('Have error');
+      this.toastr.error('Error!', 'Something wrong!');
       let formControlArr = formValue.controls;
       Object.keys(formControlArr).forEach((control) => {
         if (formControlArr[control]['status'] === 'INVALID') {

@@ -12,12 +12,16 @@ export class MarkdownEditorComponent implements OnInit {
   @Input()
   public control: FormControl;
 
+  @Input()
+  public showPreview: boolean;
+
   @HostBinding('class.focus') isFocus: boolean;
 
   constructor() {
     this.control = new FormControl();
     this.controlId = '';
     this.isFocus = false;
+    this.showPreview = false;
   }
 
   ngOnInit(): void {
