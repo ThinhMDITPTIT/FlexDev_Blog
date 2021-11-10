@@ -3,14 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class UserApiService {
-
   baseUrl: string = 'http://localhost:3000/api/profiles';
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {}
 
   getProfile(username: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/${username}`);
