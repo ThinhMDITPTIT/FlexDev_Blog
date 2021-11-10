@@ -13,7 +13,7 @@ import { AuthStateService } from 'src/app/core/services/states/auth-state.servic
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-  public defaultUser: string = 'ThinhMD';
+  public defaultUser: string = 'huyda';
   showBanner?: boolean;
 
   constructor(

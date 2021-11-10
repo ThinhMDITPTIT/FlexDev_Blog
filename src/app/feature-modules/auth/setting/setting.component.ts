@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./setting.component.scss'],
 })
 export class SettingComponent {
+
+
   constructor() {}
 }

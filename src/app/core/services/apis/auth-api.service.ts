@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { IUserLogin } from './../../../commons/models/IUserLogin';
 import { IUserRegister } from './../../../commons/models/IUserRegister';
 import { IUserDetails } from './../../../commons/models/IUserDetails';
+import { catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators'
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export class AuthApiService {
 
   constructor(private readonly http: HttpClient) { }
 
-  register(user: IUserRegister): Observable<any> {
+  register(user: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/users`, user);
   }
 
@@ -29,4 +31,6 @@ export class AuthApiService {
   updateUser(user: IUserDetails): Observable<any> {
     return this.http.put(`${this.baseUrl}/user`, user);
   }
+
+
 }
