@@ -3,8 +3,8 @@
   <form class="d-flex flex-column" [formGroup]="signInForm" (ngSubmit)="login()">
     <div class="form-group">
       <input type="email" class="form-control py-4" placeholder="Email" formControlName="email" required
-            [ngClass]="{'error': email.invalid && (email.touched || email.dirty)} || {'success': email.valid}"/>
-      <div *ngIf="email.invalid && (email.touched || email.dirty)" class="text-danger">
+            [ngClass]="{'error': submitted || email.invalid && (email.touched || email.dirty)} || {'success': email.valid}"/>
+      <div *ngIf="submitted || email.invalid && email.touched" class="text-danger">
         <small *ngIf="email.errors?.required">
           Email is required!
         </small>
@@ -15,8 +15,8 @@
     </div>
     <div class="form-group">
       <input type="password" class="form-control py-4" placeholder="Password" formControlName="password" required
-            [ngClass]="{'error': password.invalid && (password.touched || password.dirty)} || {'success': password.valid}"/>
-      <div *ngIf="password.invalid && (password.touched || password.dirty)" class="text-danger">
+            [ngClass]="{'error': submitted || password.invalid && (password.touched || password.dirty)} || {'success': password.valid}"/>
+      <div *ngIf="submitted || password.invalid && password.touched" class="text-danger">
         <small *ngIf="password.errors?.required">
           Password is required!
         </small>

@@ -1,20 +1,21 @@
 <div class="w-50 mx-auto">
-  <h1 class="text-center text-secondary my-5">Setting</h1>
+  <h1 class="text-center text-secondary my-5">Edit Profile Setting</h1>
   <form class="d-flex flex-column">
     <div class="form-group">
-      <input type="text" class="form-control py-4" placeholder="Image URL">
+      <label class="form-label" for="imageUrl">Image Link:</label>
+      <input type="text" class="form-control py-4" id="imageUrl" placeholder="Image URL">
     </div>
     <div class="form-group">
-      <input type="text" class="form-control py-4" placeholder="Username">
+      <label class="form-label" for="username">Username:</label>
+      <input type="text" class="form-control py-4" id="username" placeholder="Username" disabled>
     </div>
     <div class="form-group">
-      <textarea class="form-control" placeholder="Bio" rows="7"></textarea>
+      <label class="form-label" for="description">Description:</label>
+      <textarea class="form-control" placeholder="Bio" id="description" rows="7"></textarea>
     </div>
     <div class="form-group">
-      <input type="email" class="form-control py-4" placeholder="Email">
-    </div>
-    <div class="form-group">
-      <input type="password" class="form-control py-4" placeholder="New password">
+      <label class="form-label" for="email">Email:</label>
+      <input type="email" class="form-control py-4" id="email" placeholder="Email" disabled>
     </div>
     <div class="align-self-center pt-3">
       <button type="button" class="btn btn-primary ml-4 py-3 px-4 mb-5">Update</button>

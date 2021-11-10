@@ -14,6 +14,9 @@ import { ModalNotificationComponent } from './modal-notification/modal-notificat
   styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent {
+
+  submitted: boolean = false;
+
   isWhitespace = /^[\S]*$/;
   isContainLetter = /^(?=.*[a-zA-Z])/;
   isContainNumber = /^(?=.*[0-9])/;
@@ -82,6 +85,7 @@ export class SignupComponent {
           this.route.navigate(['']);
         })
       })
+    this.submitted = true;
     // if(this.signUpForm.valid){
     //   this.modalService.open(ModalNotificationComponent)
     // }
