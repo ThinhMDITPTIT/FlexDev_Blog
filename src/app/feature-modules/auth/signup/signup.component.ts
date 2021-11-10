@@ -1,12 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ValidatePassword } from './../../../commons/validators/validate-password';
-import { AuthApiService } from 'src/app/core/services/apis/auth-api.service';
-import { concatMap, map, switchMap } from 'rxjs/operators'
-import { LocalStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalNotificationComponent } from './modal-notification/modal-notification.component';
+import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 
 @Component({
   selector: 'app-signup',
@@ -21,13 +18,11 @@ export class SignupComponent {
   isContainLetter = /^(?=.*[a-zA-Z])/;
   isContainNumber = /^(?=.*[0-9])/;
 
-  errorMessage: any = {};
-
   signUpForm = this._fb.group({
     username: ['', [Validators.required, Validators.minLength(6)]],
     email: ['', [Validators.required, Validators.email]],
     password: [
-      [''],
+      '',
       [
         Validators.required,
         Validators.minLength(8),
@@ -43,9 +38,8 @@ export class SignupComponent {
 
   constructor(
     private readonly _fb: FormBuilder,
-    private readonly authApiService: AuthApiService,
+    private readonly authStateService: AuthStateService,
     private readonly route: Router,
-    private readonly localStorage: LocalStorageService,
     private readonly modalService: NgbModal
   ) {}
 
@@ -66,28 +60,24 @@ export class SignupComponent {
   }
 
   register() {
-    this.authApiService.register({
-        user: {
-          username: this.username.value,
-          email: this.email.value,
-          password: this.password.value,
+    const user = {
+      username: this.username.value,
+      email: this.email.value,
+      password: this.password.value,
+    }
+    if(this.signUpForm.valid){
+      this.authStateService.register({user}).subscribe(() => {
+        this.route.navigate(['']);
+      }, err => {
+        const error = err.error.errors;
+        if(error.username){
+          this.username.setErrors({usernameAlreadyTaken: true})
         }
-      }).subscribe(res => {
-        console.log(res);
-
-        this.authApiService.login({
-          user: {
-            email: res.user.email,
-            password: this.password.value
-          }
-        }).subscribe(res => {
-          this.localStorage.store('token', res.user.token);
-          this.route.navigate(['']);
-        })
+        if(error.email){
+          this.email.setErrors({emailAlreadyTaken: true})
+        }
       })
+    }
     this.submitted = true;
-    // if(this.signUpForm.valid){
-    //   this.modalService.open(ModalNotificationComponent)
-    // }
   }
 }

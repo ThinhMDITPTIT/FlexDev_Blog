@@ -32,5 +32,4 @@ export class AuthApiService {
     return this.http.put(`${this.baseUrl}/user`, user);
   }
 
-
 }
