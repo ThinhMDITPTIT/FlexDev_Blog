@@ -8,6 +8,7 @@ import {
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
+import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
 
 @Component({
   selector: 'app-article-editor-details',
@@ -24,7 +25,8 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private readonly articlesApiService: ArticlesApiService
+    private readonly articlesApiService: ArticlesApiService,
+    private readonly articlesStateService: ArticlesStateService
   ) {
     this.markdownForm = this._fb.group({
       title: ['', Validators.required],
@@ -92,6 +94,7 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
           .subscribe((data: any) => {
             console.log('Create new done');
             this.redirectArticleDetails(data.article.slug);
+            this.articlesStateService.dataChangedEmit.emit();
           });
       } else {
         this.articlesApiService
@@ -99,6 +102,7 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
           .subscribe((data: any) => {
             console.log('Update done');
             this.redirectArticleDetails(data.article.slug);
+            this.articlesStateService.dataChangedEmit.emit();
           });
       }
     } else {
