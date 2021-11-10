@@ -84,6 +84,11 @@
 <div class="p-3 border border-top-0">
   Description: {{ articleObj?.description }}
 </div>
+<div class="p-3 border border-top-0">
+  <p class="card-text">
+    Tags: {{ articleObj?.tagList.join(",").replaceAll(",", ", ") || "" }}
+  </p>
+</div>
 <div
   class="p-3 border border-top-0"
   [innerHTML]="articleObj?.body | markdown"
