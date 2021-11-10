@@ -31,6 +31,10 @@ export class SingleArticleComponent {
       });
   }
 
+  public seeAuthorProfile(authorName: string) {
+    this.router.navigate(['profile', authorName]);
+  }
+
   public seeArticleDetails(slug: string) {
     this.router.navigate(['article', slug]);
   }
