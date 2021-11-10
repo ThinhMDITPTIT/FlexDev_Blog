@@ -10,6 +10,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
+
+  submitted: boolean = false;
+
   signInForm = this._fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -43,7 +46,7 @@ export class LoginComponent {
           this.localStorage.store('token', res.user.token);
           this.router.navigate(['']);
         });
-    }
-
+      }
+    this.submitted = true;
   }
 }
