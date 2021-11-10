@@ -29,6 +29,9 @@
       <p class="card-text">
         <em>{{ articleObj?.description }}</em>
       </p>
+      <p class="card-text">
+        Tags: {{ articleObj?.tagList.join(",").replaceAll(",", ", ") || "" }}
+      </p>
     </div>
     <hr />
     <div class="d-flex justify-content-between mt-3">
