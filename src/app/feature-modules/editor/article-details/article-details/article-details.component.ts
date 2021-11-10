@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
 import { CommentsApiService } from 'src/app/core/services/apis/comments-api.service';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
+import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 
 @Component({
   selector: 'app-article-details',
@@ -12,6 +13,8 @@ import { ArticlesStateService } from 'src/app/core/services/states/articles-stat
   styleUrls: ['./article-details.component.scss'],
 })
 export class ArticleDetailsComponent implements OnInit, OnDestroy {
+  public currentUser: string;
+
   public commentForm: FormGroup;
   public commentContentError: boolean;
   private currentSlug: any;
@@ -26,8 +29,12 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private readonly articlesApiService: ArticlesApiService,
     private readonly commentsApiService: CommentsApiService,
+    private readonly authStateService: AuthStateService,
     private readonly articlesStateService: ArticlesStateService
   ) {
+    this.currentUser =
+      this.authStateService.currentUserProfile?.user?.username || '';
+
     this.commentForm = this._fb.group({
       content: ['', Validators.required],
     });
