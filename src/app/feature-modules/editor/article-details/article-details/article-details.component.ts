@@ -12,6 +12,7 @@ import { CommentsApiService } from 'src/app/core/services/apis/comments-api.serv
 })
 export class ArticleDetailsComponent implements OnInit, OnDestroy {
   public commentForm: FormGroup;
+  public commentContentError: boolean;
   private currentSlug: any;
   public articleObj: any;
   public articleComments: any[];
@@ -25,9 +26,10 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     private readonly articlesApiService: ArticlesApiService,
     private readonly commentsApiService: CommentsApiService
   ) {
-    this.commentForm = _fb.group({
+    this.commentForm = this._fb.group({
       content: ['', Validators.required],
     });
+    this.commentContentError = false;
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.currentSlug = this.activatedRoute.snapshot.params.id;
@@ -42,13 +44,13 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.articleSubscription = this.articlesApiService
       .getArticleBySlug(this.currentSlug)
       .subscribe((data: any) => {
-        console.log(data.article);
+        // console.log(data.article);
         this.articleObj = data.article;
       });
     this.commentsSubscription = this.commentsApiService
       .getCommentsFromAnArticle(this.currentSlug)
       .subscribe((data: any) => {
-        console.log(data.comments);
+        // console.log(data.comments);
         this.articleComments = data.comments;
       });
   }
@@ -93,6 +95,10 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.router.navigate(['']);
   }
 
+  public seeAuthorProfile(authorName: string) {
+    this.router.navigate(['profile', authorName]);
+  }
+
   public submitForm(formValue: FormGroup) {
     if (formValue.status === 'VALID') {
       console.log(formValue);
@@ -108,6 +114,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
         });
     } else {
       console.log('Have error');
+      this.commentContentError = true;
       let formControlArr = formValue.controls;
       Object.keys(formControlArr).forEach((control) => {
         if (formControlArr[control]['status'] === 'INVALID') {
