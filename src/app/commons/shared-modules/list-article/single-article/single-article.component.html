@@ -6,7 +6,10 @@
         (click)="seeAuthorProfile(articleObj?.author?.username)"
       >
         <img
-          src="https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg"
+          [src]="
+            articleObj?.author?.image ||
+            'https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg'
+          "
           alt="avt"
           width="50"
           class="rounded-circle"
@@ -30,7 +33,16 @@
         <em>{{ articleObj?.description }}</em>
       </p>
       <p class="card-text">
-        Tags: {{ articleObj?.tagList.join(",").replaceAll(",", ", ") || "" }}
+        Tags:
+        <span *ngFor="let tag of articleObj?.tagList; last as idxlast">
+          <a
+            class="btn pl-1 pr-0 text-primary"
+            (click)="getArticlesByHastag(tag)"
+          >
+            #{{ tag }}
+          </a>
+          <span *ngIf="!idxlast">,</span>
+        </span>
       </p>
     </div>
     <hr />

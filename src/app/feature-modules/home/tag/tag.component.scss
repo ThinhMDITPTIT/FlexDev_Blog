@@ -1,3 +1,8 @@
 .sticky-top {
   top: 1em;
 }
+
+.custom__height {
+  max-height: 50vh;
+  overflow-y: auto;
+}
