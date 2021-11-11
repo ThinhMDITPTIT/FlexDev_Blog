@@ -92,7 +92,13 @@
 </div>
 <div class="p-3 border border-top-0">
   <p class="card-text">
-    Tags: {{ articleObj?.tagList.join(",").replaceAll(",", ", ") || "" }}
+    Tags:
+    <span *ngFor="let tag of articleObj?.tagList; last as idxlast">
+      <a class="btn pl-1 pr-0 text-primary" (click)="getArticlesByHastag(tag)">
+        #{{ tag }}
+      </a>
+      <span *ngIf="!idxlast">,</span>
+    </span>
   </p>
 </div>
 <div

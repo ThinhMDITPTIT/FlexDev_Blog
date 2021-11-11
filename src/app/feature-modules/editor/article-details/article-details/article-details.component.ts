@@ -6,6 +6,7 @@ import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.serv
 import { CommentsApiService } from 'src/app/core/services/apis/comments-api.service';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
+import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
 
 @Component({
   selector: 'app-article-details',
@@ -30,7 +31,8 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     private readonly articlesApiService: ArticlesApiService,
     private readonly commentsApiService: CommentsApiService,
     private readonly authStateService: AuthStateService,
-    private readonly articlesStateService: ArticlesStateService
+    private readonly articlesStateService: ArticlesStateService,
+    private readonly tagsStateService: TagsStateService
   ) {
     this.currentUser =
       this.authStateService.currentUserProfile?.user?.username || '';
@@ -105,6 +107,11 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
 
   public seeAuthorProfile(authorName: string) {
     this.router.navigate(['profile', authorName]);
+  }
+
+  public getArticlesByHastag(tag: string) {
+    this.redirectHome()
+    this.tagsStateService.getArticlesDataByTag(tag);
   }
 
   public submitForm(formValue: FormGroup) {

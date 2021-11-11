@@ -51,7 +51,7 @@
     <div class="form-group">
       <div class="d-flex justify-content-between mb-1">
         <label class="d-flex align-items-end mb-0"
-          >Content <span class="text-danger">*</span></label
+          >Content &nbsp;<span class="text-danger">*</span></label
         >
         <a
           *ngIf="!showPreviewMarkdown"
@@ -89,18 +89,27 @@
       </ul>
     </div>
     <div class="form-group">
-      <label>
+      <label for="Tags">
         Tag
-        <span class="text-black-50">
-          <em>(multi tags separated by commas)</em>
-        </span>
+        <span class="text-danger">*</span>&nbsp;
+        <span class="text-black-50"><em>(Enter to add multi tags)</em></span>
       </label>
-      <input
-        formControlName="tags"
-        class="form-control"
-        id="Tags"
-        aria-describedby="Tags"
-      />
+      <app-tag-input id="Tags" [control]="tagsRawControl"></app-tag-input>
+    </div>
+    <div>
+      <ul
+        class="text-danger"
+        *ngIf="
+          (markdownForm.get('tags')?.invalid &&
+            markdownForm.get('tags')?.dirty) ||
+          (markdownForm.get('tags')?.invalid &&
+            markdownForm.get('tags')?.touched)
+        "
+      >
+        <li *ngIf="markdownForm.get('tags')?.hasError('required')">
+          Tags is required
+        </li>
+      </ul>
     </div>
     <div class="d-flex justify-content-end">
       <button type="submit" class="btn btn-success">Post</button>

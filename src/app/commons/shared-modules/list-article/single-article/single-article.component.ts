@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
+import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
 
 @Component({
   selector: 'app-single-article',
@@ -13,6 +14,7 @@ export class SingleArticleComponent {
 
   constructor(
     private readonly articlesApiService: ArticlesApiService,
+    private readonly tagsStateService: TagsStateService,
     private readonly router: Router
   ) {}
 
@@ -37,5 +39,9 @@ export class SingleArticleComponent {
 
   public seeArticleDetails(slug: string) {
     this.router.navigate(['article', slug]);
+  }
+
+  public getArticlesByHastag(tag: string) {
+    this.tagsStateService.getArticlesDataByTag(tag);
   }
 }
