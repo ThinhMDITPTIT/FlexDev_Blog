@@ -17,13 +17,10 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
   public featuresArr: string[];
 
   public currentFeature: any;
-  public feedArticles: any;
-  public globalArticles: any;
   public currentArticlesObj: any;
   public currentArticles: any;
-  public feedArticles_Subscription: Subscription;
-  public tagArticles_Subscription: Subscription;
-  public globalArticles_Subscription: Subscription;
+  public articles_Subscription: Subscription = new Subscription();
+  public tagArticles_Subscription: Subscription = new Subscription();
 
   public pageSize: number;
   public maxSize: number;
@@ -41,14 +38,7 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
     this.maxSize = this.articlesStateService.maxSize;
     this.currentFeature = this.featuresArr[0];
 
-    this.tagArticles_Subscription = new Subscription();
-    this.feedArticles_Subscription = new Subscription();
-    this.globalArticles_Subscription = new Subscription();
-
-    this.feedArticles = articlesStateService.feedArticles;
-    this.globalArticles = articlesStateService.globalArticles;
-    this.currentArticlesObj = this.feedArticles;
-    this.initDataForFeature();
+    this.articlesStateService.getFeedArticle();
   }
 
   ngOnChanges() {
@@ -59,16 +49,13 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.tagsStateService.clearCurrentTag();
-    this.feedArticles_Subscription =
-      this.articlesStateService.feedArticlesEmit.subscribe((data: any) => {
-        this.feedArticles = data;
-        this.currentArticlesObj = this.feedArticles;
+
+    this.articles_Subscription =
+      this.articlesStateService.articlesEmit.subscribe((data: any) => {
+        this.currentArticlesObj = data;
         this.initDataForFeature();
       });
-    this.globalArticles_Subscription =
-      this.articlesStateService.globalArticlesEmit.subscribe((data: any) => {
-        this.globalArticles = data;
-      });
+
     this.tagArticles_Subscription =
       this.tagsStateService.articlesByTagEmit.subscribe((data: any) => {
         this.showArticlesByTag = true;
@@ -80,22 +67,20 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.feedArticles_Subscription.unsubscribe();
-    this.globalArticles_Subscription.unsubscribe();
+    this.articles_Subscription.unsubscribe();
     this.tagArticles_Subscription.unsubscribe();
   }
 
   public getDataByFeature(featureName: string) {
     this.showArticlesByTag = false;
     this.tagsStateService.clearCurrentTag();
+
     if (featureName === this.featuresArr[0]) {
       this.currentFeature = this.featuresArr[0];
-      this.currentArticlesObj = this.feedArticles;
-      this.initDataForFeature();
+      this.articlesStateService.getFeedArticle();
     } else {
       this.currentFeature = this.featuresArr[1];
-      this.currentArticlesObj = this.globalArticles;
-      this.initDataForFeature();
+      this.articlesStateService.getGlobalArticle();
     }
   }
 

@@ -54,17 +54,19 @@
         <a
           class="btn text-success d-flex align-items-center"
           (click)="favoriteArticle()"
+          data-placement="top" title="Favorite"
         >
-          <i class="fas fa-heart"></i> &nbsp; Favorite&nbsp;
+          <i class="far fa-heart"></i> &nbsp;
           <span>({{ articleObj?.favoritesCount }})</span>
         </a>
       </ng-template>
       <ng-template #Unfavorite>
         <a
-          class="btn btn-outline-success d-flex align-items-center"
+          class="btn btn-success d-flex align-items-center"
           (click)="unFavoriteArticle()"
+          data-placement="top" title="Unfavorite"
         >
-          <i class="fas fa-heart"></i> &nbsp; Unfavorite&nbsp;
+          <i class="fas fa-heart"></i> &nbsp;
           <span>({{ articleObj?.favoritesCount }})</span>
         </a>
       </ng-template>

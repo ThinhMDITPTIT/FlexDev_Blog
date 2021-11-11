@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
+import { Router } from '@angular/router';
+import { CommentsStateService } from 'src/app/core/services/states/comments-state.service';
 
 @Component({
   selector: 'app-comment-details',
@@ -10,10 +11,22 @@ export class CommentDetailsComponent {
   @Input()
   public commentContent: any;
 
-  constructor(private readonly articlesStateService: ArticlesStateService) {}
+  @Input()
+  public articleSlug: any;
 
-  public deleteComment() {
-    console.log('Delete comment');
-    this.articlesStateService.dataChangedEmit.emit();
+  constructor(
+    private readonly commentsStateService: CommentsStateService,
+    private router: Router
+  ) {}
+
+  public deleteComment(commentId: any) {
+    this.commentsStateService.deleteCommentOfArticle(
+      this.articleSlug,
+      commentId
+    );
+  }
+
+  public seeAuthorProfile(authorName: string) {
+    this.router.navigate(['profile', authorName]);
   }
 }
