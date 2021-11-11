@@ -2,11 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
-import { CommentsApiService } from 'src/app/core/services/apis/comments-api.service';
+import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spinner.service';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
+import { CommentsStateService } from 'src/app/core/services/states/comments-state.service';
 import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
+import { UserStateService } from 'src/app/core/services/states/user-state.service';
 
 @Component({
   selector: 'app-article-details',
@@ -16,23 +17,27 @@ import { TagsStateService } from 'src/app/core/services/states/tags-state.servic
 export class ArticleDetailsComponent implements OnInit, OnDestroy {
   public currentUser: string;
 
+  public authorProfile: any;
+
   public commentForm: FormGroup;
   public commentContentError: boolean;
-  private currentSlug: any;
+  public currentSlug: any;
   public articleObj: any;
   public articleComments: any[];
-  private articleSubscription: Subscription;
-  private commentsSubscription: Subscription;
+  private articleSubscription: Subscription = new Subscription();
+  private commentsSubscription: Subscription = new Subscription();
+  private userProfileSubscription: Subscription = new Subscription();
 
   constructor(
     private _fb: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private readonly articlesApiService: ArticlesApiService,
-    private readonly commentsApiService: CommentsApiService,
+    private readonly userStateService: UserStateService,
+    private readonly commentsStateService: CommentsStateService,
     private readonly authStateService: AuthStateService,
     private readonly articlesStateService: ArticlesStateService,
-    private readonly tagsStateService: TagsStateService
+    private readonly tagsStateService: TagsStateService,
+    private readonly loadingSpinnerService: LoadingSpinnerService
   ) {
     this.currentUser =
       this.authStateService.currentUserProfile?.user?.username || '';
@@ -44,48 +49,55 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.currentSlug = this.activatedRoute.snapshot.params.id;
+        this.articlesStateService.getCurrentArticleBySlug(this.currentSlug);
+        this.commentsStateService.getCommentsFromArticle(this.currentSlug);
       }
     });
     this.articleComments = [];
-    this.articleSubscription = new Subscription();
-    this.commentsSubscription = new Subscription();
   }
 
   ngOnInit() {
-    this.articleSubscription = this.articlesApiService
-      .getArticleBySlug(this.currentSlug)
-      .subscribe((data: any) => {
-        this.articleObj = data.article;
-      });
-    this.commentsSubscription = this.commentsApiService
-      .getCommentsFromAnArticle(this.currentSlug)
-      .subscribe((data: any) => {
-        this.articleComments = data.comments;
+    this.articleSubscription =
+      this.articlesStateService.currentArticleBySlugEmit.subscribe(
+        (data: any) => {
+          this.articleObj = data.article;
+          this.userStateService.getUserProfileByUsername(
+            this.articleObj?.author?.username
+          );
+        }
+      );
+
+    this.commentsSubscription =
+      this.commentsStateService.currentCommentsOfArticleEmit.subscribe(
+        (data: any) => {
+          this.articleComments = data.comments;
+        }
+      );
+
+    this.userProfileSubscription =
+      this.userStateService.userProfileEmit.subscribe((data: any) => {
+        this.authorProfile = data.profile;
       });
   }
 
   ngOnDestroy() {
     this.articleSubscription.unsubscribe();
     this.commentsSubscription.unsubscribe();
+    this.userProfileSubscription.unsubscribe();
   }
 
-  public followUser() {
-    console.log('Follow User');
+  public followUser(username: any) {
+    this.userStateService.followUserByUsername(username);
   }
-  public unFollowUser() {
-    console.log('Unfollow User');
+  public unFollowUser(username: any) {
+    this.userStateService.unFollowUserByUsername(username);
   }
+
   public favoriteArticle() {
-    this.articlesApiService.favoriteArticle(this.currentSlug).subscribe(() => {
-      console.log('Favorite Article');
-    });
+    this.articlesStateService.favoriteArticleBySlug(this.currentSlug);
   }
   public unFavoriteArticle() {
-    this.articlesApiService
-      .unfavoriteArticle(this.currentSlug)
-      .subscribe(() => {
-        console.log('Unfavorite Article');
-      });
+    this.articlesStateService.unFavoriteArticleBySlug(this.currentSlug);
   }
 
   public goToEditArticleDetails() {
@@ -93,12 +105,9 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   }
 
   public deleteArticle() {
-    console.log('delete');
-
-    this.articlesApiService.deleteArticle(this.currentSlug).subscribe(() => {
-      this.articlesStateService.dataChangedEmit.emit();
-      this.redirectHome();
-    });
+    this.loadingSpinnerService.showSpinner();
+    this.articlesStateService.deleteArticleBySlug(this.currentSlug);
+    this.redirectHome();
   }
 
   public redirectHome() {
@@ -110,7 +119,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   }
 
   public getArticlesByHastag(tag: string) {
-    this.redirectHome()
+    this.redirectHome();
     this.tagsStateService.getArticlesDataByTag(tag);
   }
 
@@ -121,11 +130,11 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
           body: formValue.value.content,
         },
       };
-      this.commentsApiService
-        .addCommentToAnArticle(this.currentSlug, commentObj)
-        .subscribe((data: any) => {
-          this.articlesStateService.dataChangedEmit.emit();
-        });
+      this.commentsStateService.addCommentToArticle(
+        this.currentSlug,
+        commentObj
+      );
+      this.commentForm.get('content')?.setValue('');
     } else {
       this.commentContentError = true;
       let formControlArr = formValue.controls;

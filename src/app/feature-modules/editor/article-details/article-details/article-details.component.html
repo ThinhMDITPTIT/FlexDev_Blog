@@ -31,7 +31,7 @@
     <div class="d-flex justify-content-end mt-3 mt-sm-0">
       <ng-container *ngIf="currentUser !== articleObj?.author?.username">
         <ng-container
-          *ngIf="!articleObj?.author?.following; then Follow; else Unfollow"
+          *ngIf="!authorProfile?.following; then Follow; else Unfollow"
         ></ng-container>
       </ng-container>
       <ng-container *ngIf="currentUser !== articleObj?.author?.username">
@@ -42,17 +42,17 @@
       <ng-template #Follow>
         <a
           class="btn btn-outline-light mr-3 d-flex align-items-center"
-          (click)="followUser()"
+          (click)="followUser(articleObj?.author?.username)"
         >
           <span> <i class="fas fa-plus"></i> &nbsp; Follow </span>
         </a>
       </ng-template>
       <ng-template #Unfollow>
         <a
-          class="btn btn-outline-light mr-3 d-flex align-items-center"
-          (click)="unFollowUser()"
+          class="btn btn-light mr-3 d-flex align-items-center"
+          (click)="unFollowUser(articleObj?.author?.username)"
         >
-          <span> <i class="fas fa-plus"></i> &nbsp; Unfollow </span>
+          <span> <i class="fas fa-minus"></i> &nbsp; Unfollow </span>
         </a>
       </ng-template>
       <ng-template #Favorite>
@@ -60,16 +60,16 @@
           class="btn btn-outline-success mr-3 d-flex align-items-center"
           (click)="favoriteArticle()"
         >
-          <i class="fas fa-heart"></i> &nbsp; Favorite &nbsp;
+          <i class="far fa-heart"></i> &nbsp; Favorite&nbsp;
           <span>({{ articleObj?.favoritesCount }})</span>
         </a>
       </ng-template>
       <ng-template #Unfavorite>
         <a
-          class="btn btn-outline-success mr-3 d-flex align-items-center"
+          class="btn btn-success mr-3 d-flex align-items-center"
           (click)="unFavoriteArticle()"
         >
-          <i class="fas fa-heart"></i> &nbsp; Unfavorite &nbsp;
+          <i class="fas fa-heart"></i> &nbsp; Unfavorite&nbsp;
           <span>({{ articleObj?.favoritesCount }})</span>
         </a>
       </ng-template>
@@ -80,13 +80,15 @@
       >
         <i class="fas fa-edit"></i> &nbsp; Edit
       </a>
-      <a
+      <button
         *ngIf="currentUser === articleObj?.author?.username"
+        type="button"
         class="btn btn-outline-danger mr-3 d-flex align-items-center"
-        (click)="deleteArticle()"
+        data-toggle="modal"
+        data-target="#modalDeleteArticle"
       >
         <i class="fas fa-trash"></i> &nbsp; Delete
-      </a>
+      </button>
     </div>
   </div>
 </div>
@@ -132,7 +134,7 @@
         formControlName="content"
         class="form-control"
         placeholder="Write a comment..."
-        rows="3"
+        rows="2"
       ></textarea>
     </div>
     <div
@@ -152,9 +154,48 @@
     </div>
   </form>
 </div>
-<div class="p-3">
+<div class="pl-3 py-3 pr-0">
   <app-comment-details
     *ngFor="let comment of articleComments"
     [commentContent]="comment"
+    [articleSlug]="currentSlug"
   ></app-comment-details>
+</div>
+
+<!-- Modal Confirm Delete Article -->
+<div
+  class="modal fade"
+  id="modalDeleteArticle"
+  tabindex="-1"
+  aria-labelledby="modalConfirmDeleteArticle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalConfirmDeleteArticle">
+          Confirm Delete Article
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this article?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteArticle()">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
