@@ -6,23 +6,27 @@ import { UserApiService } from '../apis/user-api.service';
   providedIn: 'root',
 })
 export class UserStateService {
-  // public userProfile: any;
-  // public usernameAuthor: any;
-  // public userProfileEmit: EventEmitter<any>;
-  // public usernameAuthorSubject = new BehaviorSubject<string>('');
+  public userProfileEmit: EventEmitter<any>;
 
   constructor(private readonly userApiService: UserApiService) {
-    // this.userProfileEmit = new EventEmitter<any>();
-    // this.usernameAuthorSubject.subscribe((data: any) => {
-    //   if (data !== '') {
-    //     this.usernameAuthor = data;
-    //     this.userApiService
-    //       .getProfile(this.usernameAuthor)
-    //       .subscribe((userData: any) => {
-    //         this.userProfile = userData;
-    //         this.userProfileEmit.emit(this.userProfile);
-    //       });
-    //   }
-    // });
+    this.userProfileEmit = new EventEmitter<any>();
+  }
+
+  public getUserProfileByUsername(username: any) {
+    this.userApiService.getProfile(username).subscribe((data: any) => {
+      this.userProfileEmit.emit(data);
+    });
+  }
+
+  public followUserByUsername(username: any) {
+    this.userApiService.followUser(username).subscribe((data: any) => {
+      this.userProfileEmit.emit(data);
+    });
+  }
+
+  public unFollowUserByUsername(username: any) {
+    this.userApiService.unfollowUser(username).subscribe((data: any) => {
+      this.userProfileEmit.emit(data);
+    });
   }
 }

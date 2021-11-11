@@ -21,7 +21,7 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
   public markdownForm: FormGroup;
   public articleObj: any;
   private currentSlug: any;
-  private articleSubscription: Subscription;
+  private articleSubscription: Subscription = new Subscription();
   public showPreviewMarkdown: boolean;
 
   constructor(
@@ -46,30 +46,30 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
       if (event instanceof NavigationEnd) {
         if (this.activatedRoute.snapshot.params.id) {
           this.currentSlug = this.activatedRoute.snapshot.params.id;
+          this.articlesStateService.getCurrentArticleBySlug(this.currentSlug);
         }
       }
     });
-
-    this.articleSubscription = new Subscription();
   }
 
   ngOnInit() {
     if (this.currentSlug) {
-      this.articleSubscription = this.articlesApiService
-        .getArticleBySlug(this.currentSlug)
-        .subscribe((data: any) => {
-          this.articleObj = data.article;
-          this.markdownForm.get('title')?.setValue(this.articleObj.title);
-          this.markdownForm
-            .get('description')
-            ?.setValue(this.articleObj.description);
-          this.markdownForm.get('content')?.setValue(this.articleObj.body);
-          this.markdownForm.get('tags')?.setValue(
-            this.articleObj.tagList.map((tag: string) => {
-              return { display: tag, value: tag };
-            })
-          );
-        });
+      this.articleSubscription =
+        this.articlesStateService.currentArticleBySlugEmit.subscribe(
+          (data: any) => {
+            this.articleObj = data.article;
+            this.markdownForm.get('title')?.setValue(this.articleObj.title);
+            this.markdownForm
+              .get('description')
+              ?.setValue(this.articleObj.description);
+            this.markdownForm.get('content')?.setValue(this.articleObj.body);
+            this.markdownForm.get('tags')?.setValue(
+              this.articleObj.tagList.map((tag: string) => {
+                return { display: tag, value: tag };
+              })
+            );
+          }
+        );
     }
   }
 
@@ -102,7 +102,6 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
         this.articlesApiService
           .createArticle(articleObj)
           .subscribe((data: any) => {
-            this.articlesStateService.dataChangedEmit.emit();
             setTimeout(() => {
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
@@ -114,7 +113,6 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
         this.articlesApiService
           .updateAticle(this.currentSlug, articleObj)
           .subscribe((data: any) => {
-            this.articlesStateService.dataChangedEmit.emit();
             setTimeout(() => {
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
