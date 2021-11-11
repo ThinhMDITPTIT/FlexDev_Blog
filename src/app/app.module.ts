@@ -14,6 +14,7 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { TagInputModule } from 'ngx-chips';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,7 +32,9 @@ import { ToastrModule } from 'ngx-toastr';
     NgxWebstorageModule.forRoot(),
     NgxSpinnerModule,
     ToastrModule.forRoot({
-      timeOut: 3500,
+      timeOut: 2000,
+      progressAnimation: 'increasing',
+      progressBar: true,
       positionClass: 'toast-top-right',
       tapToDismiss: true,
       newestOnTop: true,

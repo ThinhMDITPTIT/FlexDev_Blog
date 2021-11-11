@@ -37,7 +37,7 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
       title: ['', Validators.required],
       description: ['', Validators.required],
       content: ['', Validators.required],
-      tags: [],
+      tags: ['', Validators.required],
     });
 
     this.showPreviewMarkdown = false;
@@ -64,12 +64,11 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
             .get('description')
             ?.setValue(this.articleObj.description);
           this.markdownForm.get('content')?.setValue(this.articleObj.body);
-          this.markdownForm
-            .get('tags')
-            ?.setValue(
-              Array(this.articleObj.tagList).join(',').replaceAll(',', ', ')
-            );
-          console.log(data);
+          this.markdownForm.get('tags')?.setValue(
+            this.articleObj.tagList.map((tag: string) => {
+              return { display: tag, value: tag };
+            })
+          );
         });
     }
   }
@@ -84,6 +83,10 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
     return this.markdownForm.controls.content as FormControl;
   }
 
+  public get tagsRawControl() {
+    return this.markdownForm.controls.tags as FormControl;
+  }
+
   public submitForm(formValue: FormGroup) {
     if (formValue.status === 'VALID') {
       let articleObj = {
@@ -91,7 +94,7 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
           title: formValue.value.title,
           description: formValue.value.description,
           body: formValue.value.content,
-          tagList: String(formValue.value.tags).trim().split(','),
+          tagList: formValue.value.tags.map((tag: any) => tag.value),
         },
       };
       if (!this.currentSlug) {
@@ -104,7 +107,7 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Create new completed!');
-            }, 2000);
+            }, 1500);
           });
       } else {
         this.loadingSpinnerService.showSpinner();
@@ -116,7 +119,7 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Update completed!');
-            }, 2000);
+            }, 1500);
           });
       }
     } else {
