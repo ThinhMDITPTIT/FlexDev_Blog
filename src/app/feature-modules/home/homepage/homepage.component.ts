@@ -10,8 +10,15 @@ export class HomepageComponent {
   public featuresHome: string[];
 
   constructor(private readonly authStateService: AuthStateService) {
-    this.featuresHome = ['Your Feed', 'Global Feed'];
+    this.featuresHome = [];
 
-    this.authStateService.getCurrentUserInfo();
+    this.authStateService.getCurrentUserInfo().subscribe(
+      () => {
+        this.featuresHome = ['Your Feed', 'Global Feed'];
+      },
+      (error: any) => {
+        this.featuresHome = ['Global Feed'];
+      }
+    );
   }
 }

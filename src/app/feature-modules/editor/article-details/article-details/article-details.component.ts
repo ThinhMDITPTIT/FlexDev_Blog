@@ -59,15 +59,19 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authStateService.currentLoggedInEmit.subscribe((data: any) => {
-      if (data?.user?.token) {
-        this.currentUser =
-          this.authStateService.currentUserProfile.user.username;
-        this.currentUserImage = this.authStateService.currentUserProfile.user.image;
-      } else {
-        this.currentUser = '';
+    this.authStateService.getCurrentUserInfo().subscribe(
+      (data: any) => {
+        if (data?.user?.token) {
+          this.currentUser =
+            this.authStateService.currentUserProfile.user.username;
+          this.currentUserImage =
+            this.authStateService.currentUserProfile.user.image;
+        }
+      },
+      () => {
+        this.currentUser = this.authStateService.currentUserProfile;
       }
-    });
+    );
 
     this.commentsSubscription =
       this.commentsStateService.currentCommentsOfArticle$.subscribe(
@@ -83,56 +87,67 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   }
 
   public getCurrentArticleBySlug(slug: any) {
-    this.articlesStateService
-      .getCurrentArticleBySlug(slug)
-      .subscribe((data: any) => {
+    this.articlesStateService.getCurrentArticleBySlug(slug).subscribe(
+      (data: any) => {
         this.articleObj = data.article;
         this.userStateService
           .getUserProfileByUsername(this.articleObj?.author?.username)
-          .subscribe((data: any) => {
-            this.authorProfile = data.profile;
-          });
-      });
+          .subscribe(
+            (data: any) => {
+              this.authorProfile = data.profile;
+            },
+            () => {}
+          );
+      },
+      () => {}
+    );
   }
 
   public getCommentsFromArticle(slug: any) {
-    this.commentsStateService
-      .getCommentsFromArticle(slug)
-      .subscribe((data: any) => {
+    this.commentsStateService.getCommentsFromArticle(slug).subscribe(
+      (data: any) => {
         this.articleComments = data.comments;
-      });
+      },
+      () => {}
+    );
   }
 
   public followUser(username: any) {
-    this.userStateService
-      .followUserByUsername(username)
-      .subscribe((data: any) => {
+    this.userStateService.followUserByUsername(username).subscribe(
+      (data: any) => {
         this.authorProfile = data.profile;
         this.userStateService.userProfile$.next(data);
-      });
+      },
+      () => {}
+    );
   }
   public unFollowUser(username: any) {
-    this.userStateService
-      .unFollowUserByUsername(username)
-      .subscribe((data: any) => {
+    this.userStateService.unFollowUserByUsername(username).subscribe(
+      (data: any) => {
         this.authorProfile = data.profile;
         this.userStateService.userProfile$.next(data);
-      });
+      },
+      () => {}
+    );
   }
 
   public favoriteArticle() {
-    this.articlesStateService
-      .favoriteArticleBySlug(this.currentSlug)
-      .subscribe((data: any) => {
+    this.articlesStateService.favoriteArticleBySlug(this.currentSlug).subscribe(
+      (data: any) => {
         this.articleObj = data.article;
-      });
+      },
+      () => {}
+    );
   }
   public unFavoriteArticle() {
     this.articlesStateService
       .unFavoriteArticleBySlug(this.currentSlug)
-      .subscribe((data: any) => {
-        this.articleObj = data.article;
-      });
+      .subscribe(
+        (data: any) => {
+          this.articleObj = data.article;
+        },
+        () => {}
+      );
   }
 
   public goToEditArticleDetails() {
@@ -141,15 +156,16 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
 
   public deleteArticle() {
     this.loadingSpinnerService.showSpinner();
-    this.articlesStateService
-      .deleteArticleBySlug(this.currentSlug)
-      .subscribe(() => {
+    this.articlesStateService.deleteArticleBySlug(this.currentSlug).subscribe(
+      () => {
         setTimeout(() => {
           this.loadingSpinnerService.hideSpinner();
           this.toastr.success('Success!', 'Delete Article completed!');
           this.redirectHome();
         }, 1500);
-      });
+      },
+      () => {}
+    );
   }
 
   public redirectHome() {
@@ -161,10 +177,13 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   }
 
   public getArticlesByHastag(tag: string) {
-    this.tagsStateService.getArticlesDataByTag(tag).subscribe((data: any) => {
-      this.tagsStateService.articlesByTag$.next(data);
-      this.redirectHome();
-    });
+    this.tagsStateService.getArticlesDataByTag(tag).subscribe(
+      (data: any) => {
+        this.tagsStateService.articlesByTag$.next(data);
+        this.redirectHome();
+      },
+      () => {}
+    );
   }
 
   public submitForm(formValue: FormGroup) {
@@ -176,9 +195,12 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
       };
       this.commentsStateService
         .addCommentToArticle(this.currentSlug, commentObj)
-        .subscribe(() => {
-          this.getCommentsFromArticle(this.currentSlug);
-        });
+        .subscribe(
+          () => {
+            this.getCommentsFromArticle(this.currentSlug);
+          },
+          () => {}
+        );
       this.commentForm.get('content')?.setValue('');
     } else {
       this.commentContentError = true;

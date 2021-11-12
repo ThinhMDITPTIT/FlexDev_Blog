@@ -65,11 +65,24 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
     this.feedArticlesChange_Subscription =
       this.userStateService.userProfile$.subscribe((data: any) => {
         if (data) {
-          this.articlesStateService.getFeedArticle().subscribe((data: any) => {
-            this.currentArticlesObj = data;
-            this.initDataForFeature();
-            this.userStateService.userProfile$.next(undefined);
-          });
+          if (this.featuresArr.length < 1) {
+            this.articlesStateService.getGlobalArticle().subscribe(
+              (data: any) => {
+                this.currentArticlesObj = data;
+                this.initDataForFeature();
+              },
+              () => {}
+            );
+          } else {
+            this.articlesStateService.getFeedArticle().subscribe(
+              (data: any) => {
+                this.currentArticlesObj = data;
+                this.initDataForFeature();
+                this.userStateService.userProfile$.next(undefined);
+              },
+              () => {}
+            );
+          }
         }
       });
   }
@@ -85,16 +98,22 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
 
     if (featureName === this.featuresArr[0]) {
       this.currentFeature = this.featuresArr[0];
-      this.articlesStateService.getFeedArticle().subscribe((data: any) => {
-        this.currentArticlesObj = data;
-        this.initDataForFeature();
-      });
+      this.articlesStateService.getFeedArticle().subscribe(
+        (data: any) => {
+          this.currentArticlesObj = data;
+          this.initDataForFeature();
+        },
+        () => {}
+      );
     } else {
       this.currentFeature = this.featuresArr[1];
-      this.articlesStateService.getGlobalArticle().subscribe((data: any) => {
-        this.currentArticlesObj = data;
-        this.initDataForFeature();
-      });
+      this.articlesStateService.getGlobalArticle().subscribe(
+        (data: any) => {
+          this.currentArticlesObj = data;
+          this.initDataForFeature();
+        },
+        () => {}
+      );
     }
   }
 

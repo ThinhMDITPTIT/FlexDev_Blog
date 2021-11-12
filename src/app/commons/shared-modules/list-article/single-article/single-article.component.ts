@@ -24,20 +24,26 @@ export class SingleArticleComponent {
   public favoriteArticle() {
     this.articlesStateService
       .favoriteArticleBySlug(this.articleObj?.slug)
-      .subscribe((data: any) => {
-        if (this.articleObj?.slug === data?.article?.slug) {
-          this.articleObj = data?.article;
-        }
-      });
+      .subscribe(
+        (data: any) => {
+          if (this.articleObj?.slug === data?.article?.slug) {
+            this.articleObj = data?.article;
+          }
+        },
+        () => {}
+      );
   }
   public unFavoriteArticle() {
     this.articlesStateService
       .unFavoriteArticleBySlug(this.articleObj?.slug)
-      .subscribe((data: any) => {
-        if (this.articleObj?.slug === data?.article?.slug) {
-          this.articleObj = data?.article;
-        }
-      });
+      .subscribe(
+        (data: any) => {
+          if (this.articleObj?.slug === data?.article?.slug) {
+            this.articleObj = data?.article;
+          }
+        },
+        () => {}
+      );
   }
 
   public seeAuthorProfile(authorName: string) {
@@ -49,8 +55,11 @@ export class SingleArticleComponent {
   }
 
   public getArticlesByHastag(tag: string) {
-    this.tagsStateService.getArticlesDataByTag(tag).subscribe((data: any) => {
-      this.tagsStateService.articlesByTag$.next(data);
-    });
+    this.tagsStateService.getArticlesDataByTag(tag).subscribe(
+      (data: any) => {
+        this.tagsStateService.articlesByTag$.next(data);
+      },
+      () => {}
+    );
   }
 }

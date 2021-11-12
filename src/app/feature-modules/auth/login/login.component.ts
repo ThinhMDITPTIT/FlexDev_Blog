@@ -20,9 +20,7 @@ export class LoginComponent {
 
   constructor(
     private readonly _fb: FormBuilder,
-    private readonly authApiService: AuthApiService,
     private readonly authStateService: AuthStateService,
-    private readonly localStorage: LocalStorageService,
     private readonly router: Router
   ) {}
 
@@ -36,18 +34,15 @@ export class LoginComponent {
 
   login() {
     if (!this.signInForm.invalid) {
-      this.authApiService
-        .login({
-          user: {
-            email: this.email.value,
-            password: this.password.value,
-          },
-        })
-        .subscribe((res) => {
-          this.localStorage.store('token', res.user.token);
-          this.authStateService.currentUserChangeEmit.emit();
-          this.router.navigate(['']);
-        });
+      let userObj = {
+        user: {
+          email: this.email.value,
+          password: this.password.value,
+        },
+      };
+      this.authStateService.login(userObj).subscribe(() => {
+        this.router.navigate(['']);
+      });
     }
     this.submitted = true;
   }
