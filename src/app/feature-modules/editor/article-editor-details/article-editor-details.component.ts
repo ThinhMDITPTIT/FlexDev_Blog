@@ -12,7 +12,7 @@ import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.serv
 import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spinner.service';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
 import { CheckDeactivate } from './../../../commons/models/check-deactive';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NotificationModalComponent } from './../../../commons/shared-modules/notification-modal/notification-modal.component';
 
 @Component({
@@ -26,6 +26,7 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy, CheckDe
   private currentSlug: any;
   private articleSubscription: Subscription = new Subscription();
   public showPreviewMarkdown: boolean;
+  private isEditted: boolean = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -159,6 +160,10 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy, CheckDe
   }
 
   checkDeactivate(currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return true || this.openModal()
+    // return !this.isEditted || this.openModal();
+    if(this.isEditted){
+      return true
+    }
+    return false
   }
 }

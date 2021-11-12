@@ -15,6 +15,6 @@ import { TagInputCustomModule } from 'src/app/commons/shared-modules/tag-input-c
     MarkdownEditorModule,
     TagInputCustomModule
   ],
-  exports: [ArticleEditorDetailsComponent],
+  exports: [ArticleEditorDetailsComponent]
 })
 export class ArticleEditorDetailsModule {}

@@ -42,7 +42,7 @@ const routes: Routes = [
         './feature-modules/editor/article-editor-details/article-editor-details.module'
       ).then((m) => m.ArticleEditorDetailsModule),
     canActivate: [AuthGuard],
-    canDeactivate: [EditorArticleGuard]
+    // canDeactivate: [EditorArticleGuard]
   },
   {
     path: Route.EDITOR_ID,
@@ -51,7 +51,7 @@ const routes: Routes = [
         './feature-modules/editor/article-editor-details/article-editor-details.module'
       ).then((m) => m.ArticleEditorDetailsModule),
     canActivate: [AuthGuard],
-    canDeactivate: [EditorArticleGuard]
+    // canDeactivate: [EditorArticleGuard]
   },
   {
     path: Route.ARTICLE_ID,
