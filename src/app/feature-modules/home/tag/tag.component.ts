@@ -13,19 +13,19 @@ export class TagComponent implements OnInit, OnDestroy {
   public currentActiveTag: string;
   public currentActiveTag_subscription: Subscription;
 
-  constructor(
-    private readonly tagsApiService: TagsApiService,
-    private readonly tagsStateService: TagsStateService
-  ) {
+  constructor(private readonly tagsStateService: TagsStateService) {
     this.tagsList = [];
     this.currentActiveTag = '';
     this.currentActiveTag_subscription = new Subscription();
   }
 
   ngOnInit() {
-    this.tagsApiService.getTags().subscribe((data: any) => {
-      this.tagsList = data.tags;
-    });
+    this.tagsStateService.getAllTags().subscribe(
+      (data: any) => {
+        this.tagsList = data.tags;
+      },
+      () => {}
+    );
     this.tagsStateService.currentTagEmit.subscribe(() => {
       this.currentActiveTag = '';
     });
@@ -40,8 +40,11 @@ export class TagComponent implements OnInit, OnDestroy {
   }
 
   public getArticlesByHastag(tag: string) {
-    this.tagsStateService.getArticlesDataByTag(tag).subscribe((data: any) => {
-      this.tagsStateService.articlesByTag$.next(data);
-    });
+    this.tagsStateService.getArticlesDataByTag(tag).subscribe(
+      (data: any) => {
+        this.tagsStateService.articlesByTag$.next(data);
+      },
+      () => {}
+    );
   }
 }

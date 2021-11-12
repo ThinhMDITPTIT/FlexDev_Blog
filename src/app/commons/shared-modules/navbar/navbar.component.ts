@@ -1,4 +1,10 @@
-import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnChanges,
+  Input,
+  SimpleChanges,
+} from '@angular/core';
 import {
   Router,
   NavigationStart,
@@ -26,16 +32,22 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.displayBanner();
-    this.authStateService.currentUserProfileEmit.subscribe((data: any) => {
-      this.defaultUser = data.user.username;
-    });
-    this.authStateService.currentLoggedInEmit.subscribe((data: any) => {
-      if(data?.user?.token){
+    this.authStateService.currentLoggedIn$.subscribe((data: any) => {
+      if (data === 'LoggedIn') {
         this.isAuthenticated = true;
       } else {
         this.isAuthenticated = false;
       }
-    })
+    });
+
+    this.authStateService.getCurrentUserInfo().subscribe(
+      (data: any) => {
+        if (data?.user?.token) {
+          this.defaultUser = data.user.username;
+        }
+      },
+      () => {}
+    );
   }
 
   toProfile() {
@@ -44,7 +56,12 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.localStorage.clear('token');
-    this.router.navigate(['login']);
+    this.authStateService.getCurrentUserInfo().subscribe(
+      () => {},
+      () => {
+        this.router.navigate(['login']);
+      }
+    );
   }
 
   displayBanner() {

@@ -1,7 +1,8 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { ArticlesApiService } from '../apis/articles-api.service';
+import { TagsApiService } from '../apis/tags-api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,21 +13,36 @@ export class TagsStateService {
   public articlesByTag$: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public currentTagEmit: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private readonly articlesApiService: ArticlesApiService) {
+  constructor(
+    private readonly articlesApiService: ArticlesApiService,
+    private readonly tagsApiService: TagsApiService
+  ) {
     this.currentTag = '';
     this.articlesByTag = [];
   }
 
-  public clearCurrentTag(){
+  public clearCurrentTag() {
     this.currentTag = '';
     this.currentTagEmit.emit();
   }
 
+  public getAllTags() {
+    return this.tagsApiService.getTags().pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => err)
+    );
+  }
+
   public getArticlesDataByTag(tag: string) {
     this.currentTag = tag;
-    return this.articlesApiService.getArticleByTag(tag).pipe(map((data: any) => {
-      this.articlesByTag = data;
-      return data;
-    }));
+    return this.articlesApiService.getArticleByTag(tag).pipe(
+      map((data: any) => {
+        this.articlesByTag = data;
+        return data;
+      }),
+      catchError((err) => err)
+    );
   }
 }
