@@ -10,6 +10,7 @@ export class AuthStateService {
   public currentUserProfile: any;
   public currentUserProfileEmit: EventEmitter<any>;
   public currentUserChangeEmit: EventEmitter<any>;
+  public currentLoggedInEmit: EventEmitter<any>;
 
   constructor(
     private readonly authApiService: AuthApiService,
@@ -18,6 +19,8 @@ export class AuthStateService {
 
     this.currentUserProfileEmit = new EventEmitter<any>();
     this.currentUserChangeEmit = new EventEmitter<any>();
+    this.currentLoggedInEmit = new EventEmitter<any>();
+
     this.authApiService.getCurrentUser().subscribe((data: any) => {
       this.currentUserProfile = data;
       this.currentUserProfileEmit.emit(this.currentUserProfile);
