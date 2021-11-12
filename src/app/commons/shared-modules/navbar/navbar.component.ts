@@ -12,8 +12,8 @@ import { AuthStateService } from 'src/app/core/services/states/auth-state.servic
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
-export class NavbarComponent implements OnInit, OnChanges {
-  @Input() isAuthenticated: boolean = !!this.localStorage.retrieve('token');
+export class NavbarComponent implements OnInit {
+  public isAuthenticated: boolean = false;
 
   public defaultUser: string = 'huyda';
   showBanner?: boolean;
@@ -29,11 +29,13 @@ export class NavbarComponent implements OnInit, OnChanges {
     this.authStateService.currentUserProfileEmit.subscribe((data: any) => {
       this.defaultUser = data.user.username;
     });
-  }
-
-  ngOnChanges(change: SimpleChanges){
-    console.log(change);
-
+    this.authStateService.currentLoggedInEmit.subscribe((data: any) => {
+      if(data?.user?.token){
+        this.isAuthenticated = true;
+      } else {
+        this.isAuthenticated = false;
+      }
+    })
   }
 
   toProfile() {

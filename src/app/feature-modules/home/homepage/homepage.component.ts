@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 
 @Component({
   selector: 'app-homepage',
@@ -8,7 +9,9 @@ import { Component } from '@angular/core';
 export class HomepageComponent {
   public featuresHome: string[];
 
-  constructor() {
+  constructor(private readonly authStateService: AuthStateService) {
     this.featuresHome = ['Your Feed', 'Global Feed'];
+
+    this.authStateService.getCurrentUserInfo();
   }
 }

@@ -16,7 +16,6 @@ export class AuthStateService {
     private readonly authApiService: AuthApiService,
     private readonly localStorage: LocalStorageService
   ) {
-
     this.currentUserProfileEmit = new EventEmitter<any>();
     this.currentUserChangeEmit = new EventEmitter<any>();
     this.currentLoggedInEmit = new EventEmitter<any>();
@@ -34,9 +33,20 @@ export class AuthStateService {
     });
   }
 
+  public getCurrentUserInfo() {
+    this.authApiService.getCurrentUser().subscribe(
+      (data: any) => {
+        this.currentLoggedInEmit.emit(data);
+      },
+      (error: any) => {
+        this.currentLoggedInEmit.emit(error);
+      }
+    );
+  }
+
   login(user: any) {
     return this.authApiService.login(user).pipe(
-      tap(res => {
+      tap((res) => {
         this.localStorage.store('token', res.user.token);
         this.currentUserChangeEmit.emit();
       })
@@ -44,8 +54,8 @@ export class AuthStateService {
   }
 
   register(user: any) {
-    return this.authApiService.register(user).pipe(
-      concatMap(() => this.login(user))
-    )
+    return this.authApiService
+      .register(user)
+      .pipe(concatMap(() => this.login(user)));
   }
 }

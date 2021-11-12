@@ -56,6 +56,7 @@ const routes: Routes = [
       import(
         './feature-modules/editor/article-details/article-details.module'
       ).then((m) => m.ArticleDetailsModule),
+    canActivate: [AuthGuard]
   },
   {
     path: Route.PROFILE_USER,

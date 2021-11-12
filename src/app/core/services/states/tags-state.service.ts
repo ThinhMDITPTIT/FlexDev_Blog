@@ -1,4 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ArticlesApiService } from '../apis/articles-api.service';
 
 @Injectable({
@@ -7,14 +9,12 @@ import { ArticlesApiService } from '../apis/articles-api.service';
 export class TagsStateService {
   public currentTag: string;
   public articlesByTag: any[];
-  public articlesByTagEmit: EventEmitter<any>;
-  public currentTagEmit: EventEmitter<any>;
+  public articlesByTag$: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public currentTagEmit: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private readonly articlesApiService: ArticlesApiService) {
     this.currentTag = '';
     this.articlesByTag = [];
-    this.articlesByTagEmit = new EventEmitter<any>();
-    this.currentTagEmit = new EventEmitter<any>();
   }
 
   public clearCurrentTag(){
@@ -24,9 +24,9 @@ export class TagsStateService {
 
   public getArticlesDataByTag(tag: string) {
     this.currentTag = tag;
-    this.articlesApiService.getArticleByTag(tag).subscribe((data: any) => {
+    return this.articlesApiService.getArticleByTag(tag).pipe(map((data: any) => {
       this.articlesByTag = data;
-      this.articlesByTagEmit.emit(this.articlesByTag);
-    });
+      return data;
+    }));
   }
 }
