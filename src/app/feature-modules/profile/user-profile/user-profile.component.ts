@@ -10,7 +10,6 @@ import { Subscription } from 'rxjs';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
 import { switchMap } from 'rxjs/operators';
 import { UserApiService } from 'src/app/core/services/apis/user-api.service';
-import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { UserStateService } from 'src/app/core/services/states/user-state.service';
 
@@ -27,7 +26,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   public currentArticlesObj: any;
   public currentArticles: any;
   private articles_Subscription: Subscription = new Subscription();
-  // private userProfileSubscription: Subscription = new Subscription();
 
   public pageSize: number;
   public maxSize: number;
@@ -73,47 +71,44 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authStateService.currentLoggedInEmit.subscribe((data: any) => {
-      if (data?.user?.token) {
-        this.currentUser =
-          this.authStateService.currentUserProfile?.user?.username;
-      } else {
-        this.currentUser = '';
+    this.authStateService.getCurrentUserInfo().subscribe(
+      (data: any) => {
+        if (data?.user?.token) {
+          this.currentUser =
+            this.authStateService.currentUserProfile?.user?.username;
+        }
+      },
+      () => {
+        this.currentUser = this.authStateService.currentUserProfile;
       }
-    });
-
-    // this.articles_Subscription =
-    //   this.articlesStateService.articlesEmit.subscribe((data: any) => {
-    //     this.currentArticlesObj = data;
-    //     this.initDataForFeature();
-    //   });
-
-    // this.userProfileSubscription =
-    //   this.userStateService.userProfileEmit.subscribe((data: any) => {
-    //     this.authorProfileObj = data.profile;
-    //   });
+    );
   }
 
   ngOnDestroy() {
     this.articles_Subscription.unsubscribe();
-    // this.userProfileSubscription.unsubscribe();
   }
 
   public getDataByFeature(featureName: string) {
     if (featureName === 'favorites_articles') {
       this.articlesStateService
         .getFavoriteArticlesByUsername(this.authorProfileObj.username)
-        .subscribe((data: any) => {
-          this.currentArticlesObj = data;
-          this.initDataForFeature();
-        });
+        .subscribe(
+          (data: any) => {
+            this.currentArticlesObj = data;
+            this.initDataForFeature();
+          },
+          () => {}
+        );
     } else {
       this.articlesStateService
         .getArticlesByAuthor(this.authorProfileObj.username)
-        .subscribe((data: any) => {
-          this.currentArticlesObj = data;
-          this.initDataForFeature();
-        });
+        .subscribe(
+          (data: any) => {
+            this.currentArticlesObj = data;
+            this.initDataForFeature();
+          },
+          () => {}
+        );
     }
   }
 
@@ -139,21 +134,21 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   public followUser(username: any) {
-    console.log('follow');
-    this.userStateService
-      .followUserByUsername(username)
-      .subscribe((data: any) => {
+    this.userStateService.followUserByUsername(username).subscribe(
+      (data: any) => {
         this.authorProfileObj = data.profile;
         this.userStateService.userProfile$.next(data);
-      });
+      },
+      () => {}
+    );
   }
   public unFollowUser(username: any) {
-    console.log('unfollow');
-    this.userStateService
-      .unFollowUserByUsername(username)
-      .subscribe((data: any) => {
+    this.userStateService.unFollowUserByUsername(username).subscribe(
+      (data: any) => {
         this.authorProfileObj = data.profile;
         this.userStateService.userProfile$.next(data);
-      });
+      },
+      () => {}
+    );
   }
 }
