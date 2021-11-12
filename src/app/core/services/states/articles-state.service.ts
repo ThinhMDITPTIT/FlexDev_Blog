@@ -13,9 +13,6 @@ export class ArticlesStateService {
   public currentArticleBySlug$: BehaviorSubject<any> = new BehaviorSubject<any>(
     {}
   );
-  // public articlesEmit: EventEmitter<any> = new EventEmitter<any>();
-  // public currentArticleBySlugEmit: EventEmitter<any> =
-  //   new EventEmitter<any>();
 
   public pageSize: number = 5;
   public maxSize: number = 3;
