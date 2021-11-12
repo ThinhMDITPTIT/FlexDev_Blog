@@ -10,13 +10,10 @@ import { LocalStorageService } from 'ngx-webstorage';
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly router: Router,
-    private readonly localStorage: LocalStorageService,
-    private readonly authStateService: AuthStateService
+    private readonly localStorage: LocalStorageService
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    this.authStateService.getCurrentUserInfo();
-
     const token = this.localStorage.retrieve('token');
     if(!token){
       this.router.navigate(['login']);

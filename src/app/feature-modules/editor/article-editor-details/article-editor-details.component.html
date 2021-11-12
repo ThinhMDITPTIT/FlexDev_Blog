@@ -1,7 +1,4 @@
-<p class="mt-3 h2 text-center">
-  <u>{{ articleObj?.title ? "Update Article" : "New Article" }}</u>
-</p>
-<div class="mt-2">
+<div class="mt-5">
   <form [formGroup]="markdownForm" (ngSubmit)="submitForm(markdownForm)">
     <div class="form-group">
       <label for="Title">Title <span class="text-danger">*</span></label>
@@ -54,7 +51,7 @@
     <div class="form-group">
       <div class="d-flex justify-content-between mb-1">
         <label class="d-flex align-items-end mb-0"
-          >Content &nbsp;<span class="text-danger">*</span></label
+          >Content <span class="text-danger">*</span></label
         >
         <a
           *ngIf="!showPreviewMarkdown"
@@ -92,35 +89,21 @@
       </ul>
     </div>
     <div class="form-group">
-      <label for="Tags">
+      <label>
         Tag
-        <span class="text-danger">*</span>&nbsp;
-        <span class="text-black-50"
-          ><em>(Press 'Enter' to add multi tags)</em></span
-        >
+        <span class="text-black-50">
+          <em>(multi tags separated by commas)</em>
+        </span>
       </label>
-      <app-tag-input id="Tags" [control]="tagsRawControl"></app-tag-input>
-    </div>
-    <div>
-      <ul
-        class="text-danger"
-        *ngIf="
-          (markdownForm.get('tags')?.invalid &&
-            markdownForm.get('tags')?.dirty) ||
-          (markdownForm.get('tags')?.invalid &&
-            markdownForm.get('tags')?.touched)
-        "
-      >
-        <li *ngIf="markdownForm.get('tags')?.hasError('required')">
-          Tags is required
-        </li>
-      </ul>
+      <input
+        formControlName="tags"
+        class="form-control"
+        id="Tags"
+        aria-describedby="Tags"
+      />
     </div>
     <div class="d-flex justify-content-end">
-      <button type="submit" class="btn btn-success">
-        {{ articleObj?.title ? "Update" : "Post" }}
-      </button>
+      <button type="submit" class="btn btn-success">Post</button>
     </div>
   </form>
-  <button (click)="openModal()">open_in_browser</button>
 </div>

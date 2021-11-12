@@ -4,7 +4,6 @@ import { ArticleEditorDetailsRoutingModule } from './article-editor-details-rout
 import { ArticleEditorDetailsComponent } from './article-editor-details.component';
 import { MarkdownEditorModule } from 'src/app/commons/shared-modules/markdown-editor/markdown-editor.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TagInputCustomModule } from 'src/app/commons/shared-modules/tag-input-custom/tag-input-custom.module';
 
 @NgModule({
   declarations: [ArticleEditorDetailsComponent],
@@ -13,8 +12,7 @@ import { TagInputCustomModule } from 'src/app/commons/shared-modules/tag-input-c
     ReactiveFormsModule,
     ArticleEditorDetailsRoutingModule,
     MarkdownEditorModule,
-    TagInputCustomModule
   ],
-  exports: [ArticleEditorDetailsComponent]
+  exports: [ArticleEditorDetailsComponent],
 })
 export class ArticleEditorDetailsModule {}

@@ -31,14 +31,12 @@ import { ToastrModule } from 'ngx-toastr';
     NgxWebstorageModule.forRoot(),
     NgxSpinnerModule,
     ToastrModule.forRoot({
-      timeOut: 2000,
-      progressAnimation: 'increasing',
-      progressBar: true,
+      timeOut: 3500,
       positionClass: 'toast-top-right',
       tapToDismiss: true,
       newestOnTop: true,
     }),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [
     {

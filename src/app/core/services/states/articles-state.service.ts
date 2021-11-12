@@ -1,80 +1,40 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, ReplaySubject } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
 import { ArticlesApiService } from '../apis/articles-api.service';
-import { LoadingSpinnerService } from '../spinner/loading-spinner.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ArticlesStateService {
-  public articles$: BehaviorSubject<any> = new BehaviorSubject<any>({});
-  public currentArticleBySlug$: BehaviorSubject<any> = new BehaviorSubject<any>(
-    {}
-  );
-  // public articlesEmit: EventEmitter<any> = new EventEmitter<any>();
-  // public currentArticleBySlugEmit: EventEmitter<any> =
-  //   new EventEmitter<any>();
+  public dataChangedEmit: EventEmitter<any>;
+  public feedArticles: any;
+  public globalArticles: any;
+  public feedArticlesEmit: EventEmitter<any>;
+  public globalArticlesEmit: EventEmitter<any>;
 
   public pageSize: number = 5;
   public maxSize: number = 3;
 
-  constructor(private readonly articlesApiService: ArticlesApiService) {}
-
-  public getGlobalArticle() {
-    return this.articlesApiService.getAllArticle().pipe(
-      map((data: any) => data),
-      catchError((err) => err)
-    );
-  }
-
-  public getFeedArticle() {
-    return this.articlesApiService.getFeed().pipe(
-      map((data: any) => data),
-      catchError((err) => err)
-    );
-  }
-
-  public getCurrentArticleBySlug(slug: any) {
-    return this.articlesApiService.getArticleBySlug(slug).pipe(
-      map((data: any) => data),
-      catchError((err) => err)
-    );
-  }
-
-  public deleteArticleBySlug(slug: any) {
-    return this.articlesApiService.deleteArticle(slug).pipe(
-      map((data: any) => data),
-      catchError((err) => err)
-    );
-  }
-
-  public getFavoriteArticlesByUsername(username: any) {
-    return this.articlesApiService.getArticleFavoriteByUsername(username).pipe(
-      map((data: any) => data),
-      catchError((err) => err)
-    );
-  }
-
-  public getArticlesByAuthor(username: any) {
-    return this.articlesApiService.getArticleByAuthor(username).pipe(
-      map((data: any) => data),
-      catchError((err) => err)
-    );
-  }
-
-  public favoriteArticleBySlug(slug: any) {
-    return this.articlesApiService.favoriteArticle(slug).pipe(
-      map((data: any) => data),
-      catchError((err) => err)
-    );
-  }
-
-  public unFavoriteArticleBySlug(slug: any) {
-    return this.articlesApiService.unfavoriteArticle(slug).pipe(
-      map((data: any) => data),
-      catchError((err) => err)
-    );
+  constructor(private readonly articlesApiService: ArticlesApiService) {
+    this.dataChangedEmit = new EventEmitter<any>();
+    this.feedArticlesEmit = new EventEmitter<any>();
+    this.globalArticlesEmit = new EventEmitter<any>();
+    this.articlesApiService.getFeed().subscribe((data: any) => {
+      this.feedArticles = data;
+      this.feedArticlesEmit.emit(this.feedArticles);
+    });
+    this.articlesApiService.getAllArticle().subscribe((data: any) => {
+      this.globalArticles = data;
+      this.globalArticlesEmit.emit(this.globalArticles);
+    });
+    this.dataChangedEmit.subscribe(() => {
+      this.articlesApiService.getFeed().subscribe((data: any) => {
+        this.feedArticles = data;
+        this.feedArticlesEmit.emit(this.feedArticles);
+      });
+      this.articlesApiService.getAllArticle().subscribe((data: any) => {
+        this.globalArticles = data;
+        this.globalArticlesEmit.emit(this.globalArticles);
+      });
+    });
   }
 }

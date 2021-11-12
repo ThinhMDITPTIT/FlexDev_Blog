@@ -12,7 +12,7 @@ import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.serv
 import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spinner.service';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
 import { CheckDeactivate } from './../../../commons/models/check-deactive';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NotificationModalComponent } from './../../../commons/shared-modules/notification-modal/notification-modal.component';
 
 @Component({
@@ -24,9 +24,8 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy, CheckDe
   public markdownForm: FormGroup;
   public articleObj: any;
   private currentSlug: any;
-  private articleSubscription: Subscription = new Subscription();
+  private articleSubscription: Subscription;
   public showPreviewMarkdown: boolean;
-  private isEditted: boolean = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -42,7 +41,7 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy, CheckDe
       title: ['', Validators.required],
       description: ['', Validators.required],
       content: ['', Validators.required],
-      tags: ['', Validators.required],
+      tags: [],
     });
 
     this.showPreviewMarkdown = false;
@@ -51,10 +50,11 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy, CheckDe
       if (event instanceof NavigationEnd) {
         if (this.activatedRoute.snapshot.params.id) {
           this.currentSlug = this.activatedRoute.snapshot.params.id;
-          this.getArticleDataBySlug(this.currentSlug);
         }
       }
     });
+
+    this.articleSubscription = new Subscription();
   }
 
   ngOnInit() {
@@ -78,33 +78,13 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy, CheckDe
   }
 
   ngOnDestroy() {
-    this.articleSubscription.unsubscribe();
-  }
-
-  public getArticleDataBySlug(slug: any) {
-    this.articleSubscription = this.articlesStateService
-      .getCurrentArticleBySlug(slug)
-      .subscribe((data: any) => {
-        this.articleObj = data.article;
-        this.markdownForm.get('title')?.setValue(this.articleObj.title);
-        this.markdownForm
-          .get('description')
-          ?.setValue(this.articleObj.description);
-        this.markdownForm.get('content')?.setValue(this.articleObj.body);
-        this.markdownForm.get('tags')?.setValue(
-          this.articleObj.tagList.map((tag: string) => {
-            return { display: tag, value: tag };
-          })
-        );
-      });
+    if (this.currentSlug) {
+      this.articleSubscription.unsubscribe();
+    }
   }
 
   public get contentRawControl() {
     return this.markdownForm.controls.content as FormControl;
-  }
-
-  public get tagsRawControl() {
-    return this.markdownForm.controls.tags as FormControl;
   }
 
   public submitForm(formValue: FormGroup) {
@@ -114,7 +94,7 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy, CheckDe
           title: formValue.value.title,
           description: formValue.value.description,
           body: formValue.value.content,
-          tagList: formValue.value.tags.map((tag: any) => tag.value),
+          tagList: String(formValue.value.tags).trim().split(','),
         },
       };
       if (!this.currentSlug) {
@@ -122,22 +102,24 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy, CheckDe
         this.articlesApiService
           .createArticle(articleObj)
           .subscribe((data: any) => {
+            this.articlesStateService.dataChangedEmit.emit();
             setTimeout(() => {
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Create new completed!');
-            }, 1500);
+            }, 2000);
           });
       } else {
         this.loadingSpinnerService.showSpinner();
         this.articlesApiService
           .updateAticle(this.currentSlug, articleObj)
           .subscribe((data: any) => {
+            this.articlesStateService.dataChangedEmit.emit();
             setTimeout(() => {
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Update completed!');
-            }, 1500);
+            }, 2000);
           });
       }
     } else {
@@ -160,10 +142,6 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy, CheckDe
   }
 
   checkDeactivate(currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    // return !this.isEditted || this.openModal();
-    if(this.isEditted){
-      return true
-    }
-    return false
+    return true || this.openModal()
   }
 }

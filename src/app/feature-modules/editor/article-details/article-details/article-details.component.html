@@ -1,16 +1,13 @@
 <div class="p-3 bg-dark">
   <p class="h2 text-white">{{ articleObj?.title }}</p>
-  <div class="d-sm-flex justify-content-between mt-4">
+  <div class="d-flex justify-content-between mt-4">
     <div class="d-flex">
       <div
         class="cursor__pointer"
         (click)="seeAuthorProfile(articleObj?.author?.username)"
       >
         <img
-          [src]="
-            articleObj?.author?.image ||
-            'https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg'
-          "
+          src="https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg"
           alt="avt"
           width="50"
           class="rounded-circle"
@@ -28,10 +25,10 @@
         </p>
       </div>
     </div>
-    <div class="d-flex justify-content-end mt-3 mt-sm-0">
+    <div class="d-flex">
       <ng-container *ngIf="currentUser !== articleObj?.author?.username">
         <ng-container
-          *ngIf="!authorProfile?.following; then Follow; else Unfollow"
+          *ngIf="!articleObj?.author?.following; then Follow; else Unfollow"
         ></ng-container>
       </ng-container>
       <ng-container *ngIf="currentUser !== articleObj?.author?.username">
@@ -42,17 +39,17 @@
       <ng-template #Follow>
         <a
           class="btn btn-outline-light mr-3 d-flex align-items-center"
-          (click)="followUser(articleObj?.author?.username)"
+          (click)="followUser()"
         >
           <span> <i class="fas fa-plus"></i> &nbsp; Follow </span>
         </a>
       </ng-template>
       <ng-template #Unfollow>
         <a
-          class="btn btn-light mr-3 d-flex align-items-center"
-          (click)="unFollowUser(articleObj?.author?.username)"
+          class="btn btn-outline-light mr-3 d-flex align-items-center"
+          (click)="unFollowUser()"
         >
-          <span> <i class="fas fa-minus"></i> &nbsp; Unfollow </span>
+          <span> <i class="fas fa-plus"></i> &nbsp; Unfollow </span>
         </a>
       </ng-template>
       <ng-template #Favorite>
@@ -60,16 +57,16 @@
           class="btn btn-outline-success mr-3 d-flex align-items-center"
           (click)="favoriteArticle()"
         >
-          <i class="far fa-heart"></i> &nbsp; Favorite&nbsp;
+          <i class="fas fa-heart"></i> &nbsp; Favorite &nbsp;
           <span>({{ articleObj?.favoritesCount }})</span>
         </a>
       </ng-template>
       <ng-template #Unfavorite>
         <a
-          class="btn btn-success mr-3 d-flex align-items-center"
+          class="btn btn-outline-success mr-3 d-flex align-items-center"
           (click)="unFavoriteArticle()"
         >
-          <i class="fas fa-heart"></i> &nbsp; Unfavorite&nbsp;
+          <i class="fas fa-heart"></i> &nbsp; Unfavorite &nbsp;
           <span>({{ articleObj?.favoritesCount }})</span>
         </a>
       </ng-template>
@@ -80,15 +77,13 @@
       >
         <i class="fas fa-edit"></i> &nbsp; Edit
       </a>
-      <button
+      <a
         *ngIf="currentUser === articleObj?.author?.username"
-        type="button"
         class="btn btn-outline-danger mr-3 d-flex align-items-center"
-        data-toggle="modal"
-        data-target="#modalDeleteArticle"
+        (click)="deleteArticle()"
       >
         <i class="fas fa-trash"></i> &nbsp; Delete
-      </button>
+      </a>
     </div>
   </div>
 </div>
@@ -97,17 +92,11 @@
 </div>
 <div class="p-3 border border-top-0">
   <p class="card-text">
-    Tags:
-    <span *ngFor="let tag of articleObj?.tagList; last as idxlast">
-      <a class="btn pl-1 pr-0 text-primary" (click)="getArticlesByHastag(tag)">
-        #{{ tag }}
-      </a>
-      <span *ngIf="!idxlast">,</span>
-    </span>
+    Tags: {{ articleObj?.tagList.join(",").replaceAll(",", ", ") || "" }}
   </p>
 </div>
 <div
-  class="p-3 border border-top-0 custom__over-flow"
+  class="p-3 border border-top-0"
   [innerHTML]="articleObj?.body | markdown"
 ></div>
 <div class="pl-3 py-3 form-group mb-0">
@@ -134,7 +123,7 @@
         formControlName="content"
         class="form-control"
         placeholder="Write a comment..."
-        rows="2"
+        rows="3"
       ></textarea>
     </div>
     <div
@@ -142,12 +131,9 @@
     >
       <div class="pl-2">
         <img
-          [src]="
-            currentUserImage ||
-            'https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg'
-          "
+          src="https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg"
           alt="avt"
-          width="40"
+          width="50"
           class="rounded-circle"
         />
       </div>
@@ -157,57 +143,9 @@
     </div>
   </form>
 </div>
-<div class="pl-3 py-3 pr-0">
+<div class="p-3">
   <app-comment-details
     *ngFor="let comment of articleComments"
     [commentContent]="comment"
-    [articleSlug]="currentSlug"
-    [isHost]="
-      currentUser === articleObj?.author?.username ||
-      currentUser === comment?.author?.username
-    "
   ></app-comment-details>
-</div>
-
-<!-- Modal Confirm Delete Article -->
-<div
-  class="modal fade"
-  id="modalDeleteArticle"
-  tabindex="-1"
-  aria-labelledby="modalConfirmDeleteArticle"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalConfirmDeleteArticle">
-          Confirm Delete Article
-        </h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this article?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Close
-        </button>
-        <button
-          type="button"
-          class="btn btn-danger"
-          data-dismiss="modal"
-          (click)="deleteArticle()"
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  </div>
 </div>

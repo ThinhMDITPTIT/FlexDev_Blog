@@ -1,137 +1,73 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
-import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
-import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
-import { UserStateService } from 'src/app/core/services/states/user-state.service';
 
 @Component({
   selector: 'app-list-article',
   templateUrl: './list-article.component.html',
   styleUrls: ['./list-article.component.scss'],
 })
-export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
-  public showArticlesByTag: boolean = false;
-  public currentHastag: string;
-  public currentPageIdx: number;
-
+export class ListArticleComponent implements OnInit, OnDestroy {
   @Input()
   public featuresArr: string[];
 
   public currentFeature: any;
+  public feedArticles: any;
+  public globalArticles: any;
   public currentArticlesObj: any;
   public currentArticles: any;
-  public tagArticles_Subscription: Subscription = new Subscription();
-  public feedArticlesChange_Subscription: Subscription = new Subscription();
+  public feedArticles_Subscription: Subscription;
+  public globalArticles_Subscription: Subscription;
 
   public pageSize: number;
   public maxSize: number;
 
-  constructor(
-    private readonly articlesStateService: ArticlesStateService,
-    private readonly tagsStateService: TagsStateService,
-    private readonly userStateService: UserStateService,
-    private readonly authStateService: AuthStateService
-  ) {
-    this.currentHastag = 'Demo';
-    this.currentPageIdx = 1;
-
+  constructor(private readonly articlesStateService: ArticlesStateService) {
     this.featuresArr = [];
     this.pageSize = this.articlesStateService.pageSize;
     this.maxSize = this.articlesStateService.maxSize;
-  }
+    this.currentFeature = this.featuresArr[0];
 
-  ngOnChanges() {
-    if (this.tagsStateService.currentTag === '') {
-      if (this.featuresArr.length !== 0) {
-        this.authStateService.getCurrentUserInfo().subscribe(
-          () => {
-            this.currentFeature = this.featuresArr[0];
-            // this.currentPageIdx = 1;
-            this.getDataByFeature(this.currentFeature);
-          },
-          () => {
-            this.currentFeature = this.featuresArr[0];
-            // this.currentPageIdx = 1;
-            this.getDataByFeature(this.currentFeature);
-          }
-        );
-      }
-    }
+    this.feedArticles_Subscription = new Subscription();
+    this.globalArticles_Subscription = new Subscription();
+
+    this.feedArticles = articlesStateService.feedArticles;
+    this.globalArticles = articlesStateService.globalArticles;
+    this.currentArticlesObj = this.feedArticles;
+    this.initDataForFeature();
   }
 
   ngOnInit() {
-    this.tagArticles_Subscription =
-      this.tagsStateService.articlesByTag$.subscribe((data: any) => {
-        if (this.tagsStateService.currentTag === '') {
-          this.showArticlesByTag = false;
-        } else {
-          this.currentFeature = 'Tag Feed';
-          this.showArticlesByTag = true;
-          this.currentHastag = this.tagsStateService.currentTag;
-          this.currentArticlesObj = data;
-          this.initDataForFeature();
-        }
+    this.feedArticles_Subscription =
+      this.articlesStateService.feedArticlesEmit.subscribe((data: any) => {
+        this.feedArticles = data;
+        this.currentArticlesObj = this.feedArticles;
+        this.initDataForFeature();
       });
-
-    this.feedArticlesChange_Subscription =
-      this.userStateService.userProfile$.subscribe((data: any) => {
-        if (data) {
-          if (this.featuresArr.length < 1) {
-            this.articlesStateService.getGlobalArticle().subscribe(
-              (data: any) => {
-                this.currentArticlesObj = data;
-                this.initDataForFeature();
-                this.userStateService.userProfile$.next(undefined);
-              },
-              () => {}
-            );
-          } else {
-            this.articlesStateService.getFeedArticle().subscribe(
-              (data: any) => {
-                this.currentArticlesObj = data;
-                this.initDataForFeature();
-                this.userStateService.userProfile$.next(undefined);
-              },
-              () => {}
-            );
-          }
-        }
+    this.globalArticles_Subscription =
+      this.articlesStateService.globalArticlesEmit.subscribe((data: any) => {
+        this.globalArticles = data;
       });
   }
 
   ngOnDestroy() {
-    this.tagArticles_Subscription.unsubscribe();
-    this.feedArticlesChange_Subscription.unsubscribe();
+    this.feedArticles_Subscription.unsubscribe();
+    this.globalArticles_Subscription.unsubscribe();
   }
 
   public getDataByFeature(featureName: string) {
-    this.showArticlesByTag = false;
-    this.tagsStateService.clearCurrentTag();
-
     if (featureName === 'Your Feed') {
-      this.currentFeature = 'Your Feed';
-      this.articlesStateService.getFeedArticle().subscribe(
-        (data: any) => {
-          this.currentArticlesObj = data;
-          this.initDataForFeature();
-        },
-        () => {}
-      );
+      this.currentFeature = this.featuresArr[0];
+      this.currentArticlesObj = this.feedArticles;
+      this.initDataForFeature();
     } else {
-      this.currentFeature = 'Global Feed';
-      this.articlesStateService.getGlobalArticle().subscribe(
-        (data: any) => {
-          this.currentArticlesObj = data;
-          this.initDataForFeature();
-        },
-        () => {}
-      );
+      this.currentFeature = this.featuresArr[1];
+      this.currentArticlesObj = this.globalArticles;
+      this.initDataForFeature();
     }
   }
 
   public initDataForFeature() {
-    this.currentPageIdx = 1;
     this.currentArticles = this.currentArticlesObj?.articles?.slice(
       0,
       this.pageSize

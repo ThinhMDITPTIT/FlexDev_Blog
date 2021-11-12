@@ -1,16 +1,10 @@
 {
   "hosting": {
     "public": "dist/flexdev-blog",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "/public/**",
-        "destination": "/public.html"
-      },
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
     ]
   }
 }

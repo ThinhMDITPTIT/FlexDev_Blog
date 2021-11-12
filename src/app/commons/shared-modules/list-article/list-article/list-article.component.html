@@ -1,19 +1,7 @@
 <nav class="cursor__pointer">
   <ul ngbNav class="nav-tabs">
     <li ngbNavItem *ngFor="let feature of featuresArr">
-      <a
-        ngbNavLink
-        (click)="getDataByFeature(feature)"
-        [class.active]="currentFeature === feature"
-      >
-        {{ feature }}
-      </a>
-    </li>
-
-    <li ngbNavItem *ngIf="showArticlesByTag">
-      <a ngbNavLink [class.active]="currentFeature === 'Tag Feed'">
-        #{{ currentHastag }}
-      </a>
+      <a ngbNavLink (click)="getDataByFeature(feature)">{{ feature }}</a>
     </li>
   </ul>
 </nav>
@@ -28,7 +16,6 @@
   </div>
   <app-pagination
     *ngIf="currentArticlesObj?.articles?.length !== 0"
-    [page]="currentPageIdx"
     [collectionSize]="currentArticlesObj?.articlesCount"
     [pageSize]="pageSize"
     [maxSize]="maxSize"
