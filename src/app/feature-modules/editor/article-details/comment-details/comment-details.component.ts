@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spinner.service';
+import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { CommentsStateService } from 'src/app/core/services/states/comments-state.service';
 
 @Component({
@@ -24,7 +25,7 @@ export class CommentDetailsComponent {
     private router: Router,
     private readonly loadingSpinnerService: LoadingSpinnerService,
     private readonly toastr: ToastrService
-  ) {}
+  ) { }
 
   public deleteComment(commentId: any) {
     this.loadingSpinnerService.showSpinner();
