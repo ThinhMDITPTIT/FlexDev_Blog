@@ -18,7 +18,7 @@ export class NoNeedAuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const token = this.localStorage.retrieve('token');
     if(token){
-      this.router.navigate(['']);
+      this.router.navigate(['/']);
       return false
     }
     return true;

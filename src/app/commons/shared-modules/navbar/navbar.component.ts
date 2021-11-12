@@ -1,27 +1,28 @@
-import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   Router,
   NavigationStart,
   Event as NavigationEnd,
 } from '@angular/router';
 import { LocalStorageService } from 'ngx-webstorage';
+import { BehaviorSubject } from 'rxjs';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
+import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spinner.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
-export class NavbarComponent implements OnInit, OnChanges {
-  @Input() isAuthenticated: boolean = !!this.localStorage.retrieve('token');
-
+export class NavbarComponent implements OnInit {
   public defaultUser: string = 'huyda';
   showBanner?: boolean;
 
   constructor(
     private readonly router: Router,
     private readonly localStorage: LocalStorageService,
-    private readonly authStateService: AuthStateService
+    private readonly authStateService: AuthStateService,
+    private readonly spinner: LoadingSpinnerService
   ) {}
 
   ngOnInit(): void {
@@ -31,18 +32,17 @@ export class NavbarComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges(change: SimpleChanges){
-    console.log(change);
-
-  }
-
   toProfile() {
     this.router.navigate(['profile', this.defaultUser]);
   }
 
   logout() {
     this.localStorage.clear('token');
-    this.router.navigate(['login']);
+    this.spinner.showSpinner();
+    setTimeout(() => {
+      this.spinner.hideSpinner();
+      this.router.navigate(['']);
+    }, 500);
   }
 
   displayBanner() {

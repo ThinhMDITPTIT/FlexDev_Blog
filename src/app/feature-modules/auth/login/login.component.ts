@@ -4,6 +4,8 @@ import { AuthApiService } from 'src/app/core/services/apis/auth-api.service';
 import { LocalStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
+import { ToastrService } from 'ngx-toastr';
+import { LoadingSpinnerService } from './../../../core/services/spinner/loading-spinner.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +25,9 @@ export class LoginComponent {
     private readonly authApiService: AuthApiService,
     private readonly authStateService: AuthStateService,
     private readonly localStorage: LocalStorageService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly toastr: ToastrService,
+    private readonly spinner: LoadingSpinnerService
   ) {}
 
   get email() {
@@ -36,6 +40,7 @@ export class LoginComponent {
 
   login() {
     if (!this.signInForm.invalid) {
+      this.spinner.showSpinner();
       this.authApiService
         .login({
           user: {
@@ -45,8 +50,19 @@ export class LoginComponent {
         })
         .subscribe((res) => {
           this.localStorage.store('token', res.user.token);
-          this.authStateService.currentUserChangeEmit.emit();
-          this.router.navigate(['']);
+          setTimeout(() => {
+            this.spinner.hideSpinner();
+            this.authStateService.currentUserChangeEmit.emit();
+            this.router.navigate(['']);
+          }, 1000)
+          this.toastr.info(`Wellcome back!`, `Hi, ${res.user.username}`)
+        }, err => {
+          setTimeout(() => {
+            this.spinner.hideSpinner();
+          }, 500);
+          if(err.error.errors){
+            this.toastr.warning('Please try again!', 'Email or Password is Invalid!');
+          }
         });
     }
     this.submitted = true;
