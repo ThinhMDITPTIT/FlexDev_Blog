@@ -11,7 +11,7 @@
     </li>
 
     <li ngbNavItem *ngIf="showArticlesByTag">
-      <a ngbNavLink [class.active]="currentFeature?.includes('Tag Feed')">
+      <a ngbNavLink [class.active]="currentFeature === 'Tag Feed'">
         #{{ currentHastag }}
       </a>
     </li>

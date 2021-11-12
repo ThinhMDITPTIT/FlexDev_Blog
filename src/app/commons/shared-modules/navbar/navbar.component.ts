@@ -21,7 +21,7 @@ import { AuthStateService } from 'src/app/core/services/states/auth-state.servic
 export class NavbarComponent implements OnInit {
   public isAuthenticated: boolean = false;
 
-  public defaultUser: string = 'huyda';
+  public defaultUser: string = '';
   showBanner?: boolean;
 
   constructor(
@@ -35,19 +35,11 @@ export class NavbarComponent implements OnInit {
     this.authStateService.currentLoggedIn$.subscribe((data: any) => {
       if (data === 'LoggedIn') {
         this.isAuthenticated = true;
+        this.defaultUser = this.authStateService.currentUserProfile.user.username;
       } else {
         this.isAuthenticated = false;
       }
     });
-
-    this.authStateService.getCurrentUserInfo().subscribe(
-      (data: any) => {
-        if (data?.user?.token) {
-          this.defaultUser = data.user.username;
-        }
-      },
-      () => {}
-    );
   }
 
   toProfile() {

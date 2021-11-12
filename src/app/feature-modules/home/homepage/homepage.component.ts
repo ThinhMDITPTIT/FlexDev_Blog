@@ -16,7 +16,7 @@ export class HomepageComponent {
       () => {
         this.featuresHome = ['Your Feed', 'Global Feed'];
       },
-      (error: any) => {
+      () => {
         this.featuresHome = ['Global Feed'];
       }
     );
