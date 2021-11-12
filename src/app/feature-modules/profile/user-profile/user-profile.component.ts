@@ -44,8 +44,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.currentUser =
       this.authStateService.currentUserProfile?.user?.username || '';
 
-    this.authStateService.getCurrentUserInfo();
-
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.activatedRoute.paramMap

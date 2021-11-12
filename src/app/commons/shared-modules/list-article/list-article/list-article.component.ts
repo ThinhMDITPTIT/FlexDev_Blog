@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
+import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
 import { UserStateService } from 'src/app/core/services/states/user-state.service';
 
@@ -29,7 +30,8 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private readonly articlesStateService: ArticlesStateService,
     private readonly tagsStateService: TagsStateService,
-    private readonly userStateService: UserStateService
+    private readonly userStateService: UserStateService,
+    private readonly authStateService: AuthStateService
   ) {
     this.currentHastag = 'Demo';
     this.currentPageIdx = 1;
@@ -37,14 +39,24 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
     this.featuresArr = [];
     this.pageSize = this.articlesStateService.pageSize;
     this.maxSize = this.articlesStateService.maxSize;
-    this.currentFeature = this.featuresArr[0];
   }
 
   ngOnChanges() {
-    this.currentFeature = this.featuresArr[0];
-    this.currentPageIdx = 1;
     if (this.tagsStateService.currentTag === '') {
-      this.getDataByFeature(this.currentFeature);
+      if (this.featuresArr.length !== 0) {
+        this.authStateService.getCurrentUserInfo().subscribe(
+          () => {
+            this.currentFeature = this.featuresArr[0];
+            // this.currentPageIdx = 1;
+            this.getDataByFeature(this.currentFeature);
+          },
+          () => {
+            this.currentFeature = this.featuresArr[0];
+            // this.currentPageIdx = 1;
+            this.getDataByFeature(this.currentFeature);
+          }
+        );
+      }
     }
   }
 
@@ -54,8 +66,8 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
         if (this.tagsStateService.currentTag === '') {
           this.showArticlesByTag = false;
         } else {
-          this.showArticlesByTag = true;
           this.currentFeature = 'Tag Feed';
+          this.showArticlesByTag = true;
           this.currentHastag = this.tagsStateService.currentTag;
           this.currentArticlesObj = data;
           this.initDataForFeature();
@@ -70,6 +82,7 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
               (data: any) => {
                 this.currentArticlesObj = data;
                 this.initDataForFeature();
+                this.userStateService.userProfile$.next(undefined);
               },
               () => {}
             );
@@ -96,8 +109,8 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
     this.showArticlesByTag = false;
     this.tagsStateService.clearCurrentTag();
 
-    if (featureName === this.featuresArr[0]) {
-      this.currentFeature = this.featuresArr[0];
+    if (featureName === 'Your Feed') {
+      this.currentFeature = 'Your Feed';
       this.articlesStateService.getFeedArticle().subscribe(
         (data: any) => {
           this.currentArticlesObj = data;
@@ -106,7 +119,7 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
         () => {}
       );
     } else {
-      this.currentFeature = this.featuresArr[1];
+      this.currentFeature = 'Global Feed';
       this.articlesStateService.getGlobalArticle().subscribe(
         (data: any) => {
           this.currentArticlesObj = data;

@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class CommentsApiService {
-  baseUrl: string = 'https://api.realworld.io/api';
-  // baseUrl: string = 'http://localhost:3000/api';
+  // baseUrl: string = 'https://api.realworld.io/api';
+  baseUrl: string = 'http://localhost:3000/api';
 
   constructor(private readonly http: HttpClient) {}
 

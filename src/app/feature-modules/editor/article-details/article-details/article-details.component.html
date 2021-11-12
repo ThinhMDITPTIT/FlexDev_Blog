@@ -162,7 +162,10 @@
     *ngFor="let comment of articleComments"
     [commentContent]="comment"
     [articleSlug]="currentSlug"
-    [isHost]="currentUser === articleObj?.author?.username"
+    [isHost]="
+      currentUser === articleObj?.author?.username ||
+      currentUser === comment?.author?.username
+    "
   ></app-comment-details>
 </div>
 
