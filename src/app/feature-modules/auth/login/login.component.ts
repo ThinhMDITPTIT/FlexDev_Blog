@@ -22,9 +22,7 @@ export class LoginComponent {
 
   constructor(
     private readonly _fb: FormBuilder,
-    private readonly authApiService: AuthApiService,
     private readonly authStateService: AuthStateService,
-    private readonly localStorage: LocalStorageService,
     private readonly router: Router,
     private readonly toastr: ToastrService,
     private readonly spinner: LoadingSpinnerService
@@ -41,29 +39,26 @@ export class LoginComponent {
   login() {
     if (!this.signInForm.invalid) {
       this.spinner.showSpinner();
-      this.authApiService
-        .login({
-          user: {
-            email: this.email.value,
-            password: this.password.value,
-          },
-        })
-        .subscribe((res) => {
-          this.localStorage.store('token', res.user.token);
-          setTimeout(() => {
-            this.spinner.hideSpinner();
-            this.authStateService.currentUserChangeEmit.emit();
-            this.router.navigate(['']);
-          }, 1000)
-          this.toastr.info(`Wellcome back!`, `Hi, ${res.user.username}`)
-        }, err => {
-          setTimeout(() => {
-            this.spinner.hideSpinner();
-          }, 500);
-          if(err.error.errors){
-            this.toastr.warning('Please try again!', 'Email or Password is Invalid!');
-          }
-        });
+      let userObj = {
+        user: {
+          email: this.email.value,
+          password: this.password.value,
+        },
+      };
+      this.authStateService.login(userObj).subscribe(res => {
+        setTimeout(() => {
+          this.spinner.hideSpinner();
+          this.router.navigate(['']);
+        }, 1000)
+        this.toastr.info(`Wellcome back!`, `Hi, ${res.user.username}`)
+      }, err => {
+        setTimeout(() => {
+          this.spinner.hideSpinner();
+        }, 500);
+        if(err.error.errors){
+          this.toastr.warning('Please try again!', 'Email or Password is Invalid!');
+        }
+      });
     }
     this.submitted = true;
   }

@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
+import { Subscription } from 'rxjs';
+import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
+import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
 
 @Component({
   selector: 'app-single-article',
@@ -11,24 +13,37 @@ export class SingleArticleComponent {
   @Input()
   public articleObj: any;
 
+  public articleObjSubscription: Subscription = new Subscription();
+
   constructor(
-    private readonly articlesApiService: ArticlesApiService,
+    private readonly articlesStateService: ArticlesStateService,
+    private readonly tagsStateService: TagsStateService,
     private readonly router: Router
   ) {}
 
   public favoriteArticle() {
-    this.articlesApiService
-      .favoriteArticle(this.articleObj?.slug)
-      .subscribe(() => {
-        console.log('Favorite Article');
-      });
+    this.articlesStateService
+      .favoriteArticleBySlug(this.articleObj?.slug)
+      .subscribe(
+        (data: any) => {
+          if (this.articleObj?.slug === data?.article?.slug) {
+            this.articleObj = data?.article;
+          }
+        },
+        () => {}
+      );
   }
   public unFavoriteArticle() {
-    this.articlesApiService
-      .unfavoriteArticle(this.articleObj?.slug)
-      .subscribe(() => {
-        console.log('Unfavorite Article');
-      });
+    this.articlesStateService
+      .unFavoriteArticleBySlug(this.articleObj?.slug)
+      .subscribe(
+        (data: any) => {
+          if (this.articleObj?.slug === data?.article?.slug) {
+            this.articleObj = data?.article;
+          }
+        },
+        () => {}
+      );
   }
 
   public seeAuthorProfile(authorName: string) {
@@ -37,5 +52,14 @@ export class SingleArticleComponent {
 
   public seeArticleDetails(slug: string) {
     this.router.navigate(['article', slug]);
+  }
+
+  public getArticlesByHastag(tag: string) {
+    this.tagsStateService.getArticlesDataByTag(tag).subscribe(
+      (data: any) => {
+        this.tagsStateService.articlesByTag$.next(data);
+      },
+      () => {}
+    );
   }
 }

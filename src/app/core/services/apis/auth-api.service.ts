@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators'
   providedIn: 'root'
 })
 export class AuthApiService {
-
+  // baseUrl: string = 'https://api.realworld.io/api';
   baseUrl: string = 'http://localhost:3000/api';
 
   constructor(private readonly http: HttpClient) { }

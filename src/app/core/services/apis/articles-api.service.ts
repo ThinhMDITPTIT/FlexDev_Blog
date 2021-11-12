@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ArticlesApiService {
+  // baseUrl: string = 'https://api.realworld.io/api/articles';
   baseUrl: string = 'http://localhost:3000/api/articles';
 
   constructor(private readonly http: HttpClient) {}
