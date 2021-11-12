@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 import {
   Router,
   NavigationStart,
@@ -12,7 +12,9 @@ import { AuthStateService } from 'src/app/core/services/states/auth-state.servic
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnChanges {
+  @Input() isAuthenticated: boolean = !!this.localStorage.retrieve('token');
+
   public defaultUser: string = 'huyda';
   showBanner?: boolean;
 
@@ -20,14 +22,18 @@ export class NavbarComponent implements OnInit {
     private readonly router: Router,
     private readonly localStorage: LocalStorageService,
     private readonly authStateService: AuthStateService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+    this.displayBanner();
     this.authStateService.currentUserProfileEmit.subscribe((data: any) => {
       this.defaultUser = data.user.username;
     });
   }
 
-  ngOnInit(): void {
-    this.displayBanner();
+  ngOnChanges(change: SimpleChanges){
+    console.log(change);
+
   }
 
   toProfile() {
