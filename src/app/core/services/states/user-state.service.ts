@@ -1,32 +1,31 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { UserApiService } from '../apis/user-api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserStateService {
-  public userProfileEmit: EventEmitter<any>;
+  public userProfile$: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
-  constructor(private readonly userApiService: UserApiService) {
-    this.userProfileEmit = new EventEmitter<any>();
-  }
+  constructor(private readonly userApiService: UserApiService) {}
 
   public getUserProfileByUsername(username: any) {
-    this.userApiService.getProfile(username).subscribe((data: any) => {
-      this.userProfileEmit.emit(data);
-    });
+    return this.userApiService
+      .getProfile(username)
+      .pipe(map((data: any) => data));
   }
 
   public followUserByUsername(username: any) {
-    this.userApiService.followUser(username).subscribe((data: any) => {
-      this.userProfileEmit.emit(data);
-    });
+    return this.userApiService
+      .followUser(username)
+      .pipe(map((data: any) => data));
   }
 
   public unFollowUserByUsername(username: any) {
-    this.userApiService.unfollowUser(username).subscribe((data: any) => {
-      this.userProfileEmit.emit(data);
-    });
+    return this.userApiService
+      .unfollowUser(username)
+      .pipe(map((data: any) => data));
   }
 }

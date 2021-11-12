@@ -31,17 +31,17 @@
       <ng-template #Follow>
         <a
           class="btn btn-outline-light mr-3 d-flex align-items-center"
-          (click)="followUser()"
+          (click)="followUser(authorProfileObj?.username)"
         >
           <span> <i class="fas fa-plus"></i> &nbsp; Follow </span>
         </a>
       </ng-template>
       <ng-template #Unfollow>
         <a
-          class="btn btn-outline-light mr-3 d-flex align-items-center"
-          (click)="unFollowUser()"
+          class="btn btn-light mr-3 d-flex align-items-center"
+          (click)="unFollowUser(authorProfileObj?.username)"
         >
-          <span> <i class="fas fa-plus"></i> &nbsp; Unfollow </span>
+          <span> <i class="fas fa-minus"></i> &nbsp; Unfollow </span>
         </a>
       </ng-template>
     </div>
@@ -53,19 +53,19 @@
       <a
         ngbNavLink
         [routerLink]="['', 'profile', authorProfileObj?.username]"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        >My Articles</a
+        [class.active]="currentFeature?.includes('my_articles')"
       >
+        My Articles
+      </a>
     </li>
     <li ngbNavItem>
       <a
         ngbNavLink
         [routerLink]="['favorites']"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        >Favorite Articles</a
+        [class.active]="currentFeature?.includes('favorites_articles')"
       >
+        Favorite Articles
+      </a>
     </li>
   </ul>
 </div>

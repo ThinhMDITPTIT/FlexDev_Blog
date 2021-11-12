@@ -28,9 +28,9 @@ export class TagComponent implements OnInit, OnDestroy {
     });
     this.tagsStateService.currentTagEmit.subscribe(() => {
       this.currentActiveTag = '';
-    })
+    });
     this.currentActiveTag_subscription =
-      this.tagsStateService.articlesByTagEmit.subscribe(() => {
+      this.tagsStateService.articlesByTag$.subscribe(() => {
         this.currentActiveTag = this.tagsStateService.currentTag;
       });
   }
@@ -40,6 +40,8 @@ export class TagComponent implements OnInit, OnDestroy {
   }
 
   public getArticlesByHastag(tag: string) {
-    this.tagsStateService.getArticlesDataByTag(tag);
+    this.tagsStateService.getArticlesDataByTag(tag).subscribe((data: any) => {
+      this.tagsStateService.articlesByTag$.next(data);
+    });
   }
 }

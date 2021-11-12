@@ -9,7 +9,7 @@ import { TagsStateService } from 'src/app/core/services/states/tags-state.servic
   templateUrl: './single-article.component.html',
   styleUrls: ['./single-article.component.scss'],
 })
-export class SingleArticleComponent implements OnInit, OnDestroy {
+export class SingleArticleComponent {
   @Input()
   public articleObj: any;
 
@@ -21,26 +21,23 @@ export class SingleArticleComponent implements OnInit, OnDestroy {
     private readonly router: Router
   ) {}
 
-  ngOnInit() {
-    this.articleObjSubscription =
-      this.articlesStateService.currentArticleBySlugEmit.subscribe(
-        (data: any) => {
-          if (this.articleObj?.slug === data.article.slug) {
-            this.articleObj = data.article;
-          }
-        }
-      );
-  }
-
-  ngOnDestroy() {
-    this.articleObjSubscription.unsubscribe();
-  }
-
   public favoriteArticle() {
-    this.articlesStateService.favoriteArticleBySlug(this.articleObj?.slug);
+    this.articlesStateService
+      .favoriteArticleBySlug(this.articleObj?.slug)
+      .subscribe((data: any) => {
+        if (this.articleObj?.slug === data?.article?.slug) {
+          this.articleObj = data?.article;
+        }
+      });
   }
   public unFavoriteArticle() {
-    this.articlesStateService.unFavoriteArticleBySlug(this.articleObj?.slug);
+    this.articlesStateService
+      .unFavoriteArticleBySlug(this.articleObj?.slug)
+      .subscribe((data: any) => {
+        if (this.articleObj?.slug === data?.article?.slug) {
+          this.articleObj = data?.article;
+        }
+      });
   }
 
   public seeAuthorProfile(authorName: string) {
@@ -52,6 +49,8 @@ export class SingleArticleComponent implements OnInit, OnDestroy {
   }
 
   public getArticlesByHastag(tag: string) {
-    this.tagsStateService.getArticlesDataByTag(tag);
+    this.tagsStateService.getArticlesDataByTag(tag).subscribe((data: any) => {
+      this.tagsStateService.articlesByTag$.next(data);
+    });
   }
 }

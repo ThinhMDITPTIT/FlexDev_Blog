@@ -1,37 +1,32 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { CommentsApiService } from '../apis/comments-api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommentsStateService {
-  public currentCommentsOfArticleEmit: EventEmitter<any>;
+  public currentCommentsOfArticle$: BehaviorSubject<any> =
+    new BehaviorSubject<any>({});
 
-  constructor(private readonly commentsApiService: CommentsApiService) {
-    this.currentCommentsOfArticleEmit = new EventEmitter<any>();
-  }
+  constructor(private readonly commentsApiService: CommentsApiService) {}
 
   public getCommentsFromArticle(slug: any) {
-    this.commentsApiService
+    return this.commentsApiService
       .getCommentsFromAnArticle(slug)
-      .subscribe((data: any) => {
-        this.currentCommentsOfArticleEmit.emit(data);
-      });
+      .pipe(map((data: any) => data));
   }
 
   public addCommentToArticle(slug: any, commentObj: any) {
-    this.commentsApiService
+    return this.commentsApiService
       .addCommentToAnArticle(slug, commentObj)
-      .subscribe(() => {
-        this.getCommentsFromArticle(slug);
-      });
+      .pipe(map((data: any) => data));
   }
 
   public deleteCommentOfArticle(slug: any, commentId: any) {
-    this.commentsApiService
+    return this.commentsApiService
       .deleteCommentToAnArticle(slug, commentId)
-      .subscribe(() => {
-        this.getCommentsFromArticle(slug);
-      });
+      .pipe(map((data: any) => data));
   }
 }

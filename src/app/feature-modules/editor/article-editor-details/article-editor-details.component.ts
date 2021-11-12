@@ -17,7 +17,7 @@ import { ArticlesStateService } from 'src/app/core/services/states/articles-stat
   templateUrl: './article-editor-details.component.html',
   styleUrls: ['./article-editor-details.component.scss'],
 })
-export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
+export class ArticleEditorDetailsComponent implements OnDestroy {
   public markdownForm: FormGroup;
   public articleObj: any;
   private currentSlug: any;
@@ -46,37 +46,32 @@ export class ArticleEditorDetailsComponent implements OnInit, OnDestroy {
       if (event instanceof NavigationEnd) {
         if (this.activatedRoute.snapshot.params.id) {
           this.currentSlug = this.activatedRoute.snapshot.params.id;
-          this.articlesStateService.getCurrentArticleBySlug(this.currentSlug);
+          this.getArticleDataBySlug(this.currentSlug);
         }
       }
     });
   }
 
-  ngOnInit() {
-    if (this.currentSlug) {
-      this.articleSubscription =
-        this.articlesStateService.currentArticleBySlugEmit.subscribe(
-          (data: any) => {
-            this.articleObj = data.article;
-            this.markdownForm.get('title')?.setValue(this.articleObj.title);
-            this.markdownForm
-              .get('description')
-              ?.setValue(this.articleObj.description);
-            this.markdownForm.get('content')?.setValue(this.articleObj.body);
-            this.markdownForm.get('tags')?.setValue(
-              this.articleObj.tagList.map((tag: string) => {
-                return { display: tag, value: tag };
-              })
-            );
-          }
-        );
-    }
+  ngOnDestroy() {
+    this.articleSubscription.unsubscribe();
   }
 
-  ngOnDestroy() {
-    if (this.currentSlug) {
-      this.articleSubscription.unsubscribe();
-    }
+  public getArticleDataBySlug(slug: any) {
+    this.articleSubscription = this.articlesStateService
+      .getCurrentArticleBySlug(slug)
+      .subscribe((data: any) => {
+        this.articleObj = data.article;
+        this.markdownForm.get('title')?.setValue(this.articleObj.title);
+        this.markdownForm
+          .get('description')
+          ?.setValue(this.articleObj.description);
+        this.markdownForm.get('content')?.setValue(this.articleObj.body);
+        this.markdownForm.get('tags')?.setValue(
+          this.articleObj.tagList.map((tag: string) => {
+            return { display: tag, value: tag };
+          })
+        );
+      });
   }
 
   public get contentRawControl() {
