@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
 import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
+import { UserStateService } from 'src/app/core/services/states/user-state.service';
 
 @Component({
   selector: 'app-list-article',
@@ -9,7 +10,7 @@ import { TagsStateService } from 'src/app/core/services/states/tags-state.servic
   styleUrls: ['./list-article.component.scss'],
 })
 export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
-  public showArticlesByTag: boolean;
+  public showArticlesByTag: boolean = false;
   public currentHastag: string;
   public currentPageIdx: number;
 
@@ -19,17 +20,17 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
   public currentFeature: any;
   public currentArticlesObj: any;
   public currentArticles: any;
-  public articles_Subscription: Subscription = new Subscription();
   public tagArticles_Subscription: Subscription = new Subscription();
+  public feedArticlesChange_Subscription: Subscription = new Subscription();
 
   public pageSize: number;
   public maxSize: number;
 
   constructor(
     private readonly articlesStateService: ArticlesStateService,
-    private readonly tagsStateService: TagsStateService
+    private readonly tagsStateService: TagsStateService,
+    private readonly userStateService: UserStateService
   ) {
-    this.showArticlesByTag = false;
     this.currentHastag = 'Demo';
     this.currentPageIdx = 1;
 
@@ -37,38 +38,45 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
     this.pageSize = this.articlesStateService.pageSize;
     this.maxSize = this.articlesStateService.maxSize;
     this.currentFeature = this.featuresArr[0];
-
-    this.articlesStateService.getFeedArticle();
   }
 
   ngOnChanges() {
     this.currentFeature = this.featuresArr[0];
     this.currentPageIdx = 1;
-    this.tagsStateService.clearCurrentTag();
+    if (this.tagsStateService.currentTag === '') {
+      this.getDataByFeature(this.currentFeature);
+    }
   }
 
   ngOnInit() {
-    this.tagsStateService.clearCurrentTag();
-
-    this.articles_Subscription =
-      this.articlesStateService.articlesEmit.subscribe((data: any) => {
-        this.currentArticlesObj = data;
-        this.initDataForFeature();
+    this.tagArticles_Subscription =
+      this.tagsStateService.articlesByTag$.subscribe((data: any) => {
+        if (this.tagsStateService.currentTag === '') {
+          this.showArticlesByTag = false;
+        } else {
+          this.showArticlesByTag = true;
+          this.currentFeature = 'Tag Feed';
+          this.currentHastag = this.tagsStateService.currentTag;
+          this.currentArticlesObj = data;
+          this.initDataForFeature();
+        }
       });
 
-    this.tagArticles_Subscription =
-      this.tagsStateService.articlesByTagEmit.subscribe((data: any) => {
-        this.showArticlesByTag = true;
-        this.currentFeature = 'Tag Feed';
-        this.currentHastag = this.tagsStateService.currentTag;
-        this.currentArticlesObj = data;
-        this.initDataForFeature();
+    this.feedArticlesChange_Subscription =
+      this.userStateService.userProfile$.subscribe((data: any) => {
+        if (data) {
+          this.articlesStateService.getFeedArticle().subscribe((data: any) => {
+            this.currentArticlesObj = data;
+            this.initDataForFeature();
+            this.userStateService.userProfile$.next(undefined);
+          });
+        }
       });
   }
 
   ngOnDestroy() {
-    this.articles_Subscription.unsubscribe();
     this.tagArticles_Subscription.unsubscribe();
+    this.feedArticlesChange_Subscription.unsubscribe();
   }
 
   public getDataByFeature(featureName: string) {
@@ -77,10 +85,16 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
 
     if (featureName === this.featuresArr[0]) {
       this.currentFeature = this.featuresArr[0];
-      this.articlesStateService.getFeedArticle();
+      this.articlesStateService.getFeedArticle().subscribe((data: any) => {
+        this.currentArticlesObj = data;
+        this.initDataForFeature();
+      });
     } else {
       this.currentFeature = this.featuresArr[1];
-      this.articlesStateService.getGlobalArticle();
+      this.articlesStateService.getGlobalArticle().subscribe((data: any) => {
+        this.currentArticlesObj = data;
+        this.initDataForFeature();
+      });
     }
   }
 

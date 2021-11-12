@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spinner.service';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
@@ -16,6 +17,7 @@ import { UserStateService } from 'src/app/core/services/states/user-state.servic
 })
 export class ArticleDetailsComponent implements OnInit, OnDestroy {
   public currentUser: string;
+  public currentUserImage: any;
 
   public authorProfile: any;
 
@@ -26,7 +28,6 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   public articleComments: any[];
   private articleSubscription: Subscription = new Subscription();
   private commentsSubscription: Subscription = new Subscription();
-  private userProfileSubscription: Subscription = new Subscription();
 
   constructor(
     private _fb: FormBuilder,
@@ -37,7 +38,8 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     private readonly authStateService: AuthStateService,
     private readonly articlesStateService: ArticlesStateService,
     private readonly tagsStateService: TagsStateService,
-    private readonly loadingSpinnerService: LoadingSpinnerService
+    private readonly loadingSpinnerService: LoadingSpinnerService,
+    private readonly toastr: ToastrService
   ) {
     this.currentUser =
       this.authStateService.currentUserProfile?.user?.username || '';
@@ -49,55 +51,88 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.currentSlug = this.activatedRoute.snapshot.params.id;
-        this.articlesStateService.getCurrentArticleBySlug(this.currentSlug);
-        this.commentsStateService.getCommentsFromArticle(this.currentSlug);
+        this.getCurrentArticleBySlug(this.currentSlug);
+        this.getCommentsFromArticle(this.currentSlug);
       }
     });
     this.articleComments = [];
   }
 
   ngOnInit() {
-    this.articleSubscription =
-      this.articlesStateService.currentArticleBySlugEmit.subscribe(
-        (data: any) => {
-          this.articleObj = data.article;
-          this.userStateService.getUserProfileByUsername(
-            this.articleObj?.author?.username
-          );
-        }
-      );
+    this.authStateService.currentLoggedInEmit.subscribe((data: any) => {
+      if (data?.user?.token) {
+        this.currentUser =
+          this.authStateService.currentUserProfile.user.username;
+        this.currentUserImage = this.authStateService.currentUserProfile.user.image;
+      } else {
+        this.currentUser = '';
+      }
+    });
 
     this.commentsSubscription =
-      this.commentsStateService.currentCommentsOfArticleEmit.subscribe(
+      this.commentsStateService.currentCommentsOfArticle$.subscribe(
         (data: any) => {
           this.articleComments = data.comments;
         }
       );
-
-    this.userProfileSubscription =
-      this.userStateService.userProfileEmit.subscribe((data: any) => {
-        this.authorProfile = data.profile;
-      });
   }
 
   ngOnDestroy() {
     this.articleSubscription.unsubscribe();
     this.commentsSubscription.unsubscribe();
-    this.userProfileSubscription.unsubscribe();
+  }
+
+  public getCurrentArticleBySlug(slug: any) {
+    this.articlesStateService
+      .getCurrentArticleBySlug(slug)
+      .subscribe((data: any) => {
+        this.articleObj = data.article;
+        this.userStateService
+          .getUserProfileByUsername(this.articleObj?.author?.username)
+          .subscribe((data: any) => {
+            this.authorProfile = data.profile;
+          });
+      });
+  }
+
+  public getCommentsFromArticle(slug: any) {
+    this.commentsStateService
+      .getCommentsFromArticle(slug)
+      .subscribe((data: any) => {
+        this.articleComments = data.comments;
+      });
   }
 
   public followUser(username: any) {
-    this.userStateService.followUserByUsername(username);
+    this.userStateService
+      .followUserByUsername(username)
+      .subscribe((data: any) => {
+        this.authorProfile = data.profile;
+        this.userStateService.userProfile$.next(data);
+      });
   }
   public unFollowUser(username: any) {
-    this.userStateService.unFollowUserByUsername(username);
+    this.userStateService
+      .unFollowUserByUsername(username)
+      .subscribe((data: any) => {
+        this.authorProfile = data.profile;
+        this.userStateService.userProfile$.next(data);
+      });
   }
 
   public favoriteArticle() {
-    this.articlesStateService.favoriteArticleBySlug(this.currentSlug);
+    this.articlesStateService
+      .favoriteArticleBySlug(this.currentSlug)
+      .subscribe((data: any) => {
+        this.articleObj = data.article;
+      });
   }
   public unFavoriteArticle() {
-    this.articlesStateService.unFavoriteArticleBySlug(this.currentSlug);
+    this.articlesStateService
+      .unFavoriteArticleBySlug(this.currentSlug)
+      .subscribe((data: any) => {
+        this.articleObj = data.article;
+      });
   }
 
   public goToEditArticleDetails() {
@@ -106,8 +141,15 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
 
   public deleteArticle() {
     this.loadingSpinnerService.showSpinner();
-    this.articlesStateService.deleteArticleBySlug(this.currentSlug);
-    this.redirectHome();
+    this.articlesStateService
+      .deleteArticleBySlug(this.currentSlug)
+      .subscribe(() => {
+        setTimeout(() => {
+          this.loadingSpinnerService.hideSpinner();
+          this.toastr.success('Success!', 'Delete Article completed!');
+          this.redirectHome();
+        }, 1500);
+      });
   }
 
   public redirectHome() {
@@ -119,8 +161,10 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   }
 
   public getArticlesByHastag(tag: string) {
-    this.redirectHome();
-    this.tagsStateService.getArticlesDataByTag(tag);
+    this.tagsStateService.getArticlesDataByTag(tag).subscribe((data: any) => {
+      this.tagsStateService.articlesByTag$.next(data);
+      this.redirectHome();
+    });
   }
 
   public submitForm(formValue: FormGroup) {
@@ -130,10 +174,11 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
           body: formValue.value.content,
         },
       };
-      this.commentsStateService.addCommentToArticle(
-        this.currentSlug,
-        commentObj
-      );
+      this.commentsStateService
+        .addCommentToArticle(this.currentSlug, commentObj)
+        .subscribe(() => {
+          this.getCommentsFromArticle(this.currentSlug);
+        });
       this.commentForm.get('content')?.setValue('');
     } else {
       this.commentContentError = true;

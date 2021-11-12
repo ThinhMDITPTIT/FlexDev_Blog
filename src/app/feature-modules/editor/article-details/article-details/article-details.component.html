@@ -142,9 +142,12 @@
     >
       <div class="pl-2">
         <img
-          src="https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg"
+          [src]="
+            currentUserImage ||
+            'https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg'
+          "
           alt="avt"
-          width="50"
+          width="40"
           class="rounded-circle"
         />
       </div>
@@ -159,6 +162,7 @@
     *ngFor="let comment of articleComments"
     [commentContent]="comment"
     [articleSlug]="currentSlug"
+    [isHost]="currentUser === articleObj?.author?.username"
   ></app-comment-details>
 </div>
 
@@ -192,7 +196,12 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           Close
         </button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteArticle()">
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-dismiss="modal"
+          (click)="deleteArticle()"
+        >
           Delete
         </button>
       </div>
