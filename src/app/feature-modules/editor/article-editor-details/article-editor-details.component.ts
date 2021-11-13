@@ -34,6 +34,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate
   private currentSlug: any;
   private articleSubscription: Subscription = new Subscription();
   public showPreviewMarkdown: boolean;
+  private currentFormValue: any;
 
   constructor(
     private _fb: FormBuilder,
@@ -83,6 +84,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate
             return { display: tag, value: tag };
           })
         );
+        this.currentFormValue = {...this.markdownForm.value};
       });
   }
 
@@ -113,7 +115,9 @@ export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Create new completed!');
-            }, 1500);
+              this.markdownForm.patchValue({title: '', description: '', content: '', tags: ''});
+              this.markdownForm.markAsPristine();
+            }, 500);
           });
       } else {
         this.loadingSpinnerService.showSpinner();
@@ -124,7 +128,8 @@ export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Update completed!');
-            }, 1500);
+              this.currentFormValue = this.markdownForm.value;
+            }, 500);
           });
       }
     } else {
@@ -142,16 +147,25 @@ export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate
     this.router.navigate(['article', slug]);
   }
 
-  get isEmpty (){
+  get hasChange (){
     const formValue = this.markdownForm.value;
-    console.log(formValue);
-    for(let key in formValue){
-      if(formValue[key].length !== 0){
-        return false;
+    if(this.currentSlug){
+      for(let key in formValue){
+        if(formValue[key] !== this.currentFormValue[key]){
+          return false;
+        }
       }
+      return true;
+    }else {
+      for(let key in formValue){
+        if(formValue[key].length !== 0){
+          return false;
+        }
+      }
+      return true;
     }
-    return true;
   }
+
 
   openModal() {
     const modalRef = this.modal.open(NotificationModalComponent);
@@ -167,7 +181,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate
     | boolean
     | UrlTree {
 
-    return this.isEmpty || this.openModal();
+    return this.hasChange || this.openModal();
   }
 
 }
