@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {
   Router,
-  NavigationStart,
-  Event as NavigationEnd,
+  Event,
+  NavigationEnd,
 } from '@angular/router';
 import { LocalStorageService } from 'ngx-webstorage';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
@@ -55,10 +55,10 @@ export class NavbarComponent implements OnInit {
   }
 
   displayBanner() {
-    this.router.events.subscribe((event: NavigationEnd) => {
-      if (event instanceof NavigationStart) {
-        this.showBanner = event.url === '/' ? true : false;
+    this.router.events.subscribe((event: Event) => {
+      if(event instanceof NavigationEnd){
+        this.showBanner = event.urlAfterRedirects === '/' ? true : false;
       }
-    });
+    })
   }
 }
