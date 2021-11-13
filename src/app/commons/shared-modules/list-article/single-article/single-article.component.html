@@ -8,7 +8,7 @@
         <img
           [src]="
             articleObj?.author?.image ||
-            'https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg'
+            'https://static.productionready.io/images/smiley-cyrus.jpg'
           "
           alt="avt"
           width="50"
@@ -23,7 +23,7 @@
           {{ articleObj?.author?.username | titlecase }}
         </p>
         <p class="mb-0 text-white-50">
-          {{ articleObj?.createdAt | date: "longDate" }}
+          {{ articleObj?.createdAt | timeCustom }}
         </p>
       </div>
     </div>

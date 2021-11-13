@@ -1,5 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -9,6 +14,7 @@ import { AuthStateService } from 'src/app/core/services/states/auth-state.servic
 import { CommentsStateService } from 'src/app/core/services/states/comments-state.service';
 import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
 import { UserStateService } from 'src/app/core/services/states/user-state.service';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-article-details',
@@ -21,13 +27,25 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
 
   public authorProfile: any;
 
+  public currentPageIdx: number;
+  public pageSize: number;
+  public maxSize: number;
+  public notChangeIdxPag: number;
+
   public commentForm: FormGroup;
-  public commentContentError: boolean;
+  public minRowsMarkDown: number = 3;
+  public isReset: number = Math.random();
+  public showPreviewMarkdown: boolean = false;
+
+  private commentIdToDelete: any;
+
   public currentSlug: any;
   public articleObj: any;
-  public articleComments: any[];
+  public articleCommentsObj: any[];
+  public articleComments: any;
   private articleSubscription: Subscription = new Subscription();
   private commentsSubscription: Subscription = new Subscription();
+  private routeSubscription: Subscription = new Subscription();
 
   constructor(
     private _fb: FormBuilder,
@@ -39,44 +57,58 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     private readonly articlesStateService: ArticlesStateService,
     private readonly tagsStateService: TagsStateService,
     private readonly loadingSpinnerService: LoadingSpinnerService,
-    private readonly toastr: ToastrService
+    private readonly toastr: ToastrService,
+    private readonly localStorage: LocalStorageService
   ) {
+    this.currentPageIdx = 1;
+    this.pageSize = this.articlesStateService.pageSize;
+    this.maxSize = this.articlesStateService.maxSize;
+    this.notChangeIdxPag = Math.random();
+
     this.currentUser =
       this.authStateService.currentUserProfile?.user?.username || '';
 
     this.commentForm = this._fb.group({
       content: ['', Validators.required],
     });
-    this.commentContentError = false;
-    this.router.events.subscribe((event: Event) => {
+    this.routeSubscription = this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.currentSlug = this.activatedRoute.snapshot.params.id;
         this.getCurrentArticleBySlug(this.currentSlug);
         this.getCommentsFromArticle(this.currentSlug);
       }
     });
-    this.articleComments = [];
+    this.articleCommentsObj = [];
   }
 
   ngOnInit() {
-    this.authStateService.getCurrentUserInfo().subscribe(
-      (data: any) => {
-        if (data?.user?.token) {
-          this.currentUser =
-            this.authStateService.currentUserProfile.user.username;
-          this.currentUserImage =
-            this.authStateService.currentUserProfile.user.image;
+    if (this.localStorage.retrieve('token')) {
+      this.authStateService.getCurrentUserInfo().subscribe(
+        (data: any) => {
+          if (data?.user?.token) {
+            this.currentUser = data.user.username;
+            this.currentUserImage = data.user.image;
+          }
+        },
+        () => {
+          this.currentUser = this.authStateService.currentUserProfile;
         }
-      },
-      () => {
-        this.currentUser = this.authStateService.currentUserProfile;
-      }
-    );
+      );
+    }else {
+      this.currentUser = this.authStateService.currentUserProfile;
+    }
 
     this.commentsSubscription =
       this.commentsStateService.currentCommentsOfArticle$.subscribe(
         (data: any) => {
-          this.articleComments = data.comments;
+          if (data.comments) {
+            this.articleCommentsObj = data.comments.sort((a: any, b: any) => {
+              let aDate = new Date(a.createdAt).getTime();
+              let bDate = new Date(b.createdAt).getTime();
+              return bDate - aDate;
+            });
+            this.initCommentsForArticle();
+          }
         }
       );
   }
@@ -84,6 +116,11 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.articleSubscription.unsubscribe();
     this.commentsSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
+  }
+
+  public get contentRawControl() {
+    return this.commentForm.controls.content as FormControl;
   }
 
   public getCurrentArticleBySlug(slug: any) {
@@ -106,7 +143,12 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   public getCommentsFromArticle(slug: any) {
     this.commentsStateService.getCommentsFromArticle(slug).subscribe(
       (data: any) => {
-        this.articleComments = data.comments;
+        this.articleCommentsObj = data.comments.sort((a: any, b: any) => {
+          let aDate = new Date(a.createdAt).getTime();
+          let bDate = new Date(b.createdAt).getTime();
+          return bDate - aDate;
+        });
+        this.initCommentsForArticle();
       },
       () => {}
     );
@@ -116,7 +158,6 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.userStateService.followUserByUsername(username).subscribe(
       (data: any) => {
         this.authorProfile = data.profile;
-        this.userStateService.userProfile$.next(data);
       },
       () => {}
     );
@@ -125,7 +166,6 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.userStateService.unFollowUserByUsername(username).subscribe(
       (data: any) => {
         this.authorProfile = data.profile;
-        this.userStateService.userProfile$.next(data);
       },
       () => {}
     );
@@ -187,6 +227,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   }
 
   public submitForm(formValue: FormGroup) {
+    this.isReset = Math.random();
     if (formValue.status === 'VALID') {
       let commentObj = {
         comment: {
@@ -203,13 +244,68 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
         );
       this.commentForm.get('content')?.setValue('');
     } else {
-      this.commentContentError = true;
-      let formControlArr = formValue.controls;
-      Object.keys(formControlArr).forEach((control) => {
-        if (formControlArr[control]['status'] === 'INVALID') {
-          formControlArr[control].markAsTouched();
-        }
-      });
+      if (this.commentForm.get('content')?.hasError('required')) {
+        this.toastr.warning('warning', 'You must enter the comment content!');
+      }
+    }
+  }
+
+  public initCommentsForArticle() {
+    this.notChangeIdxPag = Math.random();
+    let start =
+      this.currentPageIdx === 1 ? 0 : (this.currentPageIdx - 1) * this.pageSize;
+    let end =
+      this.currentPageIdx === 1
+        ? this.pageSize
+        : this.currentPageIdx * this.pageSize;
+
+    if (!this.articleCommentsObj[start]) {
+      if (this.currentPageIdx > 1) this.currentPageIdx--;
+      start =
+        this.currentPageIdx === 1
+          ? 0
+          : (this.currentPageIdx - 1) * this.pageSize;
+      end =
+        this.currentPageIdx === 1
+          ? this.pageSize
+          : this.currentPageIdx * this.pageSize;
+    }
+
+    this.articleComments = this.articleCommentsObj?.slice(start, end);
+  }
+
+  public showDataByCurrentPage(page: number) {
+    let start = page === 1 ? 0 : (page - 1) * this.pageSize;
+    let end = page === 1 ? this.pageSize : page * this.pageSize;
+    this.articleComments = this.articleCommentsObj?.slice(start, end);
+  }
+
+  public getCurrentPageIndex(event: any) {
+    this.notChangeIdxPag = Math.random();
+    this.currentPageIdx = Number(event);
+    this.showDataByCurrentPage(Number(event));
+  }
+
+  public getCommentIdToDelete(id: any) {
+    this.commentIdToDelete = id;
+  }
+
+  public confirmDeleteComment() {
+    if (this.commentIdToDelete) {
+      this.loadingSpinnerService.showSpinner();
+      this.commentsStateService
+        .deleteCommentOfArticle(this.currentSlug, this.commentIdToDelete)
+        .subscribe(() => {
+          this.commentsStateService
+            .getCommentsFromArticle(this.currentSlug)
+            .subscribe((data: any) => {
+              this.commentsStateService.currentCommentsOfArticle$.next(data);
+              setTimeout(() => {
+                this.loadingSpinnerService.hideSpinner();
+                this.toastr.success('Success!', 'Delete Comment completed!');
+              }, 250);
+            });
+        });
     }
   }
 }

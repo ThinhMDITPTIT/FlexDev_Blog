@@ -5,23 +5,15 @@
   <form [formGroup]="markdownForm" (ngSubmit)="submitForm(markdownForm)">
     <div class="form-group">
       <label for="Title">Title <span class="text-danger">*</span></label>
-      <input
-        formControlName="title"
-        class="form-control"
-        id="Title"
-        aria-describedby="Title"
-      />
+      <input formControlName="title" class="form-control" id="Title" aria-describedby="Title" />
     </div>
     <div>
-      <ul
-        class="text-danger"
-        *ngIf="
+      <ul class="text-danger" *ngIf="
           (markdownForm.get('title')?.invalid &&
             markdownForm.get('title')?.dirty) ||
           (markdownForm.get('title')?.invalid &&
             markdownForm.get('title')?.touched)
-        "
-      >
+        ">
         <li *ngIf="markdownForm.get('title')?.hasError('required')">
           Title is required
         </li>
@@ -29,23 +21,15 @@
     </div>
     <div class="form-group">
       <label>Description <span class="text-danger">*</span></label>
-      <input
-        formControlName="description"
-        class="form-control"
-        id="Description"
-        aria-describedby="Description"
-      />
+      <input formControlName="description" class="form-control" id="Description" aria-describedby="Description" />
     </div>
     <div>
-      <ul
-        class="text-danger"
-        *ngIf="
+      <ul class="text-danger" *ngIf="
           (markdownForm.get('description')?.invalid &&
             markdownForm.get('description')?.dirty) ||
           (markdownForm.get('description')?.invalid &&
             markdownForm.get('description')?.touched)
-        "
-      >
+        ">
         <li *ngIf="markdownForm.get('description')?.hasError('required')">
           Description is required
         </li>
@@ -53,39 +37,29 @@
     </div>
     <div class="form-group">
       <div class="d-flex justify-content-between mb-1">
-        <label class="d-flex align-items-end mb-0"
-          >Content &nbsp;<span class="text-danger">*</span></label
-        >
-        <a
-          *ngIf="!showPreviewMarkdown"
-          class="btn btn-dark d-flex align-items-center"
-          (click)="showPreviewMarkdown = true"
-        >
+        <label class="d-flex align-items-end mb-0">Content &nbsp;<span class="text-danger">*</span></label>
+        <a *ngIf="!showPreviewMarkdown" class="btn btn-dark d-flex align-items-center"
+          (click)="showPreviewMarkdown = true">
           <span> <i class="fas fa-eye"></i> &nbsp; Preview </span>
         </a>
-        <a
-          *ngIf="showPreviewMarkdown"
-          class="btn btn-dark d-flex align-items-center"
-          (click)="showPreviewMarkdown = false"
-        >
+        <a *ngIf="showPreviewMarkdown" class="btn btn-dark d-flex align-items-center"
+          (click)="showPreviewMarkdown = false">
           <span> <i class="fas fa-eye-slash"></i> &nbsp; Editor </span>
         </a>
       </div>
       <app-markdown-editor
         [control]="contentRawControl"
+        [minRows]="6"
         [showPreview]="showPreviewMarkdown"
       ></app-markdown-editor>
     </div>
     <div>
-      <ul
-        class="text-danger"
-        *ngIf="
+      <ul class="text-danger" *ngIf="
           (markdownForm.get('content')?.invalid &&
             markdownForm.get('content')?.dirty) ||
           (markdownForm.get('content')?.invalid &&
             markdownForm.get('content')?.touched)
-        "
-      >
+        ">
         <li *ngIf="markdownForm.get('content')?.hasError('required')">
           Content is required
         </li>
@@ -95,22 +69,17 @@
       <label for="Tags">
         Tag
         <span class="text-danger">*</span>&nbsp;
-        <span class="text-black-50"
-          ><em>(Press 'Enter' to add multi tags)</em></span
-        >
+        <span class="text-black-50"><em>(Press 'Enter' to add multi tags)</em></span>
       </label>
       <app-tag-input id="Tags" [control]="tagsRawControl"></app-tag-input>
     </div>
     <div>
-      <ul
-        class="text-danger"
-        *ngIf="
+      <ul class="text-danger" *ngIf="
           (markdownForm.get('tags')?.invalid &&
             markdownForm.get('tags')?.dirty) ||
           (markdownForm.get('tags')?.invalid &&
             markdownForm.get('tags')?.touched)
-        "
-      >
+        ">
         <li *ngIf="markdownForm.get('tags')?.hasError('required')">
           Tags is required
         </li>

@@ -16,7 +16,7 @@ const routes: Routes = [
       import('./feature-modules/auth/login/login.module').then(
         (m) => m.LoginModule
       ),
-    canActivate: [NoNeedAuthGuard]
+    canActivate: [NoNeedAuthGuard],
   },
   {
     path: Route.SIGNUP,
@@ -24,7 +24,7 @@ const routes: Routes = [
       import('./feature-modules/auth/signup/signup.module').then(
         (m) => m.SignUpModule
       ),
-    canActivate: [NoNeedAuthGuard]
+    canActivate: [NoNeedAuthGuard],
   },
   {
     path: Route.SETTING,
@@ -32,7 +32,7 @@ const routes: Routes = [
       import('./feature-modules/auth/setting/setting.module').then(
         (m) => m.SettingModule
       ),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: Route.EDITOR,
@@ -40,7 +40,7 @@ const routes: Routes = [
       import(
         './feature-modules/editor/article-editor-details/article-editor-details.module'
       ).then((m) => m.ArticleEditorDetailsModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: Route.EDITOR_ID,
@@ -48,7 +48,7 @@ const routes: Routes = [
       import(
         './feature-modules/editor/article-editor-details/article-editor-details.module'
       ).then((m) => m.ArticleEditorDetailsModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: Route.ARTICLE_ID,
@@ -56,7 +56,6 @@ const routes: Routes = [
       import(
         './feature-modules/editor/article-details/article-details.module'
       ).then((m) => m.ArticleDetailsModule),
-    canActivate: [AuthGuard]
   },
   {
     path: Route.PROFILE_USER,
@@ -65,6 +64,10 @@ const routes: Routes = [
         (m) => m.ProfileModule
       ),
   },
+  // {
+  //   path: '**',
+
+  // }
 ];
 
 @NgModule({

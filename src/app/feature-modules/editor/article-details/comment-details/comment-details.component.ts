@@ -1,9 +1,5 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spinner.service';
-import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
-import { CommentsStateService } from 'src/app/core/services/states/comments-state.service';
 
 @Component({
   selector: 'app-comment-details',
@@ -20,28 +16,15 @@ export class CommentDetailsComponent {
   @Input()
   public articleSlug: any;
 
+  @Output()
+  public deleteCommentOutput: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(
-    private readonly commentsStateService: CommentsStateService,
-    private router: Router,
-    private readonly loadingSpinnerService: LoadingSpinnerService,
-    private readonly toastr: ToastrService
+    private router: Router
   ) { }
 
-  public deleteComment(commentId: any) {
-    this.loadingSpinnerService.showSpinner();
-    this.commentsStateService
-      .deleteCommentOfArticle(this.articleSlug, commentId)
-      .subscribe(() => {
-        this.commentsStateService
-          .getCommentsFromArticle(this.articleSlug)
-          .subscribe((data: any) => {
-            this.commentsStateService.currentCommentsOfArticle$.next(data);
-            setTimeout(() => {
-              this.loadingSpinnerService.hideSpinner();
-              this.toastr.success('Success!', 'Delete Article completed!');
-            }, 250);
-          });
-      });
+  public deleteComment(commentID: any) {
+    this.deleteCommentOutput.emit(commentID);
   }
 
   public seeAuthorProfile(authorName: string) {

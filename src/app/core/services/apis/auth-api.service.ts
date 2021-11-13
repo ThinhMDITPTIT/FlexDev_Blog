@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { IUserLogin } from './../../../commons/models/IUserLogin';
 import { IUserRegister } from './../../../commons/models/IUserRegister';
 import { IUserDetails } from './../../../commons/models/IUserDetails';
-import { catchError } from 'rxjs/operators';
-import { map } from 'rxjs/operators'
 
 @Injectable({
   providedIn: 'root'

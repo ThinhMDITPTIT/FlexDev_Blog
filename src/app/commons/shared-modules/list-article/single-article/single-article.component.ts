@@ -58,6 +58,7 @@ export class SingleArticleComponent {
     this.tagsStateService.getArticlesDataByTag(tag).subscribe(
       (data: any) => {
         this.tagsStateService.articlesByTag$.next(data);
+        this.router.navigate(['']);
       },
       () => {}
     );

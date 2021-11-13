@@ -25,6 +25,9 @@ export class PaginationComponent implements OnChanges {
   @Input()
   public maxSize: number;
 
+  @Input()
+  public notChangeIndex: number;
+
   @Output()
   public currentPageClick: EventEmitter<any>;
 
@@ -33,11 +36,12 @@ export class PaginationComponent implements OnChanges {
     this.collectionSize = 1;
     this.pageSize = 10;
     this.maxSize = 3;
+    this.notChangeIndex = 1;
     this.currentPageClick = new EventEmitter<any>();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(!changes.page){
+    if(!changes.page && !changes.notChangeIndex){
       this.page = 1
     }
   }

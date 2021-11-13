@@ -9,7 +9,7 @@
         <img
           [src]="
             articleObj?.author?.image ||
-            'https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg'
+            'https://static.productionready.io/images/smiley-cyrus.jpg'
           "
           alt="avt"
           width="50"
@@ -24,7 +24,7 @@
           {{ articleObj?.author?.username | titlecase }}
         </p>
         <p class="mb-0 text-white-50">
-          {{ articleObj?.createdAt | date: "longDate" }}
+          {{ articleObj?.createdAt | timeCustom }}
         </p>
       </div>
     </div>
@@ -110,32 +110,19 @@
   class="p-3 border border-top-0 custom__over-flow"
   [innerHTML]="articleObj?.body | markdown"
 ></div>
+<div class="mt-5 pl-3">
+  <h3 class="text-info font-weight-bold m-0">Comments</h3>
+  <hr />
+</div>
 <div class="pl-3 py-3 form-group mb-0">
   <form [formGroup]="commentForm" (ngSubmit)="submitForm(commentForm)">
-    <div>
-      <ul
-        class="text-danger"
-        *ngIf="
-          (commentContentError &&
-            commentForm.get('content')?.invalid &&
-            commentForm.get('content')?.dirty) ||
-          (commentContentError &&
-            commentForm.get('content')?.invalid &&
-            commentForm.get('content')?.touched)
-        "
-      >
-        <li *ngIf="commentForm.get('content')?.hasError('required')">
-          Content is required
-        </li>
-      </ul>
-    </div>
     <div class="form-group mb-0">
-      <textarea
-        formControlName="content"
-        class="form-control"
-        placeholder="Write a comment..."
-        rows="2"
-      ></textarea>
+      <app-markdown-editor
+        [control]="contentRawControl"
+        [minRows]="minRowsMarkDown"
+        [resetSize]="isReset"
+        [showPreview]="showPreviewMarkdown"
+      ></app-markdown-editor>
     </div>
     <div
       class="bg-light border border-top-0 d-flex justify-content-between p-3"
@@ -144,7 +131,7 @@
         <img
           [src]="
             currentUserImage ||
-            'https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg'
+            'https://static.productionready.io/images/smiley-cyrus.jpg'
           "
           alt="avt"
           width="40"
@@ -157,6 +144,7 @@
     </div>
   </form>
 </div>
+
 <div class="pl-3 py-3 pr-0">
   <app-comment-details
     *ngFor="let comment of articleComments"
@@ -166,8 +154,22 @@
       currentUser === articleObj?.author?.username ||
       currentUser === comment?.author?.username
     "
+    (deleteCommentOutput)="getCommentIdToDelete($event)"
   ></app-comment-details>
 </div>
+
+<app-pagination
+  *ngIf="
+    articleCommentsObj.length !== 0 &&
+    articleCommentsObj.length > pageSize
+  "
+  [page]="currentPageIdx"
+  [collectionSize]="articleCommentsObj.length"
+  [pageSize]="pageSize"
+  [maxSize]="maxSize"
+  [notChangeIndex]="notChangeIdxPag"
+  (currentPageClick)="getCurrentPageIndex($event)"
+></app-pagination>
 
 <!-- Modal Confirm Delete Article -->
 <div
@@ -211,3 +213,48 @@
     </div>
   </div>
 </div>
+
+<!-- Modal Confirm Delete Comment -->
+<div
+  class="modal fade"
+  id="modalDeleteComment"
+  tabindex="-1"
+  aria-labelledby="modalConfirmDeleteComment"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalConfirmDeleteComment">
+          Confirm Delete Comment
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this comment?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-dismiss="modal"
+          (click)="confirmDeleteComment()"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

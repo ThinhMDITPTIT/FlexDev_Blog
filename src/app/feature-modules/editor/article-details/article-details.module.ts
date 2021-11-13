@@ -6,6 +6,10 @@ import { ArticleDetailsComponent } from './article-details/article-details.compo
 import { CommentDetailsComponent } from './comment-details/comment-details.component';
 import { RouterModule } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
+import { CustomPipesModule } from 'src/app/commons/pipes/custom-pipes.module';
+import { TextFieldModule } from '@angular/cdk/text-field';
+import { MarkdownEditorModule } from 'src/app/commons/shared-modules/markdown-editor/markdown-editor.module';
+import { PaginationModule } from 'src/app/commons/shared-modules/pagination/pagination.module';
 
 @NgModule({
   declarations: [ArticleDetailsComponent, CommentDetailsComponent],
@@ -15,6 +19,11 @@ import { MarkdownModule } from 'ngx-markdown';
     ReactiveFormsModule,
     RouterModule,
     MarkdownModule,
+    CustomPipesModule,
+    TextFieldModule,
+    MarkdownEditorModule,
+    CustomPipesModule,
+    PaginationModule,
   ],
 })
 export class ArticleDetailsModule {}

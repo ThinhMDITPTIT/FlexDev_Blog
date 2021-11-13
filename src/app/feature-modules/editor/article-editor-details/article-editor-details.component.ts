@@ -5,24 +5,37 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Event,
+  NavigationEnd,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
 import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spinner.service';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
+import { CheckDeactivate } from './../../../commons/models/check-deactive';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NotificationModalComponent } from './../../../commons/shared-modules/notification-modal/notification-modal.component';
 
 @Component({
   selector: 'app-article-editor-details',
   templateUrl: './article-editor-details.component.html',
   styleUrls: ['./article-editor-details.component.scss'],
 })
-export class ArticleEditorDetailsComponent implements OnDestroy {
+export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate {
   public markdownForm: FormGroup;
   public articleObj: any;
   private currentSlug: any;
-  private articleSubscription: Subscription = new Subscription();
   public showPreviewMarkdown: boolean;
+  private articleSubscription: Subscription = new Subscription();
+  private routerSubcription: Subscription = new Subscription();
+  private currentFormValue: any;
 
   constructor(
     private _fb: FormBuilder,
@@ -31,7 +44,8 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
     private readonly articlesApiService: ArticlesApiService,
     private readonly articlesStateService: ArticlesStateService,
     private readonly loadingSpinnerService: LoadingSpinnerService,
-    private readonly toastr: ToastrService
+    private readonly toastr: ToastrService,
+    private readonly modal: NgbModal
   ) {
     this.markdownForm = this._fb.group({
       title: ['', Validators.required],
@@ -42,7 +56,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
 
     this.showPreviewMarkdown = false;
 
-    this.router.events.subscribe((event: Event) => {
+    this.routerSubcription = this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         if (this.activatedRoute.snapshot.params.id) {
           this.currentSlug = this.activatedRoute.snapshot.params.id;
@@ -54,6 +68,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.articleSubscription.unsubscribe();
+    this.routerSubcription.unsubscribe();
   }
 
   public getArticleDataBySlug(slug: any) {
@@ -71,6 +86,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
             return { display: tag, value: tag };
           })
         );
+        this.currentFormValue = {...this.markdownForm.value};
       });
   }
 
@@ -101,7 +117,9 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Create new completed!');
-            }, 1500);
+              this.markdownForm.patchValue({title: '', description: '', content: '', tags: ''});
+              this.markdownForm.markAsPristine();
+            }, 500);
           });
       } else {
         this.loadingSpinnerService.showSpinner();
@@ -112,7 +130,8 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Update completed!');
-            }, 1500);
+              this.currentFormValue = this.markdownForm.value;
+            }, 500);
           });
       }
     } else {
@@ -129,4 +148,42 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
   public redirectArticleDetails(slug: any) {
     this.router.navigate(['article', slug]);
   }
+
+  get hasChange (){
+    const formValue = this.markdownForm.value;
+    if(this.currentSlug){
+      for(let key in formValue){
+        if(formValue[key] !== this.currentFormValue[key]){
+          return false;
+        }
+      }
+      return true;
+    }else {
+      for(let key in formValue){
+        if(formValue[key].length !== 0){
+          return false;
+        }
+      }
+      return true;
+    }
+  }
+
+
+  openModal() {
+    const modalRef = this.modal.open(NotificationModalComponent);
+    return modalRef.closed;
+  }
+
+  checkDeactivate(
+    currentRoute: ActivatedRouteSnapshot,
+    currentState: RouterStateSnapshot,
+    nextState?: RouterStateSnapshot
+  ): Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
+
+    return this.hasChange || this.openModal();
+  }
+
 }
