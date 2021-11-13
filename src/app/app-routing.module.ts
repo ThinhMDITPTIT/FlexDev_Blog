@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Route } from './commons/enums/route.enum';
 import { AuthGuard } from './core/guards/auth-guard.guard';
-import { EditorArticleGuard } from './core/guards/editor-article.guard';
 import { NoNeedAuthGuard } from './core/guards/no-need-auth-guard.guard';
 
 const routes: Routes = [
@@ -42,7 +41,6 @@ const routes: Routes = [
         './feature-modules/editor/article-editor-details/article-editor-details.module'
       ).then((m) => m.ArticleEditorDetailsModule),
     canActivate: [AuthGuard],
-    // canDeactivate: [EditorArticleGuard],
   },
   {
     path: Route.EDITOR_ID,
@@ -51,7 +49,6 @@ const routes: Routes = [
         './feature-modules/editor/article-editor-details/article-editor-details.module'
       ).then((m) => m.ArticleEditorDetailsModule),
     canActivate: [AuthGuard],
-    // canDeactivate: [EditorArticleGuard],
   },
   {
     path: Route.ARTICLE_ID,
@@ -67,6 +64,10 @@ const routes: Routes = [
         (m) => m.ProfileModule
       ),
   },
+  // {
+  //   path: '**',
+
+  // }
 ];
 
 @NgModule({

@@ -7,6 +7,7 @@ import { CheckDeactivate } from './../../commons/models/check-deactive';
   providedIn: 'root'
 })
 export class EditorArticleGuard implements CanDeactivate<CheckDeactivate> {
+
   canDeactivate(
     component: CheckDeactivate,
     currentRoute: ActivatedRouteSnapshot,

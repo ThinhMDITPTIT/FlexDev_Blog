@@ -28,13 +28,14 @@ import { NotificationModalComponent } from './../../../commons/shared-modules/no
   templateUrl: './article-editor-details.component.html',
   styleUrls: ['./article-editor-details.component.scss'],
 })
-export class ArticleEditorDetailsComponent implements OnDestroy {
+export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate {
   public markdownForm: FormGroup;
   public articleObj: any;
   private currentSlug: any;
   public showPreviewMarkdown: boolean;
   private articleSubscription: Subscription = new Subscription();
   private routerSubcription: Subscription = new Subscription();
+  private currentFormValue: any;
 
   constructor(
     private _fb: FormBuilder,
@@ -85,6 +86,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
             return { display: tag, value: tag };
           })
         );
+        this.currentFormValue = {...this.markdownForm.value};
       });
   }
 
@@ -115,7 +117,9 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Create new completed!');
-            }, 1500);
+              this.markdownForm.patchValue({title: '', description: '', content: '', tags: ''});
+              this.markdownForm.markAsPristine();
+            }, 500);
           });
       } else {
         this.loadingSpinnerService.showSpinner();
@@ -126,7 +130,8 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
               this.redirectArticleDetails(data.article.slug);
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Update completed!');
-            }, 1500);
+              this.currentFormValue = this.markdownForm.value;
+            }, 500);
           });
       }
     } else {
@@ -144,19 +149,41 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
     this.router.navigate(['article', slug]);
   }
 
-  // openModal() {
-  //   this.modal.open(NotificationModalComponent);
-  // }
+  get hasChange (){
+    const formValue = this.markdownForm.value;
+    if(this.currentSlug){
+      for(let key in formValue){
+        if(formValue[key] !== this.currentFormValue[key]){
+          return false;
+        }
+      }
+      return true;
+    }else {
+      for(let key in formValue){
+        if(formValue[key].length !== 0){
+          return false;
+        }
+      }
+      return true;
+    }
+  }
 
-  // checkDeactivate(
-  //   currentRoute: ActivatedRouteSnapshot,
-  //   currentState: RouterStateSnapshot,
-  //   nextState?: RouterStateSnapshot
-  // ):
-  //   | Observable<boolean | UrlTree>
-  //   | Promise<boolean | UrlTree>
-  //   | boolean
-  //   | UrlTree {
-  //   return true || this.openModal();
-  // }
+
+  openModal() {
+    const modalRef = this.modal.open(NotificationModalComponent);
+    return modalRef.closed;
+  }
+
+  checkDeactivate(
+    currentRoute: ActivatedRouteSnapshot,
+    currentState: RouterStateSnapshot,
+    nextState?: RouterStateSnapshot
+  ): Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
+
+    return this.hasChange || this.openModal();
+  }
+
 }

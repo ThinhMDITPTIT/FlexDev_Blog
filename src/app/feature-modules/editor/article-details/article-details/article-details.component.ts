@@ -94,7 +94,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
           this.currentUser = this.authStateService.currentUserProfile;
         }
       );
-    } else {
+    }else {
       this.currentUser = this.authStateService.currentUserProfile;
     }
 
@@ -302,7 +302,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
               this.commentsStateService.currentCommentsOfArticle$.next(data);
               setTimeout(() => {
                 this.loadingSpinnerService.hideSpinner();
-                this.toastr.success('Success!', 'Delete Article completed!');
+                this.toastr.success('Success!', 'Delete Comment completed!');
               }, 250);
             });
         });

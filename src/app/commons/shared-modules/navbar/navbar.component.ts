@@ -52,11 +52,6 @@ export class NavbarComponent implements OnInit {
       this.spinner.hideSpinner();
       this.router.navigate(['login']);
     }, 500);
-    // this.authStateService.getCurrentUserInfo().subscribe(
-    //   () => {},
-    //   () => {
-    //   }
-    // );
   }
 
   displayBanner() {

@@ -37,7 +37,6 @@
         </small>
       </div>
     </div>
-    {{ commentContent?._id }}
     <a
       *ngIf="isHost"
       type="button"
@@ -55,6 +54,6 @@
   </div>
   <div class="border border-top-0 rounded-bottom px-4 bg-light">
     <hr class="mt-0" />
-    <span [innerHTML]="commentContent?.body | markdown"></span>
+    <div class="custom__markdown" [innerHTML]="commentContent?.body | markdown"></div>
   </div>
 </div>
