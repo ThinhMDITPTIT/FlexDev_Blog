@@ -37,6 +37,8 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   public isReset: number = Math.random();
   public showPreviewMarkdown: boolean = false;
 
+  private commentIdToDelete: any;
+
   public currentSlug: any;
   public articleObj: any;
   public articleCommentsObj: any[];
@@ -242,8 +244,8 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
         );
       this.commentForm.get('content')?.setValue('');
     } else {
-      if(this.commentForm.get('content')?.hasError('required')){
-        this.toastr.warning('warning', 'You must enter the comment content!')
+      if (this.commentForm.get('content')?.hasError('required')) {
+        this.toastr.warning('warning', 'You must enter the comment content!');
       }
     }
   }
@@ -282,5 +284,28 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.notChangeIdxPag = Math.random();
     this.currentPageIdx = Number(event);
     this.showDataByCurrentPage(Number(event));
+  }
+
+  public getCommentIdToDelete(id: any) {
+    this.commentIdToDelete = id;
+  }
+
+  public confirmDeleteComment() {
+    if (this.commentIdToDelete) {
+      this.loadingSpinnerService.showSpinner();
+      this.commentsStateService
+        .deleteCommentOfArticle(this.currentSlug, this.commentIdToDelete)
+        .subscribe(() => {
+          this.commentsStateService
+            .getCommentsFromArticle(this.currentSlug)
+            .subscribe((data: any) => {
+              this.commentsStateService.currentCommentsOfArticle$.next(data);
+              setTimeout(() => {
+                this.loadingSpinnerService.hideSpinner();
+                this.toastr.success('Success!', 'Delete Article completed!');
+              }, 250);
+            });
+        });
+    }
   }
 }
