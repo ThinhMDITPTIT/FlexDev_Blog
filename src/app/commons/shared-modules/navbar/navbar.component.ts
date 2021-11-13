@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
   Router,
-  ActivatedRoute,
   Event,
   NavigationEnd,
 } from '@angular/router';
@@ -24,8 +23,7 @@ export class NavbarComponent implements OnInit {
     private readonly router: Router,
     private readonly localStorage: LocalStorageService,
     private readonly authStateService: AuthStateService,
-    private readonly spinner: LoadingSpinnerService,
-    private readonly activatedRoute: ActivatedRoute
+    private readonly spinner: LoadingSpinnerService
   ) {}
 
   ngOnInit(): void {
