@@ -1,32 +1,41 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'timeCustom'
+  name: 'timeCustom',
 })
 export class TimeCustomPipe implements PipeTransform {
-
   transform(value: Date, args?: any): any {
     let currentDate = new Date();
     let valueDate = new Date(value);
 
-    console.log(currentDate);
-    console.log(valueDate);
+    let milisecond = currentDate.getTime() - valueDate.getTime();
 
+    let minutes = Math.floor((milisecond / (1000 * 60)) % 60);
+    let hours = Math.floor((milisecond / (1000 * 60 * 60)) % 24);
+    let hoursTotal = Math.floor(milisecond / (1000 * 60 * 60));
+    let days = hoursTotal >= 24 ? Math.floor(hoursTotal / 24) : 0;
+    let weeks = days >= 7 ? Math.floor(days / 7) : 0;
+    let months = weeks >= 4 ? Math.floor(weeks / 4) : 0;
 
-    let currentDateHour = currentDate.getHours();
-    let valueDateHour = valueDate.getHours();
-    let currentDateMinute = currentDate.getMinutes();
-    let valueDateMinute = valueDate.getMinutes();
-    let currentDateSecond = currentDate.getSeconds();
-    let valueDateSecond = valueDate.getSeconds();
+    if (months > 0) {
+      return `${months} months`;
+    }
 
-    let hour = Math.abs(currentDateHour - valueDateHour);
-    let minute = Math.abs(currentDateMinute - valueDateMinute);
-    let second = Math.abs(currentDateSecond - valueDateSecond);
-    console.log(hour, minute, second);
+    if (weeks > 0) {
+      return `${weeks} weeks`;
+    }
 
+    if (days > 1) {
+      return `${days} days`;
+    }
 
-    return currentDate;
+    if (hours < 1) {
+      if (minutes < 1) {
+        return `1 minutes`;
+      }
+      return `${minutes} minutes`;
+    }
+
+    return `${hours} hours`;
   }
-
 }

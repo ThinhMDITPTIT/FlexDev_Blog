@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -22,6 +22,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   public authorProfile: any;
 
   public commentForm: FormGroup;
+  public showPreviewMarkdown: boolean = false;
   public commentContentError: boolean;
   public currentSlug: any;
   public articleObj: any;
@@ -88,6 +89,10 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.articleSubscription.unsubscribe();
     this.commentsSubscription.unsubscribe();
+  }
+
+  public get contentRawControl() {
+    return this.commentForm.controls.content as FormControl;
   }
 
   public getCurrentArticleBySlug(slug: any) {

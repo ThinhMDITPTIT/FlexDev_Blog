@@ -13,3 +13,24 @@
 .custom__over-flow {
   overflow-x: auto;
 }
+
+.text-editor {
+  padding-left: 15px;
+  padding-right: 15px;
+  resize: none;
+  // border-color: transparent;
+  width: 100%;
+  overflow-y: hidden;
+
+  &:focus {
+    outline: none !important;
+    // border: transparent;
+  }
+}
+
+.form-control {
+  &:focus {
+    outline: none !important;
+    // border: transparent;
+  }
+}

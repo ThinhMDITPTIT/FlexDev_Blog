@@ -24,7 +24,7 @@
           {{ articleObj?.author?.username | titlecase }}
         </p>
         <p class="mb-0 text-white-50">
-          {{ articleObj?.createdAt | date: "longDate" }}
+          {{ articleObj?.createdAt | timeCustom}}
         </p>
       </div>
     </div>
@@ -130,12 +130,16 @@
       </ul>
     </div>
     <div class="form-group mb-0">
-      <textarea
+      <app-markdown-editor
+        [control]="contentRawControl"
+        [showPreview]="showPreviewMarkdown"
+      ></app-markdown-editor>
+      <!-- <textarea
         formControlName="content"
         class="form-control"
         placeholder="Write a comment..."
         rows="2"
-      ></textarea>
+      ></textarea> -->
     </div>
     <div
       class="bg-light border border-top-0 d-flex justify-content-between p-3"
