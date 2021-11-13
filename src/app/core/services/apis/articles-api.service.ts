@@ -18,7 +18,7 @@ export class ArticlesApiService {
 
   // no need auth
   getAllArticle(): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}`);
+    return this.http.get<any>(`${this.baseUrl}?limit=100`);
   }
 
   // no need auth
@@ -40,7 +40,9 @@ export class ArticlesApiService {
 
   // no need auth
   getArticleByTag(tag: string): Observable<any> {
-    const params = new HttpParams().set('tag', tag);
+    const params = new HttpParams()
+      .set('tag', tag)
+      .set('limit', 100);
     return this.http.get(`${this.baseUrl}`, { params });
   }
 

@@ -1,15 +1,25 @@
-// textarea.ng-invalid.ng-dirty {
-//   border: red 1px solid;
-// }
-
-// textarea.ng-invalid.ng-touched {
-//   border: red 1px solid;
-// }
-
 .cursor__pointer {
   cursor: pointer;
 }
 
 .custom__over-flow {
   overflow-x: auto;
+}
+
+.text-editor {
+  padding-left: 15px;
+  padding-right: 15px;
+  resize: none;
+  width: 100%;
+  overflow-y: hidden;
+
+  &:focus {
+    outline: none !important;
+  }
+}
+
+.form-control {
+  &:focus {
+    outline: none !important;
+  }
 }

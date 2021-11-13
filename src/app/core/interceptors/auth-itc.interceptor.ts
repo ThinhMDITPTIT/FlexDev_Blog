@@ -5,12 +5,19 @@ import {
   HttpEvent,
   HttpInterceptor,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { LocalStorageService } from 'ngx-webstorage';
+import { catchError } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthItcInterceptor implements HttpInterceptor {
-  constructor(private readonly localStorage: LocalStorageService) {}
+  constructor(
+    private readonly localStorage: LocalStorageService,
+    private readonly toastr: ToastrService,
+    private readonly router: Router
+  ) {}
 
   intercept(
     request: HttpRequest<unknown>,
@@ -25,6 +32,23 @@ export class AuthItcInterceptor implements HttpInterceptor {
       }
     }
 
-    return next.handle(request);
+    return next.handle(request).pipe(
+      catchError((err) => {
+        if (err.status === 401) {
+          this.localStorage.clear('token');
+          this.toastr.warning('', 'You must to Login!');
+        }
+        if (err.status === 403) {
+          this.toastr.warning('Error!', "You don't have permissions!");
+        }
+        if (err.status === 404) {
+          this.toastr.error('Error!', 'Request Not Found!');
+        }
+        if (err.status === 422) {
+          this.toastr.warning('Please try again!', 'Email or Password is Invalid!');
+        }
+        return throwError(err);
+      })
+    );
   }
 }

@@ -1,11 +1,7 @@
 <nav class="cursor__pointer">
   <ul ngbNav class="nav-tabs">
     <li ngbNavItem *ngFor="let feature of featuresArr">
-      <a
-        ngbNavLink
-        (click)="getDataByFeature(feature)"
-        [class.active]="currentFeature === feature"
-      >
+      <a ngbNavLink (click)="getDataByFeature(feature)" [class.active]="currentFeature === feature">
         {{ feature }}
       </a>
     </li>
@@ -26,12 +22,7 @@
       <app-single-article [articleObj]="article"></app-single-article>
     </div>
   </div>
-  <app-pagination
-    *ngIf="currentArticlesObj?.articles?.length !== 0"
-    [page]="currentPageIdx"
-    [collectionSize]="currentArticlesObj?.articlesCount"
-    [pageSize]="pageSize"
-    [maxSize]="maxSize"
-    (currentPageClick)="getCurrentPageIndex($event)"
-  ></app-pagination>
+  <app-pagination *ngIf="currentArticlesObj?.articles?.length !== 0 && currentArticlesObj?.articles?.length > pageSize"
+    [page]="currentPageIdx" [collectionSize]="currentArticlesObj?.articlesCount" [pageSize]="pageSize"
+    [maxSize]="maxSize" (currentPageClick)="getCurrentPageIndex($event)"></app-pagination>
 </div>

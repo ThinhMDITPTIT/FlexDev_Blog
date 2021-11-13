@@ -9,7 +9,7 @@
         <img
           [src]="
             articleObj?.author?.image ||
-            'https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg'
+            'https://static.productionready.io/images/smiley-cyrus.jpg'
           "
           alt="avt"
           width="50"
@@ -24,7 +24,7 @@
           {{ articleObj?.author?.username | titlecase }}
         </p>
         <p class="mb-0 text-white-50">
-          {{ articleObj?.createdAt | date: "longDate" }}
+          {{ articleObj?.createdAt | timeCustom}}
         </p>
       </div>
     </div>
@@ -110,6 +110,10 @@
   class="p-3 border border-top-0 custom__over-flow"
   [innerHTML]="articleObj?.body | markdown"
 ></div>
+<div class="mt-5 pl-3">
+  <h3 class="text-info font-weight-bold m-0">Comments</h3>
+  <hr>
+</div>
 <div class="pl-3 py-3 form-group mb-0">
   <form [formGroup]="commentForm" (ngSubmit)="submitForm(commentForm)">
     <div>
@@ -130,12 +134,16 @@
       </ul>
     </div>
     <div class="form-group mb-0">
-      <textarea
+      <app-markdown-editor
+        [control]="contentRawControl"
+        [showPreview]="showPreviewMarkdown"
+      ></app-markdown-editor>
+      <!-- <textarea
         formControlName="content"
         class="form-control"
         placeholder="Write a comment..."
         rows="2"
-      ></textarea>
+      ></textarea> -->
     </div>
     <div
       class="bg-light border border-top-0 d-flex justify-content-between p-3"
@@ -144,7 +152,7 @@
         <img
           [src]="
             currentUserImage ||
-            'https://banner2.cleanpng.com/20180625/at/kisspng-business-game-avatar-computer-program-google-smart-object-5b315c2b2ad958.6413531715299615151755.jpg'
+            'https://static.productionready.io/images/smiley-cyrus.jpg'
           "
           alt="avt"
           width="40"
@@ -157,6 +165,7 @@
     </div>
   </form>
 </div>
+
 <div class="pl-3 py-3 pr-0">
   <app-comment-details
     *ngFor="let comment of articleComments"

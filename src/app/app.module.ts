@@ -14,7 +14,6 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { TagInputModule } from 'ngx-chips';
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,7 +38,7 @@ import { TagInputModule } from 'ngx-chips';
       tapToDismiss: true,
       newestOnTop: true,
     }),
-    BrowserAnimationsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {

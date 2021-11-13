@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -9,6 +9,7 @@ import { AuthStateService } from 'src/app/core/services/states/auth-state.servic
 import { CommentsStateService } from 'src/app/core/services/states/comments-state.service';
 import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
 import { UserStateService } from 'src/app/core/services/states/user-state.service';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-article-details',
@@ -22,12 +23,15 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   public authorProfile: any;
 
   public commentForm: FormGroup;
+  public showPreviewMarkdown: boolean = false;
   public commentContentError: boolean;
   public currentSlug: any;
   public articleObj: any;
   public articleComments: any[];
   private articleSubscription: Subscription = new Subscription();
   private commentsSubscription: Subscription = new Subscription();
+
+  private isDeleted: boolean = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -39,7 +43,8 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     private readonly articlesStateService: ArticlesStateService,
     private readonly tagsStateService: TagsStateService,
     private readonly loadingSpinnerService: LoadingSpinnerService,
-    private readonly toastr: ToastrService
+    private readonly toastr: ToastrService,
+    private readonly localStorage: LocalStorageService
   ) {
     this.currentUser =
       this.authStateService.currentUserProfile?.user?.username || '';
@@ -51,27 +56,31 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.currentSlug = this.activatedRoute.snapshot.params.id;
-        this.getCurrentArticleBySlug(this.currentSlug);
-        this.getCommentsFromArticle(this.currentSlug);
+        if(!this.isDeleted){
+          this.getCurrentArticleBySlug(this.currentSlug);
+          this.getCommentsFromArticle(this.currentSlug);
+        }
       }
     });
     this.articleComments = [];
   }
 
   ngOnInit() {
-    this.authStateService.getCurrentUserInfo().subscribe(
-      (data: any) => {
-        if (data?.user?.token) {
-          this.currentUser =
-            this.authStateService.currentUserProfile.user.username;
-          this.currentUserImage =
-            this.authStateService.currentUserProfile.user.image;
+    if(this.localStorage.retrieve('token')){
+      this.authStateService.getCurrentUserInfo().subscribe(
+        (data: any) => {
+          if (data?.user?.token) {
+            this.currentUser = data.user.username;
+            this.currentUserImage = data.user.image;
+          }
+        },
+        () => {
+          this.currentUser = this.authStateService.currentUserProfile;
         }
-      },
-      () => {
-        this.currentUser = this.authStateService.currentUserProfile;
-      }
-    );
+      );
+    }else {
+      this.currentUser = this.authStateService.currentUserProfile;
+    }
 
     this.commentsSubscription =
       this.commentsStateService.currentCommentsOfArticle$.subscribe(
@@ -84,6 +93,10 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.articleSubscription.unsubscribe();
     this.commentsSubscription.unsubscribe();
+  }
+
+  public get contentRawControl() {
+    return this.commentForm.controls.content as FormControl;
   }
 
   public getCurrentArticleBySlug(slug: any) {
@@ -116,7 +129,6 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.userStateService.followUserByUsername(username).subscribe(
       (data: any) => {
         this.authorProfile = data.profile;
-        this.userStateService.userProfile$.next(data);
       },
       () => {}
     );
@@ -125,7 +137,6 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.userStateService.unFollowUserByUsername(username).subscribe(
       (data: any) => {
         this.authorProfile = data.profile;
-        this.userStateService.userProfile$.next(data);
       },
       () => {}
     );
@@ -158,6 +169,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.loadingSpinnerService.showSpinner();
     this.articlesStateService.deleteArticleBySlug(this.currentSlug).subscribe(
       () => {
+        this.isDeleted = true;
         setTimeout(() => {
           this.loadingSpinnerService.hideSpinner();
           this.toastr.success('Success!', 'Delete Article completed!');
