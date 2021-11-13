@@ -21,6 +21,7 @@ import { MarkdownEditorModule } from 'src/app/commons/shared-modules/markdown-ed
     CustomPipesModule,
     TextFieldModule,
     MarkdownEditorModule,
+    CustomPipesModule
   ],
 })
 export class ArticleDetailsModule {}

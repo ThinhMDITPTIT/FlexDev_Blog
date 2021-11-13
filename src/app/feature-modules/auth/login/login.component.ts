@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { AuthApiService } from 'src/app/core/services/apis/auth-api.service';
-import { LocalStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { ToastrService } from 'ngx-toastr';
@@ -50,14 +48,11 @@ export class LoginComponent {
           this.spinner.hideSpinner();
           this.router.navigate(['']);
         }, 1000)
-        this.toastr.info(`Wellcome back!`, `Hi, ${res.user.username}`)
-      }, err => {
+        this.toastr.info(`Wellcome back!`, `Hi, ${res.user.username}`);
+      }, () => {
         setTimeout(() => {
           this.spinner.hideSpinner();
         }, 500);
-        if(err.error.errors){
-          this.toastr.warning('Please try again!', 'Email or Password is Invalid!');
-        }
       });
     }
     this.submitted = true;

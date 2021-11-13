@@ -28,34 +28,35 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.displayBanner();
-    this.authStateService.currentLoggedIn$.subscribe((data: any) => {
-      if (data === 'LoggedIn') {
+    this.authStateService.currentLoggedIn$.subscribe(() => {
+      if(this.localStorage.retrieve('token')){
         this.isAuthenticated = true;
-        this.defaultUser =
-          this.authStateService.currentUserProfile.user.username;
-      } else {
+        this.authStateService.getCurrentUserInfo().subscribe(res => {
+          this.defaultUser = res.user.username;
+        })
+      }else {
         this.isAuthenticated = false;
       }
     });
   }
 
   toProfile() {
-    this.router.navigate(['profile', this.defaultUser]);
+    this.authStateService.getCurrentUserInfo().subscribe(data => this.router.navigate(['profile', data.user.username]));
   }
 
   logout() {
     this.localStorage.clear('token');
     this.spinner.showSpinner();
-    this.authStateService.getCurrentUserInfo().subscribe(
-      () => {},
-      () => {
-        setTimeout(() => {
-          this.spinner.hideSpinner();
-          this.router.navigate(['login']);
-          // this.router.navigate(['']);
-        }, 500);
-      }
-    );
+    setTimeout(() => {
+      this.authStateService.currentLoggedIn$.next('Logout');
+      this.spinner.hideSpinner();
+      this.router.navigate(['login']);
+    }, 500);
+    // this.authStateService.getCurrentUserInfo().subscribe(
+    //   () => {},
+    //   () => {
+    //   }
+    // );
   }
 
   displayBanner() {

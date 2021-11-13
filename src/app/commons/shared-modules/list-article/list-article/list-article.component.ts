@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
-import { UserStateService } from 'src/app/core/services/states/user-state.service';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-list-article',
@@ -30,7 +30,7 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private readonly articlesStateService: ArticlesStateService,
     private readonly tagsStateService: TagsStateService,
-    private readonly userStateService: UserStateService,
+    private readonly localStorage: LocalStorageService,
     private readonly authStateService: AuthStateService
   ) {
     this.currentHastag = 'Demo';
@@ -44,16 +44,23 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges() {
     if (this.tagsStateService.currentTag === '') {
       if (this.featuresArr.length !== 0) {
-        this.authStateService.getCurrentUserInfo().subscribe(
-          () => {
-            this.currentFeature = this.featuresArr[0];
-            this.getDataByFeature(this.currentFeature);
-          },
-          () => {
-            this.currentFeature = this.featuresArr[0];
-            this.getDataByFeature(this.currentFeature);
-          }
-        );
+        // this.authStateService.getCurrentUserInfo().subscribe(
+        //   () => {
+        //     this.currentFeature = this.featuresArr[0];
+        //     this.getDataByFeature(this.currentFeature);
+        //   },
+        //   () => {
+        //     this.currentFeature = this.featuresArr[0];
+        //     this.getDataByFeature(this.currentFeature);
+        //   }
+        // );
+        if(this.localStorage.retrieve('token')){
+          this.currentFeature = this.featuresArr[0];
+          this.getDataByFeature(this.currentFeature);
+        }else {
+          this.currentFeature = this.featuresArr[0];
+          this.getDataByFeature(this.currentFeature);
+        }
       }
     }
   }

@@ -4,7 +4,6 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -36,13 +35,16 @@ export class AuthItcInterceptor implements HttpInterceptor {
         // console.log(err);
         if (err.status === 401) {
           this.localStorage.clear('token');
-          return throwError(err);
+          this.toastr.warning('', 'You must to Login!');
         }
         if (err.status === 403) {
-          this.toastr.error('Error!', err.error.errors.error.message);
+          this.toastr.warning('Error!', "You don't have permissions!");
         }
         if (err.status === 404) {
-          this.toastr.error('Error!', err.error.errors.error.message);
+          this.toastr.error('Error!', 'Request Not Found!');
+        }
+        if (err.status === 422) {
+          this.toastr.warning('Please try again!', 'Email or Password is Invalid!');
         }
         return throwError(err);
       })

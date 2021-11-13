@@ -9,6 +9,7 @@ import { AuthStateService } from 'src/app/core/services/states/auth-state.servic
 import { CommentsStateService } from 'src/app/core/services/states/comments-state.service';
 import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
 import { UserStateService } from 'src/app/core/services/states/user-state.service';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-article-details',
@@ -42,7 +43,8 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     private readonly articlesStateService: ArticlesStateService,
     private readonly tagsStateService: TagsStateService,
     private readonly loadingSpinnerService: LoadingSpinnerService,
-    private readonly toastr: ToastrService
+    private readonly toastr: ToastrService,
+    private readonly localStorage: LocalStorageService
   ) {
     this.currentUser =
       this.authStateService.currentUserProfile?.user?.username || '';
@@ -64,19 +66,26 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authStateService.getCurrentUserInfo().subscribe(
-      (data: any) => {
-        if (data?.user?.token) {
-          this.currentUser =
-            this.authStateService.currentUserProfile.user.username;
-          this.currentUserImage =
-            this.authStateService.currentUserProfile.user.image;
+    if(this.localStorage.retrieve('token')){
+      this.authStateService.getCurrentUserInfo().subscribe(
+        (data: any) => {
+          if (data?.user?.token) {
+            this.currentUser = data.user.username;
+            this.currentUserImage = data.user.image;
+              console.log(this.currentUser);
+              console.log(data);
+
+          }
+        },
+        () => {
+          this.currentUser = this.authStateService.currentUserProfile;
         }
-      },
-      () => {
-        this.currentUser = this.authStateService.currentUserProfile;
-      }
-    );
+      );
+      // this.currentUser = this.authStateService.currentUserProfile.user.username;
+      // this.currentUserImage = this.authStateService.currentUserProfile.user.image;
+    }else {
+      this.currentUser = this.authStateService.currentUserProfile;
+    }
 
     this.commentsSubscription =
       this.commentsStateService.currentCommentsOfArticle$.subscribe(
@@ -134,7 +143,6 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.userStateService.unFollowUserByUsername(username).subscribe(
       (data: any) => {
         this.authorProfile = data.profile;
-        // this.userStateService.userProfile$.next(data);
       },
       () => {}
     );

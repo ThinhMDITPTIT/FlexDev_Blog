@@ -1,10 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { EventEmitter, Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ArticlesApiService } from '../apis/articles-api.service';
-import { LoadingSpinnerService } from '../spinner/loading-spinner.service';
 import { throwError } from 'rxjs';
 
 @Injectable({
@@ -16,7 +14,7 @@ export class ArticlesStateService {
     {}
   );
 
-  public pageSize: number = 2;
+  public pageSize: number = 5;
   public maxSize: number = 3;
 
   constructor(private readonly articlesApiService: ArticlesApiService) {}

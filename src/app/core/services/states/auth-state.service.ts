@@ -1,19 +1,17 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AuthApiService } from '../apis/auth-api.service';
 import { catchError, concatMap, map, tap } from 'rxjs/operators';
 import { LocalStorageService } from 'ngx-webstorage';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthStateService {
   public currentUserProfile: any;
-  public currentUserProfile$: BehaviorSubject<any> = new BehaviorSubject<any>(
-    {}
-  );
-  public currentLoggedIn$: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public currentUserProfile$: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  public currentLoggedIn$: BehaviorSubject<any> = new BehaviorSubject<string>("");
+  public hasToken$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly authApiService: AuthApiService,
@@ -24,12 +22,10 @@ export class AuthStateService {
     return this.authApiService.getCurrentUser().pipe(
       map((data: any) => {
         this.currentUserProfile = data;
-        this.currentLoggedIn$.next('LoggedIn');
         return data;
       }),
       catchError((err) => {
         this.currentUserProfile = undefined;
-        this.currentLoggedIn$.next('Logout');
         return err;
       })
     );
@@ -39,6 +35,8 @@ export class AuthStateService {
     return this.authApiService.login(user).pipe(
       tap((res) => {
         this.localStorage.store('token', res.user.token);
+        this.currentLoggedIn$.next(res.user.username);
+        this.getCurrentUserInfo();
         return res.user.token;
       })
     );

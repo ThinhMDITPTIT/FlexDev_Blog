@@ -12,6 +12,7 @@ import { switchMap } from 'rxjs/operators';
 import { UserApiService } from 'src/app/core/services/apis/user-api.service';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { UserStateService } from 'src/app/core/services/states/user-state.service';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-user-profile',
@@ -36,7 +37,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     private readonly articlesStateService: ArticlesStateService,
     private readonly authStateService: AuthStateService,
     private readonly userApiService: UserApiService,
-    private readonly userStateService: UserStateService
+    private readonly userStateService: UserStateService,
+    private readonly localStorage: LocalStorageService
   ) {
     this.pageSize = this.articlesStateService.pageSize;
     this.maxSize = this.articlesStateService.maxSize;
@@ -69,17 +71,25 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authStateService.getCurrentUserInfo().subscribe(
-      (data: any) => {
-        if (data?.user?.token) {
-          this.currentUser =
-            this.authStateService.currentUserProfile?.user?.username;
-        }
-      },
-      () => {
-        this.currentUser = this.authStateService.currentUserProfile;
-      }
-    );
+    // this.authStateService.getCurrentUserInfo().subscribe(
+    //   (data: any) => {
+    //     if (data?.user?.token) {
+    //       this.currentUser =
+    //         this.authStateService.currentUserProfile?.user?.username;
+    //     }
+    //   },
+    //   () => {
+    //     this.currentUser = this.authStateService.currentUserProfile;
+    //   }
+    // );
+    if(this.localStorage.retrieve('token')){
+      this.currentUser = this.authStateService.currentUserProfile?.user?.username;
+      console.log(this.currentUser);
+
+    }else {
+      this.currentUser = '';
+      console.log(this.currentUser);
+    }
   }
 
   ngOnDestroy() {
