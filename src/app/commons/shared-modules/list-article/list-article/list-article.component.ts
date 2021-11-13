@@ -47,12 +47,10 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
         this.authStateService.getCurrentUserInfo().subscribe(
           () => {
             this.currentFeature = this.featuresArr[0];
-            // this.currentPageIdx = 1;
             this.getDataByFeature(this.currentFeature);
           },
           () => {
             this.currentFeature = this.featuresArr[0];
-            // this.currentPageIdx = 1;
             this.getDataByFeature(this.currentFeature);
           }
         );
@@ -74,35 +72,50 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
         }
       });
 
-    this.feedArticlesChange_Subscription =
-      this.userStateService.userProfile$.subscribe((data: any) => {
-        if (data) {
-          if (this.featuresArr.length < 1) {
-            this.articlesStateService.getGlobalArticle().subscribe(
-              (data: any) => {
-                this.currentArticlesObj = data;
-                this.initDataForFeature();
-                this.userStateService.userProfile$.next(undefined);
-              },
-              () => {}
-            );
-          } else {
-            this.articlesStateService.getFeedArticle().subscribe(
-              (data: any) => {
-                this.currentArticlesObj = data;
-                this.initDataForFeature();
-                this.userStateService.userProfile$.next(undefined);
-              },
-              () => {}
-            );
-          }
-        }
-      });
+    // this.feedArticlesChange_Subscription =
+    //   this.userStateService.userProfile$.subscribe((data: any) => {
+    //     if (data) {
+    //       console.log(this.featuresArr);
+    //       if (this.featuresArr.length > 1) {
+    //         console.log('run');
+    //         this.articlesStateService.getFeedArticle().subscribe(
+    //           (data: any) => {
+    //             this.currentFeature = this.featuresArr[0];
+    //             this.currentArticlesObj = data;
+    //             this.initDataForFeature();
+    //             this.userStateService.userProfile$.next(undefined);
+    //           },
+    //           () => {}
+    //         );
+    //       }
+    //       // if (this.featuresArr.length = 1) {
+    //       //   this.articlesStateService.getGlobalArticle().subscribe(
+    //       //     (data: any) => {
+    //       //       this.currentFeature = this.featuresArr[0];
+    //       //       this.currentArticlesObj = data;
+    //       //       this.initDataForFeature();
+    //       //       this.userStateService.userProfile$.next(undefined);
+    //       //     },
+    //       //     () => {}
+    //       //   );
+    //       // } else {
+    //       //   this.articlesStateService.getFeedArticle().subscribe(
+    //       //     (data: any) => {
+    //       //       this.currentFeature = this.featuresArr[0];
+    //       //       this.currentArticlesObj = data;
+    //       //       this.initDataForFeature();
+    //       //       this.userStateService.userProfile$.next(undefined);
+    //       //     },
+    //       //     () => {}
+    //       //   );
+    //       // }
+    //     }
+    //   });
   }
 
   ngOnDestroy() {
     this.tagArticles_Subscription.unsubscribe();
-    this.feedArticlesChange_Subscription.unsubscribe();
+    // this.feedArticlesChange_Subscription.unsubscribe();
   }
 
   public getDataByFeature(featureName: string) {

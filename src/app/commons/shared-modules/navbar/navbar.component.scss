@@ -53,3 +53,8 @@ $text-color: #ffffff;
   display: none;
 }
 
+@media only screen and (min-width: 1500px) {
+  .banner {
+    height: 50rem;
+  }
+}

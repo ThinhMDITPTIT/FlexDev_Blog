@@ -4,13 +4,19 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { LocalStorageService } from 'ngx-webstorage';
+import { catchError } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class AuthItcInterceptor implements HttpInterceptor {
-  constructor(private readonly localStorage: LocalStorageService) {}
+  constructor(
+    private readonly localStorage: LocalStorageService,
+    private readonly toastr: ToastrService
+  ) {}
 
   intercept(
     request: HttpRequest<unknown>,
@@ -25,6 +31,21 @@ export class AuthItcInterceptor implements HttpInterceptor {
       }
     }
 
-    return next.handle(request);
+    return next.handle(request).pipe(
+      catchError((err) => {
+        // console.log(err);
+        if (err.status === 401) {
+          this.localStorage.clear('token');
+          return throwError(err);
+        }
+        if (err.status === 403) {
+          this.toastr.error('Error!', err.error.errors.error.message);
+        }
+        if (err.status === 404) {
+          this.toastr.error('Error!', err.error.errors.error.message);
+        }
+        return throwError(err);
+      })
+    );
   }
 }

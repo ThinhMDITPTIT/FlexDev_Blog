@@ -5,12 +5,23 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Event,
+  NavigationEnd,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ArticlesApiService } from 'src/app/core/services/apis/articles-api.service';
 import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spinner.service';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
+import { CheckDeactivate } from './../../../commons/models/check-deactive';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NotificationModalComponent } from './../../../commons/shared-modules/notification-modal/notification-modal.component';
 
 @Component({
   selector: 'app-article-editor-details',
@@ -31,7 +42,8 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
     private readonly articlesApiService: ArticlesApiService,
     private readonly articlesStateService: ArticlesStateService,
     private readonly loadingSpinnerService: LoadingSpinnerService,
-    private readonly toastr: ToastrService
+    private readonly toastr: ToastrService,
+    private readonly modal: NgbModal
   ) {
     this.markdownForm = this._fb.group({
       title: ['', Validators.required],
@@ -129,4 +141,20 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
   public redirectArticleDetails(slug: any) {
     this.router.navigate(['article', slug]);
   }
+
+  // openModal() {
+  //   this.modal.open(NotificationModalComponent);
+  // }
+
+  // checkDeactivate(
+  //   currentRoute: ActivatedRouteSnapshot,
+  //   currentState: RouterStateSnapshot,
+  //   nextState?: RouterStateSnapshot
+  // ):
+  //   | Observable<boolean | UrlTree>
+  //   | Promise<boolean | UrlTree>
+  //   | boolean
+  //   | UrlTree {
+  //   return true || this.openModal();
+  // }
 }

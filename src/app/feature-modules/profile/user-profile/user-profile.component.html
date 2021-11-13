@@ -79,7 +79,7 @@
     </div>
   </div>
   <app-pagination
-    *ngIf="currentArticlesObj?.articles?.length !== 0"
+    *ngIf="currentArticlesObj?.articles?.length !== 0 && currentArticlesObj?.articles?.length > pageSize"
     [collectionSize]="currentArticlesObj?.articlesCount"
     [pageSize]="pageSize"
     [maxSize]="maxSize"

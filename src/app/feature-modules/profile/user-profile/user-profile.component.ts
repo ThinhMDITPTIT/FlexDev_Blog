@@ -135,7 +135,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.userStateService.followUserByUsername(username).subscribe(
       (data: any) => {
         this.authorProfileObj = data.profile;
-        this.userStateService.userProfile$.next(data);
+        // this.userStateService.userProfile$.next(data);
       },
       () => {}
     );
@@ -144,7 +144,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.userStateService.unFollowUserByUsername(username).subscribe(
       (data: any) => {
         this.authorProfileObj = data.profile;
-        this.userStateService.userProfile$.next(data);
+        // this.userStateService.userProfile$.next(data);
       },
       () => {}
     );

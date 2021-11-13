@@ -1,8 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ArticlesApiService } from '../apis/articles-api.service';
 import { TagsApiService } from '../apis/tags-api.service';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +33,7 @@ export class TagsStateService {
       map((data: any) => {
         return data;
       }),
-      catchError((err) => err)
+      catchError(this.handleError)
     );
   }
 
@@ -42,7 +44,17 @@ export class TagsStateService {
         this.articlesByTag = data;
         return data;
       }),
-      catchError((err) => err)
+      catchError(this.handleError)
     );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof Error) {
+      const errMessage = error.error.message;
+      return throwError(errMessage);
+      // Use the following instead if using lite-server
+      // return Observable.throw(err.text() || 'backend server error');
+    }
+    return throwError(error || 'Server error')
   }
 }

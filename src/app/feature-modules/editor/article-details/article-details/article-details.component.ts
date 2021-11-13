@@ -29,6 +29,8 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   private articleSubscription: Subscription = new Subscription();
   private commentsSubscription: Subscription = new Subscription();
 
+  private isDeleted: boolean = false;
+
   constructor(
     private _fb: FormBuilder,
     private router: Router,
@@ -51,8 +53,10 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.currentSlug = this.activatedRoute.snapshot.params.id;
-        this.getCurrentArticleBySlug(this.currentSlug);
-        this.getCommentsFromArticle(this.currentSlug);
+        if(!this.isDeleted){
+          this.getCurrentArticleBySlug(this.currentSlug);
+          this.getCommentsFromArticle(this.currentSlug);
+        }
       }
     });
     this.articleComments = [];
@@ -116,7 +120,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.userStateService.followUserByUsername(username).subscribe(
       (data: any) => {
         this.authorProfile = data.profile;
-        this.userStateService.userProfile$.next(data);
+        // this.userStateService.userProfile$.next(data);
       },
       () => {}
     );
@@ -125,7 +129,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.userStateService.unFollowUserByUsername(username).subscribe(
       (data: any) => {
         this.authorProfile = data.profile;
-        this.userStateService.userProfile$.next(data);
+        // this.userStateService.userProfile$.next(data);
       },
       () => {}
     );
@@ -158,6 +162,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.loadingSpinnerService.showSpinner();
     this.articlesStateService.deleteArticleBySlug(this.currentSlug).subscribe(
       () => {
+        this.isDeleted = true;
         setTimeout(() => {
           this.loadingSpinnerService.hideSpinner();
           this.toastr.success('Success!', 'Delete Article completed!');

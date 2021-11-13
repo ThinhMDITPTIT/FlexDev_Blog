@@ -23,7 +23,7 @@
           {{ articleObj?.author?.username | titlecase }}
         </p>
         <p class="mb-0 text-white-50">
-          {{ articleObj?.createdAt | date: "longDate" }}
+          {{ articleObj?.createdAt | timeCustom }}
         </p>
       </div>
     </div>
