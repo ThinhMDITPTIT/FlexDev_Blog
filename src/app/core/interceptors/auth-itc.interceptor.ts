@@ -9,12 +9,14 @@ import { Observable, throwError } from 'rxjs';
 import { LocalStorageService } from 'ngx-webstorage';
 import { catchError } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthItcInterceptor implements HttpInterceptor {
   constructor(
     private readonly localStorage: LocalStorageService,
-    private readonly toastr: ToastrService
+    private readonly toastr: ToastrService,
+    private readonly router: Router
   ) {}
 
   intercept(
@@ -32,7 +34,6 @@ export class AuthItcInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       catchError((err) => {
-        // console.log(err);
         if (err.status === 401) {
           this.localStorage.clear('token');
           this.toastr.warning('', 'You must to Login!');

@@ -11,7 +11,6 @@ export class HomepageComponent {
   public featuresHome: string[];
 
   constructor(
-    // private readonly authStateService: AuthStateService,
     private readonly localStorage: LocalStorageService,
   ) {
     this.featuresHome = [];
@@ -21,13 +20,5 @@ export class HomepageComponent {
     }else {
       this.featuresHome = ['Global Feed'];
     }
-    // this.authStateService.getCurrentUserInfo().subscribe(
-    //   () => {
-    //     this.featuresHome = ['Your Feed', 'Global Feed'];
-    //   },
-    //   () => {
-    //     this.featuresHome = ['Global Feed'];
-    //   }
-    // );
   }
 }

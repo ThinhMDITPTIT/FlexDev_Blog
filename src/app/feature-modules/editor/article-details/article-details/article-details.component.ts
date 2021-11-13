@@ -72,17 +72,12 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
           if (data?.user?.token) {
             this.currentUser = data.user.username;
             this.currentUserImage = data.user.image;
-              console.log(this.currentUser);
-              console.log(data);
-
           }
         },
         () => {
           this.currentUser = this.authStateService.currentUserProfile;
         }
       );
-      // this.currentUser = this.authStateService.currentUserProfile.user.username;
-      // this.currentUserImage = this.authStateService.currentUserProfile.user.image;
     }else {
       this.currentUser = this.authStateService.currentUserProfile;
     }
@@ -134,7 +129,6 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.userStateService.followUserByUsername(username).subscribe(
       (data: any) => {
         this.authorProfile = data.profile;
-        // this.userStateService.userProfile$.next(data);
       },
       () => {}
     );

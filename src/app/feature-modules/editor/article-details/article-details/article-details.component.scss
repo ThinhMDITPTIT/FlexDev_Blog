@@ -1,11 +1,3 @@
-// textarea.ng-invalid.ng-dirty {
-//   border: red 1px solid;
-// }
-
-// textarea.ng-invalid.ng-touched {
-//   border: red 1px solid;
-// }
-
 .cursor__pointer {
   cursor: pointer;
 }
@@ -18,19 +10,16 @@
   padding-left: 15px;
   padding-right: 15px;
   resize: none;
-  // border-color: transparent;
   width: 100%;
   overflow-y: hidden;
 
   &:focus {
     outline: none !important;
-    // border: transparent;
   }
 }
 
 .form-control {
   &:focus {
     outline: none !important;
-    // border: transparent;
   }
 }
