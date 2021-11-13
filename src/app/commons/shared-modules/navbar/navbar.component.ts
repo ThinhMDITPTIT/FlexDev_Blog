@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {
   Router,
-  NavigationStart,
-  Event as NavigationEnd,
+  ActivatedRoute,
+  Event,
+  NavigationEnd,
 } from '@angular/router';
 import { LocalStorageService } from 'ngx-webstorage';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
@@ -23,7 +24,8 @@ export class NavbarComponent implements OnInit {
     private readonly router: Router,
     private readonly localStorage: LocalStorageService,
     private readonly authStateService: AuthStateService,
-    private readonly spinner: LoadingSpinnerService
+    private readonly spinner: LoadingSpinnerService,
+    private readonly activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -55,10 +57,10 @@ export class NavbarComponent implements OnInit {
   }
 
   displayBanner() {
-    this.router.events.subscribe((event: NavigationEnd) => {
-      if (event instanceof NavigationStart) {
-        this.showBanner = event.url === '/' ? true : false;
+    this.router.events.subscribe((event: Event) => {
+      if(event instanceof NavigationEnd){
+        this.showBanner = event.urlAfterRedirects === '/' ? true : false;
       }
-    });
+    })
   }
 }
