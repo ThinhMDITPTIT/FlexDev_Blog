@@ -9,6 +9,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { CustomPipesModule } from 'src/app/commons/pipes/custom-pipes.module';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MarkdownEditorModule } from 'src/app/commons/shared-modules/markdown-editor/markdown-editor.module';
+import { PaginationModule } from 'src/app/commons/shared-modules/pagination/pagination.module';
 
 @NgModule({
   declarations: [ArticleDetailsComponent, CommentDetailsComponent],
@@ -21,7 +22,8 @@ import { MarkdownEditorModule } from 'src/app/commons/shared-modules/markdown-ed
     CustomPipesModule,
     TextFieldModule,
     MarkdownEditorModule,
-    CustomPipesModule
+    CustomPipesModule,
+    PaginationModule,
   ],
 })
 export class ArticleDetailsModule {}

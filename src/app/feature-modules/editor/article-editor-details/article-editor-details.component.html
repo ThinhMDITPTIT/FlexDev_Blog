@@ -47,7 +47,11 @@
           <span> <i class="fas fa-eye-slash"></i> &nbsp; Editor </span>
         </a>
       </div>
-      <app-markdown-editor [control]="contentRawControl" [showPreview]="showPreviewMarkdown"></app-markdown-editor>
+      <app-markdown-editor
+        [control]="contentRawControl"
+        [minRows]="6"
+        [showPreview]="showPreviewMarkdown"
+      ></app-markdown-editor>
     </div>
     <div>
       <ul class="text-danger" *ngIf="

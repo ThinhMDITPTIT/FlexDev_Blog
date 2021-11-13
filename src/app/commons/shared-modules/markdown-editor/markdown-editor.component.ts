@@ -1,4 +1,13 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import {
+  Component,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import '@github/markdown-toolbar-element';
 
@@ -7,13 +16,22 @@ import '@github/markdown-toolbar-element';
   templateUrl: './markdown-editor.component.html',
   styleUrls: ['./markdown-editor.component.scss'],
 })
-export class MarkdownEditorComponent implements OnInit {
+export class MarkdownEditorComponent implements OnInit, OnChanges {
   public controlId: string;
   @Input()
   public control: FormControl;
 
   @Input()
+  public minRows: number;
+
+  @Input()
   public showPreview: boolean;
+
+  @Input()
+  public resetSize: number;
+
+  @ViewChild('cfcAutosize')
+  public contentFCAutosize: CdkTextareaAutosize | undefined;
 
   @HostBinding('class.focus') isFocus: boolean;
 
@@ -22,6 +40,14 @@ export class MarkdownEditorComponent implements OnInit {
     this.controlId = '';
     this.isFocus = false;
     this.showPreview = false;
+    this.minRows = 6;
+    this.resetSize = Math.random();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes.resetSize){
+      this.resetTextAreaSize();
+    }
   }
 
   ngOnInit(): void {
@@ -35,5 +61,11 @@ export class MarkdownEditorComponent implements OnInit {
 
   public blur() {
     this.isFocus = false;
+  }
+
+  resetTextAreaSize() {
+    if (this.contentFCAutosize) {
+      this.contentFCAutosize.reset();
+    }
   }
 }

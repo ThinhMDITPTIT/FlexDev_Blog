@@ -32,8 +32,9 @@ export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate
   public markdownForm: FormGroup;
   public articleObj: any;
   private currentSlug: any;
-  private articleSubscription: Subscription = new Subscription();
   public showPreviewMarkdown: boolean;
+  private articleSubscription: Subscription = new Subscription();
+  private routerSubcription: Subscription = new Subscription();
   private currentFormValue: any;
 
   constructor(
@@ -55,7 +56,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate
 
     this.showPreviewMarkdown = false;
 
-    this.router.events.subscribe((event: Event) => {
+    this.routerSubcription = this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         if (this.activatedRoute.snapshot.params.id) {
           this.currentSlug = this.activatedRoute.snapshot.params.id;
@@ -67,6 +68,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate
 
   ngOnDestroy() {
     this.articleSubscription.unsubscribe();
+    this.routerSubcription.unsubscribe();
   }
 
   public getArticleDataBySlug(slug: any) {

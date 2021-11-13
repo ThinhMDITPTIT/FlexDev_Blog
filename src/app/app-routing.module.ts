@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Route } from './commons/enums/route.enum';
 import { AuthGuard } from './core/guards/auth-guard.guard';
-import { EditorArticleGuard } from './core/guards/editor-article.guard';
 import { NoNeedAuthGuard } from './core/guards/no-need-auth-guard.guard';
 
 const routes: Routes = [
