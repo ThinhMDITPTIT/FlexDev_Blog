@@ -51,7 +51,7 @@ const routes: Routes = [
         './feature-modules/editor/article-editor-details/article-editor-details.module'
       ).then((m) => m.ArticleEditorDetailsModule),
     canActivate: [AuthGuard],
-    // canDeactivate: [EditorArticleGuard],
+    canDeactivate: [EditorArticleGuard],
   },
   {
     path: Route.ARTICLE_ID,
@@ -67,6 +67,10 @@ const routes: Routes = [
         (m) => m.ProfileModule
       ),
   },
+  // {
+  //   path: '**',
+
+  // }
 ];
 
 @NgModule({

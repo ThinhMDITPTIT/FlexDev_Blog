@@ -28,7 +28,7 @@ import { NotificationModalComponent } from './../../../commons/shared-modules/no
   templateUrl: './article-editor-details.component.html',
   styleUrls: ['./article-editor-details.component.scss'],
 })
-export class ArticleEditorDetailsComponent implements OnDestroy {
+export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate {
   public markdownForm: FormGroup;
   public articleObj: any;
   private currentSlug: any;
@@ -142,19 +142,32 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
     this.router.navigate(['article', slug]);
   }
 
-  // openModal() {
-  //   this.modal.open(NotificationModalComponent);
-  // }
+  get isEmpty (){
+    const formValue = this.markdownForm.value;
+    console.log(formValue);
+    for(let key in formValue){
+      if(formValue[key].length !== 0){
+        return false;
+      }
+    }
+    return true;
+  }
 
-  // checkDeactivate(
-  //   currentRoute: ActivatedRouteSnapshot,
-  //   currentState: RouterStateSnapshot,
-  //   nextState?: RouterStateSnapshot
-  // ):
-  //   | Observable<boolean | UrlTree>
-  //   | Promise<boolean | UrlTree>
-  //   | boolean
-  //   | UrlTree {
-  //   return true || this.openModal();
-  // }
+  openModal() {
+    const modalRef = this.modal.open(NotificationModalComponent);
+    return modalRef.closed;
+  }
+
+  checkDeactivate(
+    currentRoute: ActivatedRouteSnapshot,
+    currentState: RouterStateSnapshot,
+    nextState?: RouterStateSnapshot
+  ): Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
+
+    return this.isEmpty || this.openModal();
+  }
+
 }

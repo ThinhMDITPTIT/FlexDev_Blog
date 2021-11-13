@@ -1,3 +1,7 @@
-<p>
-  notification-model works!
-</p>
+<div class="modal-body">
+  <p>Your article hasn't been saved. Do you want to discard this article?</p>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-secondary" (click)="modalRef.close(false)">No</button>
+  <button class="btn btn-danger" (click)="modalRef.close(true)">Yes</button>
+</div>
