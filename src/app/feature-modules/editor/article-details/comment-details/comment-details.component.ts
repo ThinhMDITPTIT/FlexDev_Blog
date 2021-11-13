@@ -27,12 +27,13 @@ export class CommentDetailsComponent {
     private readonly toastr: ToastrService
   ) { }
 
-  public deleteComment() {
-    console.log(this.commentContent);
+  public deleteComment(commentID: any) {
+    // console.log(this.commentContent._id);
+    // console.log('para: ', commentID);
 
     this.loadingSpinnerService.showSpinner();
     this.commentsStateService
-      .deleteCommentOfArticle(this.articleSlug, this.commentContent?._id)
+      .deleteCommentOfArticle(this.articleSlug, commentID)
       .subscribe(() => {
         this.commentsStateService
           .getCommentsFromArticle(this.articleSlug)
@@ -46,10 +47,10 @@ export class CommentDetailsComponent {
       });
   }
 
-  logComment(value: any){
-    console.log(value);
+  // logComment(value: any){
+  //   console.log(value);
 
-  }
+  // }
 
   public seeAuthorProfile(authorName: string) {
     this.router.navigate(['profile', authorName]);

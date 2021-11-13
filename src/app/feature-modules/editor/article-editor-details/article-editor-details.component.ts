@@ -32,8 +32,9 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
   public markdownForm: FormGroup;
   public articleObj: any;
   private currentSlug: any;
-  private articleSubscription: Subscription = new Subscription();
   public showPreviewMarkdown: boolean;
+  private articleSubscription: Subscription = new Subscription();
+  private routerSubcription: Subscription = new Subscription();
 
   constructor(
     private _fb: FormBuilder,
@@ -54,7 +55,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
 
     this.showPreviewMarkdown = false;
 
-    this.router.events.subscribe((event: Event) => {
+    this.routerSubcription = this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         if (this.activatedRoute.snapshot.params.id) {
           this.currentSlug = this.activatedRoute.snapshot.params.id;
@@ -66,6 +67,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.articleSubscription.unsubscribe();
+    this.routerSubcription.unsubscribe();
   }
 
   public getArticleDataBySlug(slug: any) {

@@ -213,7 +213,8 @@
     (focus)="focus()"
     (blur)="blur()"
     cdkTextareaAutosize
-    [cdkAutosizeMinRows]="6"
+    [cdkAutosizeMinRows]="minRows"
+    #cfcAutosize="cdkTextareaAutosize"
   ></textarea>
 </div>
 

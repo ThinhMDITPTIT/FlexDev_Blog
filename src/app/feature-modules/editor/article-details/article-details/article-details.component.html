@@ -24,7 +24,7 @@
           {{ articleObj?.author?.username | titlecase }}
         </p>
         <p class="mb-0 text-white-50">
-          {{ articleObj?.createdAt | timeCustom}}
+          {{ articleObj?.createdAt | timeCustom }}
         </p>
       </div>
     </div>
@@ -112,30 +112,15 @@
 ></div>
 <div class="mt-5 pl-3">
   <h3 class="text-info font-weight-bold m-0">Comments</h3>
-  <hr>
+  <hr />
 </div>
 <div class="pl-3 py-3 form-group mb-0">
   <form [formGroup]="commentForm" (ngSubmit)="submitForm(commentForm)">
-    <div>
-      <ul
-        class="text-danger"
-        *ngIf="
-          (commentContentError &&
-            commentForm.get('content')?.invalid &&
-            commentForm.get('content')?.dirty) ||
-          (commentContentError &&
-            commentForm.get('content')?.invalid &&
-            commentForm.get('content')?.touched)
-        "
-      >
-        <li *ngIf="commentForm.get('content')?.hasError('required')">
-          Content is required
-        </li>
-      </ul>
-    </div>
     <div class="form-group mb-0">
       <app-markdown-editor
         [control]="contentRawControl"
+        [minRows]="minRowsMarkDown"
+        [resetSize]="isReset"
         [showPreview]="showPreviewMarkdown"
       ></app-markdown-editor>
       <!-- <textarea
@@ -177,6 +162,19 @@
     "
   ></app-comment-details>
 </div>
+
+<app-pagination
+  *ngIf="
+    articleCommentsObj.length !== 0 &&
+    articleCommentsObj.length > pageSize
+  "
+  [page]="currentPageIdx"
+  [collectionSize]="articleCommentsObj.length"
+  [pageSize]="pageSize"
+  [maxSize]="maxSize"
+  [notChangeIndex]="notChangeIdxPag"
+  (currentPageClick)="getCurrentPageIndex($event)"
+></app-pagination>
 
 <!-- Modal Confirm Delete Article -->
 <div
@@ -220,3 +218,5 @@
     </div>
   </div>
 </div>
+
+

@@ -10,7 +10,13 @@ import { CustomPipesModule } from '../../pipes/custom-pipes.module';
 
 @NgModule({
   declarations: [SingleArticleComponent, ListArticleComponent],
-  imports: [CommonModule, NgbNavModule, RouterModule, PaginationModule, CustomPipesModule],
+  imports: [
+    CommonModule,
+    NgbNavModule,
+    RouterModule,
+    PaginationModule,
+    CustomPipesModule,
+  ],
   exports: [ListArticleComponent, SingleArticleComponent],
 })
 export class ListArticleModule {}
