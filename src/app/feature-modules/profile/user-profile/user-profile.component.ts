@@ -73,11 +73,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if(this.localStorage.retrieve('token')){
       this.currentUser = this.authStateService.currentUserProfile?.user?.username;
-      console.log(this.currentUser);
-
     }else {
       this.currentUser = '';
-      console.log(this.currentUser);
     }
   }
 

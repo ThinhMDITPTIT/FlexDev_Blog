@@ -1,6 +1,5 @@
 <div class="p-3 bg-dark">
-  <p class="h2 text-white">{{ articleObj?.title }}</p>
-  <div class="d-sm-flex justify-content-between mt-4">
+  <div class="d-sm-flex justify-content-between">
     <div class="d-flex">
       <div
         class="cursor__pointer"
@@ -57,7 +56,7 @@
       </ng-template>
       <ng-template #Favorite>
         <a
-          class="btn btn-outline-success mr-3 d-flex align-items-center"
+          class="btn btn-outline-success d-flex align-items-center"
           (click)="favoriteArticle()"
         >
           <i class="far fa-heart"></i> &nbsp; Favorite&nbsp;
@@ -66,7 +65,7 @@
       </ng-template>
       <ng-template #Unfavorite>
         <a
-          class="btn btn-success mr-3 d-flex align-items-center"
+          class="btn btn-success d-flex align-items-center"
           (click)="unFavoriteArticle()"
         >
           <i class="fas fa-heart"></i> &nbsp; Unfavorite&nbsp;
@@ -83,7 +82,7 @@
       <button
         *ngIf="currentUser === articleObj?.author?.username"
         type="button"
-        class="btn btn-outline-danger mr-3 d-flex align-items-center"
+        class="btn btn-outline-danger d-flex align-items-center"
         data-toggle="modal"
         data-target="#modalDeleteArticle"
       >
@@ -91,6 +90,7 @@
       </button>
     </div>
   </div>
+  <h1 class="text-white mt-4">{{ articleObj?.title }}</h1>
 </div>
 <div class="p-3 border border-top-0">
   Description: {{ articleObj?.description }}

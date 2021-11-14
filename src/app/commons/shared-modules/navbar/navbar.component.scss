@@ -28,6 +28,8 @@ $text-color: #ffffff;
 
   .dropdown-menu {
     background-color: #000;
+    position: absolute;
+    z-index: 10;
 
     button:hover {
       color: #000000;
@@ -37,24 +39,42 @@ $text-color: #ffffff;
 
   .title {
     font-family: 'Roboto', sans-serif;
-    position: absolute;
-    top: 50%;
-    left: 35%;
-    transform: translate(-50%, -50%);
+    margin: 10rem 10rem;
   }
 
-}
-
-.dropdown-menu {
-  min-width: 112% !important;
 }
 
 .hide {
   display: none;
 }
 
+@media only screen and (max-width: 768px) {
+  .dropdown-toggle::after {
+    display: none;
+  }
+  .banner {
+    background-position: right;
+    height: 20rem;
+
+    .title {
+      text-align: center;
+      margin: 5rem 5rem 0 5rem;
+    }
+  }
+}
+
 @media only screen and (min-width: 1500px) {
   .banner {
     height: 50rem;
+  }
+  .title {
+    margin-top: 20rem !important;
+    margin-left: 20rem !important;
+    h1 {
+      font-size: 4rem;
+    }
+    h4 {
+      font-size: 2.5rem;
+    }
   }
 }

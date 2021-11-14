@@ -1,1 +1,17 @@
+@media only screen and (min-width: 376px) and (max-width: 768px) {
+  .w-form, .btn:not(:disabled):not(.disabled) {
+    width: 100%;
+  }
+}
 
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .btn:not(:disabled):not(.disabled) {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .w-form {
+    width: 50%;
+  }
+}
