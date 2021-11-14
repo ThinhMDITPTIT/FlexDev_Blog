@@ -14,6 +14,7 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { NgParticlesModule } from 'ng-particles';
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,6 +38,7 @@ import { ToastrModule } from 'ngx-toastr';
       newestOnTop: true,
     }),
     BrowserAnimationsModule,
+    NgParticlesModule
   ],
   providers: [
     {

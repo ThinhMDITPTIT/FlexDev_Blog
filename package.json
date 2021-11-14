@@ -29,6 +29,7 @@
     "@github/markdown-toolbar-element": "^2.0.0",
     "@ng-bootstrap/ng-bootstrap": "^10.0.0",
     "bootstrap": "^4.5.0",
+    "ng-particles": "^2.20.3",
     "ngx-markdown": "^12.0.1",
     "ngx-spinner": "^12.0.0",
     "ngx-toastr": "^14.1.4",
@@ -36,6 +37,7 @@
     "ngx-webstorage-service": "^4.1.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
+    "tsparticles": "^1.37.3",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
