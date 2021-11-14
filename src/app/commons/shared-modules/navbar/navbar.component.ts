@@ -46,6 +46,7 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.localStorage.clear('token');
+    this.localStorage.clear('homeFeatureIdx');
     this.spinner.showSpinner();
     setTimeout(() => {
       this.authStateService.currentLoggedIn$.next('Logout');
