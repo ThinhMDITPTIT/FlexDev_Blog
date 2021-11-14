@@ -84,8 +84,7 @@
         *ngIf="currentUser === articleObj?.author?.username"
         type="button"
         class="btn btn-outline-danger mr-3 d-flex align-items-center"
-        data-toggle="modal"
-        data-target="#modalDeleteArticle"
+        (click)="deleteArticle()"
       >
         <i class="fas fa-trash"></i> &nbsp; Delete
       </button>
@@ -170,91 +169,5 @@
   [notChangeIndex]="notChangeIdxPag"
   (currentPageClick)="getCurrentPageIndex($event)"
 ></app-pagination>
-
-<!-- Modal Confirm Delete Article -->
-<div
-  class="modal fade"
-  id="modalDeleteArticle"
-  tabindex="-1"
-  aria-labelledby="modalConfirmDeleteArticle"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalConfirmDeleteArticle">
-          Confirm Delete Article
-        </h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this article?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Close
-        </button>
-        <button
-          type="button"
-          class="btn btn-danger"
-          data-dismiss="modal"
-          (click)="deleteArticle()"
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Confirm Delete Comment -->
-<div
-  class="modal fade"
-  id="modalDeleteComment"
-  tabindex="-1"
-  aria-labelledby="modalConfirmDeleteComment"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalConfirmDeleteComment">
-          Confirm Delete Comment
-        </h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this comment?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Close
-        </button>
-        <button
-          type="button"
-          class="btn btn-danger"
-          data-dismiss="modal"
-          (click)="confirmDeleteComment()"
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
