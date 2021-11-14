@@ -1,4 +1,4 @@
-<div class="w-50 mx-auto">
+<div class="mx-auto w-form">
   <div class="mt-5 mb-4">
     <h1 class="text-secondary text-center mb-3">Sign up</h1>
   </div>
@@ -60,15 +60,15 @@
         <small *ngIf="confirmPassword.errors?.required">
           Confirm password is required!
         </small>
-        <small *ngIf="confirmPassword.hasError('noPassswordMatch')">
+        <small *ngIf="confirmPassword.hasError('isPassswordMatch')">
           Password do not match!
         </small>
       </div>
     </div>
-    <div class="align-self-end pt-3">
+    <div class="d-flex justify-content-end align-items-center flex-column-reverse flex-md-column-reverse flex-lg-row">
       <a class="text-primary" [routerLink]="['', 'login']" routerLinkActive="router-link-active">I'm already have an
         account!</a>
-      <button class="btn btn-primary ml-4 py-3 px-4">Sign up</button>
+      <button class="btn btn-primary ml-lg-4 mb-3 mb-lg-0 py-3 px-4">Sign up</button>
     </div>
   </form>
 </div>

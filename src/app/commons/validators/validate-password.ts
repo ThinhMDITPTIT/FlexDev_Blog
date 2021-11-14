@@ -16,7 +16,7 @@ export class ValidatePassword {
     const password: string = control.get('password')?.value;
     const confirmPassword: string = control.get('confirmPassword')?.value;
     if (password !== confirmPassword && confirmPassword.length > 0) {
-      control.get('confirmPassword')?.setErrors({ noPassswordMatch: true });
+      control.get('confirmPassword')?.setErrors({ isPassswordMatch: true });
     }
   }
 

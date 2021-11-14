@@ -3,10 +3,15 @@ import {
   Router,
   Event,
   NavigationEnd,
+  ActivatedRoute,
+  NavigationStart,
 } from '@angular/router';
 import { LocalStorageService } from 'ngx-webstorage';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spinner.service';
+import { UserStateService } from 'src/app/core/services/states/user-state.service';
+import { map, switchMap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -16,32 +21,49 @@ import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spi
 export class NavbarComponent implements OnInit {
   public isAuthenticated: boolean = false;
 
-  public defaultUser: string = '';
-  showBanner?: boolean;
+  public username: string = '';
+  public imageUrl: string = '';
+  public showBanner: boolean = false;
+  public isHidden: boolean = false;
+  private currentRoute: any;
 
   constructor(
     private readonly router: Router,
     private readonly localStorage: LocalStorageService,
     private readonly authStateService: AuthStateService,
-    private readonly spinner: LoadingSpinnerService
+    private readonly spinner: LoadingSpinnerService,
+    private readonly userService: UserStateService
   ) {}
 
   ngOnInit(): void {
-    this.displayBanner();
-    this.authStateService.currentLoggedIn$.subscribe(() => {
-      if(this.localStorage.retrieve('token')){
-        this.isAuthenticated = true;
-        this.authStateService.getCurrentUserInfo().subscribe(res => {
-          this.defaultUser = res.user.username;
-        })
-      }else {
-        this.isAuthenticated = false;
+    this.display();
+    this.displayInfo();
+    this.router.events.subscribe((event: Event) => {
+      if(event instanceof NavigationEnd){
+        this.currentRoute = event.url
       }
-    });
+    })
   }
 
   toProfile() {
     this.authStateService.getCurrentUserInfo().subscribe(data => this.router.navigate(['profile', data.user.username]));
+  }
+
+  displayInfo(){
+    this.authStateService.currentLoggedIn$.subscribe(() => {
+      if(this.localStorage.retrieve('token')){
+        this.isAuthenticated = true;
+        this.authStateService.getCurrentUserInfo().pipe(
+          switchMap(res => {
+            this.username = res.user.username;
+            return this.userService.getUserProfileByUsername(this.username);
+          })
+        )
+        .subscribe(res => this.imageUrl = res.profile.image);
+      }else {
+        this.isAuthenticated = false;
+      }
+    });
   }
 
   logout() {
@@ -55,11 +77,16 @@ export class NavbarComponent implements OnInit {
     }, 500);
   }
 
-  displayBanner() {
+  display() {
     this.router.events.subscribe((event: Event) => {
       if(event instanceof NavigationEnd){
         this.showBanner = event.urlAfterRedirects === '/' ? true : false;
+        this.isHidden = (event.urlAfterRedirects === '/login' || event.urlAfterRedirects === '/register') ? true : false;
       }
     })
+  }
+
+  saveRoute(){
+    this.localStorage.store('redirectUrl', this.currentRoute);
   }
 }

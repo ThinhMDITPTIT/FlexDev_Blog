@@ -42,8 +42,7 @@ export class SignupComponent {
     },
     {
       validators: [ValidatePassword.matchValidator],
-    }
-  );
+    });
 
   constructor(
     private readonly _fb: FormBuilder,
