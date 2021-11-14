@@ -15,6 +15,9 @@ import { CommentsStateService } from 'src/app/core/services/states/comments-stat
 import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
 import { UserStateService } from 'src/app/core/services/states/user-state.service';
 import { LocalStorageService } from 'ngx-webstorage';
+import { ConfirmModalComponent } from 'src/app/commons/shared-modules/confirm-modal/confirm-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-article-details',
@@ -46,6 +49,8 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   private articleSubscription: Subscription = new Subscription();
   private commentsSubscription: Subscription = new Subscription();
   private routeSubscription: Subscription = new Subscription();
+  private delArticleModalSubscription: Subscription = new Subscription();
+  private delCommentModalSubscription: Subscription = new Subscription();
 
   constructor(
     private _fb: FormBuilder,
@@ -58,7 +63,8 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     private readonly tagsStateService: TagsStateService,
     private readonly loadingSpinnerService: LoadingSpinnerService,
     private readonly toastr: ToastrService,
-    private readonly localStorage: LocalStorageService
+    private readonly localStorage: LocalStorageService,
+    private readonly modal: NgbModal
   ) {
     this.currentPageIdx = 1;
     this.pageSize = this.articlesStateService.pageSize;
@@ -94,7 +100,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
           this.currentUser = this.authStateService.currentUserProfile;
         }
       );
-    }else {
+    } else {
       this.currentUser = this.authStateService.currentUserProfile;
     }
 
@@ -117,6 +123,8 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
     this.articleSubscription.unsubscribe();
     this.commentsSubscription.unsubscribe();
     this.routeSubscription.unsubscribe();
+    this.delArticleModalSubscription.unsubscribe();
+    this.delCommentModalSubscription.unsubscribe();
   }
 
   public get contentRawControl() {
@@ -195,17 +203,23 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   }
 
   public deleteArticle() {
-    this.loadingSpinnerService.showSpinner();
-    this.articlesStateService.deleteArticleBySlug(this.currentSlug).subscribe(
-      () => {
-        setTimeout(() => {
-          this.loadingSpinnerService.hideSpinner();
-          this.toastr.success('Success!', 'Delete Article completed!');
-          this.redirectHome();
-        }, 1500);
-      },
-      () => {}
-    );
+    this.delArticleModalSubscription = this.openModal('article').subscribe((res) => {
+      if (res) {
+        this.loadingSpinnerService.showSpinner();
+        this.articlesStateService
+          .deleteArticleBySlug(this.currentSlug)
+          .subscribe(
+            () => {
+              setTimeout(() => {
+                this.loadingSpinnerService.hideSpinner();
+                this.toastr.success('Success!', 'Delete Article completed!');
+                this.redirectHome();
+              }, 500);
+            },
+            () => {}
+          );
+      }
+    });
   }
 
   public redirectHome() {
@@ -288,6 +302,11 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
 
   public getCommentIdToDelete(id: any) {
     this.commentIdToDelete = id;
+    this.delCommentModalSubscription = this.openModal('comment').subscribe((res) => {
+      if (res) {
+        this.confirmDeleteComment();
+      }
+    });
   }
 
   public confirmDeleteComment() {
@@ -307,5 +326,11 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
             });
         });
     }
+  }
+
+  public openModal(nameConfirm: any) {
+    const modalRef = this.modal.open(ConfirmModalComponent);
+    modalRef.componentInstance.nameConfirm = nameConfirm;
+    return modalRef.closed;
   }
 }

@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class CommentDetailsComponent {
   @Input()
-  public isHost: Boolean = false;
+  public isHost: boolean = false;
 
   @Input()
   public commentContent: any;
