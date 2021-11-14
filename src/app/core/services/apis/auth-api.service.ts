@@ -26,7 +26,7 @@ export class AuthApiService {
     return this.http.get(`${this.baseUrl}/user`);
   }
 
-  updateUser(user: IUserDetails): Observable<any> {
+  updateUser(user: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/user`, user);
   }
 

@@ -9,8 +9,6 @@ import { throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class UserStateService {
-  // public userProfile$: BehaviorSubject<any> = new BehaviorSubject<any>({});
-
   constructor(private readonly userApiService: UserApiService) {}
 
   public getUserProfileByUsername(username: any) {
@@ -38,8 +36,6 @@ export class UserStateService {
     if (error.error instanceof Error) {
       const errMessage = error.error.message;
       return throwError(errMessage);
-      // Use the following instead if using lite-server
-      // return Observable.throw(err.text() || 'backend server error');
     }
     return throwError(error || 'Server error')
   }

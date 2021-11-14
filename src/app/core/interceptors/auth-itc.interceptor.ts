@@ -44,9 +44,6 @@ export class AuthItcInterceptor implements HttpInterceptor {
         if (err.status === 404) {
           this.toastr.error('Error!', 'Request Not Found!');
         }
-        if (err.status === 422) {
-          this.toastr.warning('Please try again!', 'Email or Password is Invalid!');
-        }
         return throwError(err);
       })
     );

@@ -2,51 +2,84 @@
   <nav ngbNav class="navbar navbar-expand navbar-light">
     <a class="navbar-brand" [routerLink]="['']" routerLinkActive="router-link-active">FlexDev</a>
     <div class="collapse navbar-collapse justify-content-end">
-      <ul class="navbar-nav">
-        <li ngbNavItem>
-          <a ngbNavLink [routerLink]="['']" routerLinkActive="router-link-active">
-            <i class="fas fa-home"></i>
-            Home
-          </a>
-        </li>
-        <li *ngIf="isAuthenticated" ngbNavItem>
-          <a ngbNavLink [routerLink]="['editor']" routerLinkActive="router-link-active">
-            <i class="fas fa-edit"></i>
-            New Article
-          </a>
-        </li>
-        <li *ngIf="isAuthenticated" ngbNavItem>
-          <a ngbNavLink [routerLink]="['settings']" routerLinkActive="router-link-active">
-            <i class="fas fa-tools"></i>
-            Setting
-          </a>
-        </li>
-        <li *ngIf="!isAuthenticated" ngbNavItem>
-          <a ngbNavLink [routerLink]="['login']" routerLinkActive="router-link-active">
-            <i class="fas fa-sign-in-alt"></i>
-            Login
-          </a>
-        </li>
-        <li *ngIf="isAuthenticated" ngbDropdown #drop="ngbDropdown" class="nav-item">
-          <button ngbDropdownAnchor (focus)="drop.open()" class="btn" id="dropdownManual">
-            <img src="https://static.productionready.io/images/smiley-cyrus.jpg"
-                 width="30"
-                 class="rounded-circle"
-                 alt="avt"/>
-            Profile
-          </button>
-          <div ngbDropdownMenu aria-labelledby="dropdownManual" class="dropdown-menu">
-            <button ngbDropdownItem (click)="toProfile()">
-              Profile
+      <div class="d-none d-sm-none d-md-block d-lg-block d-xl-block">
+        <ul class="navbar-nav">
+          <li ngbNavItem>
+            <a ngbNavLink [routerLink]="['']" routerLinkActive="router-link-active">
+              <i class="fas fa-home"></i>
+              Home
+            </a>
+          </li>
+          <li *ngIf="isAuthenticated" ngbNavItem>
+            <a ngbNavLink [routerLink]="['editor']" routerLinkActive="router-link-active">
+              <i class="fas fa-edit"></i>
+              New Article
+            </a>
+          </li>
+          <li *ngIf="isAuthenticated" ngbNavItem>
+            <a ngbNavLink [routerLink]="['settings']" routerLinkActive="router-link-active">
+              <i class="fas fa-tools"></i>
+              Settings
+            </a>
+          </li>
+          <li *ngIf="!isAuthenticated && !isHidden" ngbNavItem>
+            <a ngbNavLink (click)="saveRoute()" [routerLink]="['login']" routerLinkActive="router-link-active">
+              <i class="fas fa-sign-in-alt"></i>
+              Sign In
+            </a>
+          </li>
+          <li *ngIf="!isAuthenticated && !isHidden" ngbNavItem>
+            <a ngbNavLink [routerLink]="['register']" routerLinkActive="router-link-active">
+              <i class="fas fa-user-plus"></i>
+              Sign Up
+            </a>
+          </li>
+          <li *ngIf="isAuthenticated" ngbDropdown #drop="ngbDropdown" display="dynamic" placement="bottom-right" class="nav-item">
+            <button ngbDropdownAnchor (focus)="drop.open()" class="btn" id="dropdownManual">
+              <img [src]="imageUrl || 'https://static.productionready.io/images/smiley-cyrus.jpg'"
+                   width="30"
+                   height="30"
+                   class="rounded-circle"
+                   alt="avt"/>
+              <span class="font-weight-bold">
+                {{ username }}
+              </span>
             </button>
-            <button ngbDropdownItem (click)="logout()">Logout</button>
-          </div>
-        </li>
-      </ul>
+            <div ngbDropdownMenu aria-labelledby="dropdownManual" class="dropdown-menu">
+              <button ngbDropdownItem (click)="toProfile()">
+                Profile
+              </button>
+              <button ngbDropdownItem (click)="logout()">Logout</button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div ngbDropdown #drop="ngbDropdown" display="dynamic" placement="bottom-right"
+          class="d-block d-sm-block d-md-none d-lg-none d-xl-none">
+      <button ngbDropdownAnchor (focus)="drop.open()" id="dropdownManual" class="btn btn-outline-secondary">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownManual">
+        <button *ngIf="isAuthenticated" ngbDropdownItem (click)="toProfile()">
+          <img [src]="imageUrl || 'https://static.productionready.io/images/smiley-cyrus.jpg'"
+                width="30"
+                height="30"
+                class="rounded-circle"
+                alt="avt"/>
+          <span class="font-weight-bold ml-2">{{ username }}</span>
+        </button>
+        <a ngbDropdownItem [routerLink]="['']" routerLinkActive="router-link-active" >Home</a>
+        <a *ngIf="isAuthenticated" ngbDropdownItem [routerLink]="['editor']" routerLinkActive="router-link-active" >New Article</a>
+        <a *ngIf="isAuthenticated" ngbDropdownItem [routerLink]="['settings']" routerLinkActive="router-link-active" >Settings</a>
+        <a *ngIf="!isAuthenticated && !isHidden" ngbDropdownItem [routerLink]="['login']" routerLinkActive="router-link-active" >Sign In</a>
+        <a *ngIf="!isAuthenticated && !isHidden" ngbDropdownItem [routerLink]="['register']" routerLinkActive="router-link-active" >Sing Up</a>
+        <button *ngIf="isAuthenticated" ngbDropdownItem (click)="logout()">Logout</button>
+      </div>
     </div>
   </nav>
   <div [ngClass]="showBanner ? 'title' : 'hide'">
     <h1 class="text-info mb-3">FlexDev Blog</h1>
-    <h4 class="text-info">"The unexamined life is not worth living"</h4>
+    <h4 class="text-info d-none d-sm-block">"The unexamined life is not worth living"</h4>
   </div>
 </div>

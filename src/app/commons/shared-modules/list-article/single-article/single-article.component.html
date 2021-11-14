@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="mt-3">
-      <h5 class="card-title">{{ articleObj?.title }}</h5>
+      <h1 class="card-title font-weight-bold cursor__pointer" (click)="seeArticleDetails(articleObj?.slug)">{{ articleObj?.title }}</h1>
       <p class="card-text">
         <em>{{ articleObj?.description }}</em>
       </p>
@@ -70,11 +70,9 @@
           <span>({{ articleObj?.favoritesCount }})</span>
         </a>
       </ng-template>
-      <!-- <div class="d-flex justify-content-end"> -->
       <a class="btn btn-primary" (click)="seeArticleDetails(articleObj?.slug)">
         Details
       </a>
-      <!-- </div> -->
     </div>
   </div>
 </div>
