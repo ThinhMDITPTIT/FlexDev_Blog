@@ -1,46 +1,48 @@
-<h1 class="text-center text-secondary my-5">Edit Profile Setting</h1>
-<form class="d-flex flex-column" [formGroup]="settingForm" (ngSubmit)="updateProfile()">
-  <div class="row mt-5">
-    <div class="col-12 col-sm-6 order-1 order-sm-0">
-      <div class="form-group">
-        <label class="form-label" for="email">Email:</label>
-        <input type="email" class="form-control py-4" id="email" placeholder="Email" formControlName="email">
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="username">Username:</label>
-        <input type="text" class="form-control py-4" id="username" placeholder="Username" formControlName="username">
-        <div *ngIf="username.invalid && (username.touched || username.dirty)" class="d-flex flex-column text-danger mt-1">
-          <small *ngIf="username.errors?.required">
-            Username is required!
-          </small>
-          <small *ngIf="username.errors?.minlength">
-            Username must be at least 6 characters!
-          </small>
-          <small *ngIf="username.hasError('hasWhitespace')">
-            Username must not contain spaces!
-          </small>
-          <small *ngIf="username.hasError('usernameAlreadyTaken') && username.dirty">
-            Username is already taken!
-          </small>
+<div class="bg-white p-4 mt-5 rounded">
+  <h1 class="text-center text-secondary mb-5">Edit Profile Setting</h1>
+  <form class="d-flex flex-column" [formGroup]="settingForm" (ngSubmit)="updateProfile()">
+    <div class="row mt-5">
+      <div class="col-12 col-sm-6 order-1 order-sm-0">
+        <div class="form-group">
+          <label class="form-label" for="email">Email:</label>
+          <input type="email" class="form-control py-4" id="email" placeholder="Email" formControlName="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="username">Username:</label>
+          <input type="text" class="form-control py-4" id="username" placeholder="Username" formControlName="username">
+          <div *ngIf="username.invalid && (username.touched || username.dirty)" class="d-flex flex-column text-danger mt-1">
+            <small *ngIf="username.errors?.required">
+              Username is required!
+            </small>
+            <small *ngIf="username.errors?.minlength">
+              Username must be at least 6 characters!
+            </small>
+            <small *ngIf="username.hasError('hasWhitespace')">
+              Username must not contain spaces!
+            </small>
+            <small *ngIf="username.hasError('usernameAlreadyTaken') && username.dirty">
+              Username is already taken!
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="description">Description:</label>
+          <textarea class="form-control" placeholder="Your Description..." id="description" rows="7" formControlName="bio"></textarea>
         </div>
       </div>
-      <div class="form-group">
-        <label class="form-label" for="description">Description:</label>
-        <textarea class="form-control" placeholder="Your Description..." id="description" rows="7" formControlName="bio"></textarea>
+      <div class="col-12 col-sm-6 order-0 order-sm-1 d-flex flex-column justify-content-between align-items-center">
+        <div class="border p-3">
+          <img #image [src]="profile.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'" class="rounded-circle" width="250" height="250" alt="Wrong Image Url!">
+        </div>
+        <div class="form-group w-100 mt-3">
+          <label for="image">Image URL <span class="font-italic font-weight-light text-secondary">(Paste your image url here)</span></label>
+          <input type="text" class="form-control py-4" id="image" placeholder="Image URL" formControlName="image">
+        </div>
       </div>
     </div>
-    <div class="col-12 col-sm-6 order-0 order-sm-1 d-flex flex-column justify-content-between align-items-center">
-      <div class="border p-3">
-        <img #image [src]="profile.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'" class="rounded-circle" width="250" height="250" alt="Wrong Image Url!">
-      </div>
-      <div class="form-group w-100 mt-3">
-        <label for="image">Image URL <span class="font-italic font-weight-light text-secondary">(Paste your image url here)</span></label>
-        <input type="text" class="form-control py-4" id="image" placeholder="Image URL" formControlName="image">
-      </div>
+    <div class="align-self-center pt-3 mt-5">
+      <button type="button" class="btn btn-danger py-3 px-4" (click)="openModal()">Change Password</button>
+      <button class="btn btn-primary ml-4 py-3 px-4">Update</button>
     </div>
-  </div>
-  <div class="align-self-center pt-3 mt-5">
-    <button type="button" class="btn btn-danger py-3 px-4" (click)="openModal()">Change Password</button>
-    <button class="btn btn-primary ml-4 py-3 px-4">Update</button>
-  </div>
-</form>
+  </form>
+</div>

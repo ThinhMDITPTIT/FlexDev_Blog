@@ -119,7 +119,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate
               this.toastr.success('Success!', 'Create new completed!');
               this.markdownForm.patchValue({title: '', description: '', content: '', tags: ''});
               this.markdownForm.markAsPristine();
-            }, 500);
+            }, 250);
           });
       } else {
         this.loadingSpinnerService.showSpinner();
@@ -131,7 +131,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate
               this.loadingSpinnerService.hideSpinner();
               this.toastr.success('Success!', 'Update completed!');
               this.currentFormValue = this.markdownForm.value;
-            }, 500);
+            }, 250);
           });
       }
     } else {

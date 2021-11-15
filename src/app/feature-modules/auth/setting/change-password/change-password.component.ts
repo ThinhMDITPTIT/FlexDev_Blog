@@ -61,14 +61,14 @@ export class ChangePasswordComponent {
     }
     setTimeout(() => {
       this.spinner.showSpinner();
-    }, 500);
+    }, 250);
     if(this.changePwForm.valid){
       this.authApiService.updateUser({user}).subscribe(() => {
         setTimeout(() => {
           this.spinner.hideSpinner();
           this.toastr.success('', 'Change Password Successfully!');
           this.activeModal.close();
-        }, 1000)
+        }, 500)
       }, () => {
         this.toastr.error('', 'Something Wrong!');
       })
