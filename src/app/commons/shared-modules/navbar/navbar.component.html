@@ -1,5 +1,11 @@
-<div [ngClass]="showBanner ? 'banner' : 'bg-light'">
-  <nav ngbNav class="navbar navbar-expand navbar-light">
+<div [ngClass]="showBanner ? 'banner' : ''">
+  <div [ngClass]="showBanner ? 'title' : 'hide'">
+    <h1 class="text-info mb-3">FlexDev Blog</h1>
+    <h4 class="text-info d-none d-sm-block">"The unexamined life is not worth living"</h4>
+  </div>
+</div>
+<div class="fixed-top" [ngClass]="showBanner ? 'nav-bar' : 'bg-light'">
+  <nav ngbNav class="navbar navbar-expand navbar-light" >
     <a class="navbar-brand" [routerLink]="['']" routerLinkActive="router-link-active">FlexDev</a>
     <div class="collapse navbar-collapse justify-content-end">
       <div class="d-none d-sm-none d-md-block d-lg-block d-xl-block">
@@ -78,8 +84,5 @@
       </div>
     </div>
   </nav>
-  <div [ngClass]="showBanner ? 'title' : 'hide'">
-    <h1 class="text-info mb-3">FlexDev Blog</h1>
-    <h4 class="text-info d-none d-sm-block">"The unexamined life is not worth living"</h4>
-  </div>
 </div>
+

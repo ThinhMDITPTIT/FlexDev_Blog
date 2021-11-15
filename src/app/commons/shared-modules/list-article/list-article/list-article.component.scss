@@ -7,12 +7,14 @@
 }
 
 .nav-tabs .nav-link {
-  background-color: #ffffff;
-  opacity: 0.7;
+  background-color: #fff;
+  color: #000;
+  margin-right: 2px;
 }
 
 .active {
-  background-color: #696767 !important;
+  background-color: #17a2b8 !important;
   color: #fff !important;
   opacity: 1 !important;
+  margin: 0;
 }
