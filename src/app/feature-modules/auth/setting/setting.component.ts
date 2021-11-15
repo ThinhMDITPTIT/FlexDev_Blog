@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { LoadingSpinnerService } from './../../../core/services/spinner/loading-spinner.service';
+import { ValidatePassword } from './../../../commons/validators/validate-password';
 
 @Component({
   selector: 'app-setting',
@@ -22,8 +23,19 @@ export class SettingComponent implements OnInit {
 
   modalOption: NgbModalOptions = {};
 
+  isWhitespace = /^[\S]*$/;
+
   settingForm = this._fb.group({
-    username: ['', [Validators.required, Validators.minLength(6)]],
+    username: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(6),
+        ValidatePassword.patternValidator(this.isWhitespace, {
+          hasWhitespace: true,
+        }),
+      ]
+    ],
     bio: [''],
     image: [''],
     email: [{value: '', disabled: true}]

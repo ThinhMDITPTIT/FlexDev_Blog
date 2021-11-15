@@ -1,3 +1,8 @@
+form {
+  position: relative;
+  z-index: 10;
+}
+
 @media only screen and (min-width: 376px) and (max-width: 768px) {
   .w-form, .btn:not(:disabled):not(.disabled) {
     width: 100%;

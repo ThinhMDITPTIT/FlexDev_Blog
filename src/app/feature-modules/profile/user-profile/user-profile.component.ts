@@ -5,6 +5,7 @@ import {
   NavigationEnd,
   ActivatedRoute,
   ParamMap,
+  Params,
 } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ArticlesStateService } from 'src/app/core/services/states/articles-state.service';
@@ -27,6 +28,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   public currentArticlesObj: any;
   public currentArticles: any;
   private articles_Subscription: Subscription = new Subscription();
+  private profile_Subscription: Subscription = new Subscription();
 
   public pageSize: number;
   public maxSize: number;
@@ -46,12 +48,12 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.currentUser =
       this.authStateService.currentUserProfile?.user?.username || '';
 
-    this.router.events.subscribe((event: Event) => {
+    this.profile_Subscription = this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
-        this.activatedRoute.paramMap
+        this.activatedRoute.params
           .pipe(
-            switchMap((param: ParamMap) => {
-              let username = param.get('username') || '';
+            switchMap((param: Params) => {
+              let username = param.username;
               return this.userApiService.getProfile(username);
             })
           )
@@ -80,6 +82,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.articles_Subscription.unsubscribe();
+    this.profile_Subscription.unsubscribe();
   }
 
   public getDataByFeature(featureName: string) {
