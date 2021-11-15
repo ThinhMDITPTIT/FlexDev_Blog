@@ -64,10 +64,13 @@ const routes: Routes = [
         (m) => m.ProfileModule
       ),
   },
-  // {
-  //   path: '**',
-
-  // }
+  {
+    path: '**',
+    loadChildren: () =>
+      import('./commons/shared-modules/not-found/not-found.module').then(
+        (m) => m.NotFoundModule
+      )
+  }
 ];
 
 @NgModule({

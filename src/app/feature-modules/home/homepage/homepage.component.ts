@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({

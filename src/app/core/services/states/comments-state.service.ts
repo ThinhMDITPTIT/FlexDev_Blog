@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { EventEmitter, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { CommentsApiService } from '../apis/comments-api.service';
 import { throwError } from 'rxjs';
@@ -41,8 +41,6 @@ export class CommentsStateService {
     if (error.error instanceof Error) {
       const errMessage = error.error.message;
       return throwError(errMessage);
-      // Use the following instead if using lite-server
-      // return Observable.throw(err.text() || 'backend server error');
     }
     return throwError(error || 'Server error')
   }

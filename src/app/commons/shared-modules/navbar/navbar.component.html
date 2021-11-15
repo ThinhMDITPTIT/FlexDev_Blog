@@ -6,24 +6,45 @@
 </div>
 <div class="fixed-top" [ngClass]="showBanner ? 'nav-bar' : 'bg-light'">
   <nav ngbNav class="navbar navbar-expand navbar-light" >
-    <a class="navbar-brand" [routerLink]="['']" routerLinkActive="router-link-active">FlexDev</a>
+    <a
+      class="navbar-brand"
+      [routerLink]="['']"
+      routerLinkActive="router-link-active"
+    >
+      FlexDev
+    </a>
     <div class="collapse navbar-collapse justify-content-end">
       <div class="d-none d-sm-none d-md-block d-lg-block d-xl-block">
         <ul class="navbar-nav">
           <li ngbNavItem>
-            <a ngbNavLink [routerLink]="['']" routerLinkActive="router-link-active">
+            <a
+              ngbNavLink
+              [routerLink]="['']"
+              routerLinkActive="router-link-active"
+              [class.active]="currentRoute === '/'"
+            >
               <i class="fas fa-home"></i>
               Home
             </a>
           </li>
           <li *ngIf="isAuthenticated" ngbNavItem>
-            <a ngbNavLink [routerLink]="['editor']" routerLinkActive="router-link-active">
+            <a
+              ngbNavLink
+              [routerLink]="['editor']"
+              routerLinkActive="router-link-active"
+              [class.active]="currentRoute?.includes('editor')"
+            >
               <i class="fas fa-edit"></i>
               New Article
             </a>
           </li>
           <li *ngIf="isAuthenticated" ngbNavItem>
-            <a ngbNavLink [routerLink]="['settings']" routerLinkActive="router-link-active">
+            <a
+              ngbNavLink
+              [routerLink]="['settings']"
+              routerLinkActive="router-link-active"
+              [class.active]="currentRoute?.includes('settings')"
+            >
               <i class="fas fa-tools"></i>
               Settings
             </a>
