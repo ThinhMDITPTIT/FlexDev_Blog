@@ -100,24 +100,24 @@ export class SettingComponent implements OnInit {
     if(this.settingForm.valid){
       setTimeout(() => {
         this.spinner.showSpinner();
-      }, 500)
+      }, 250)
       this.authApiService.updateUser({user}).subscribe(res => {
         setTimeout(() => {
           this.spinner.hideSpinner();
           this.toastr.success('', 'Update Successfully!');
           this.authStateService.currentLoggedIn$.next(res.user.username);
-        }, 1000)
+        }, 500)
       }, err => {
         setTimeout(() => {
           this.spinner.hideSpinner();
-        }, 1000);
+        }, 700);
         setTimeout(() => {
           const error = err.error.errors;
           if (error.username) {
             this.username.setErrors({ usernameAlreadyTaken: true });
           }
           this.toastr.error('', 'Username is already taken!');
-        }, 1500)
+        }, 1000)
       });
     }
   }

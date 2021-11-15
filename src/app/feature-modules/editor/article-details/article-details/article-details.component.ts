@@ -214,7 +214,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
                 this.loadingSpinnerService.hideSpinner();
                 this.toastr.success('Success!', 'Delete Article completed!');
                 this.redirectHome();
-              }, 500);
+              }, 250);
             },
             () => {}
           );

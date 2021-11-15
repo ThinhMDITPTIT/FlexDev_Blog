@@ -13,7 +13,7 @@ export class ParticlesComponent {
   particlesOptions: any = {
     background: {
       color: {
-        value: '#fffff',
+        value: '#f0f0f0',
       },
     },
     fpsLimit: 60,
@@ -32,12 +32,12 @@ export class ParticlesComponent {
       modes: {
         bubble: {
           distance: 400,
-          duration: 2,
+          duration: 1,
           opacity: 0.8,
           size: 40,
         },
         push: {
-          quantity: 4,
+          quantity: 0,
         },
         repulse: {
           distance: 120,
@@ -47,10 +47,10 @@ export class ParticlesComponent {
     },
     particles: {
       color: {
-        value: '#000',
+        value: '#17a2b8',
       },
       links: {
-        color: '#000',
+        color: '#17a2b8',
         distance: 150,
         enable: true,
         opacity: 0.5,
@@ -64,13 +64,13 @@ export class ParticlesComponent {
         enable: true,
         outMode: 'bounce',
         random: false,
-        speed: 2,
+        speed: 1,
         straight: false,
       },
       number: {
         density: {
           enable: true,
-          value_area: 800,
+          value_area: 700,
         },
         value: 80,
       },

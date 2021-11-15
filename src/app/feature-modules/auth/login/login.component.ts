@@ -55,12 +55,12 @@ export class LoginComponent {
           }else {
             this.router.navigate(['']);
           }
-        }, 1000)
+        }, 500)
         this.toastr.info(`Wellcome back!`, `Hi, ${res.user.username}`);
       }, err => {
         setTimeout(() => {
           this.spinner.hideSpinner();
-        }, 500);
+        }, 700);
         if(err.error.errors){
           this.toastr.warning('Please try again!', 'Email or Password is Invalid!');
         }

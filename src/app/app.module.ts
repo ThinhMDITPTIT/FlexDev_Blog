@@ -43,7 +43,8 @@ import { ParticlesModule } from './commons/shared-modules/particles/particles.mo
     }),
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    NgParticlesModule
+    NgParticlesModule,
+    ParticlesModule
   ],
   providers: [
     {

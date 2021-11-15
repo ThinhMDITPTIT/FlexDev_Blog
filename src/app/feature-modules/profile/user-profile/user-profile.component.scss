@@ -9,3 +9,14 @@
 .bio {
   word-wrap: break-word;
 }
+
+.nav-tabs .nav-link {
+  background-color: #ffffff;
+  opacity: 0.7;
+}
+
+.active {
+  background-color: #696767 !important;
+  color: #fff !important;
+  opacity: 1 !important;
+}
