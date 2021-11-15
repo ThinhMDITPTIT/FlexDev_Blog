@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ArticlesApiService } from '../apis/articles-api.service';
 import { TagsApiService } from '../apis/tags-api.service';
@@ -52,8 +52,6 @@ export class TagsStateService {
     if (error.error instanceof Error) {
       const errMessage = error.error.message;
       return throwError(errMessage);
-      // Use the following instead if using lite-server
-      // return Observable.throw(err.text() || 'backend server error');
     }
     return throwError(error || 'Server error')
   }

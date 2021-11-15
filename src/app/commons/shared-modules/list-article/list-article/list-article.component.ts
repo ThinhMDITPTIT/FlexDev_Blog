@@ -76,15 +76,17 @@ export class ListArticleComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.tagArticles_Subscription =
-      this.tagsStateService.articlesByTag$.subscribe((data: any) => {
+      this.tagsStateService.articlesByTag$.subscribe(() => {
         if (this.tagsStateService.currentTag === '') {
           this.showArticlesByTag = false;
         } else {
-          this.currentFeature = this.tag;
-          this.showArticlesByTag = true;
-          this.currentHastag = this.tagsStateService.currentTag;
-          this.currentArticlesObj = data;
-          this.initDataForFeature();
+          this.tagsStateService.getArticlesDataByTag(this.tagsStateService.currentTag).subscribe((res) => {
+            this.currentFeature = this.tag;
+            this.showArticlesByTag = true;
+            this.currentHastag = this.tagsStateService.currentTag;
+            this.currentArticlesObj = res;
+            this.initDataForFeature();
+          })
         }
       });
   }

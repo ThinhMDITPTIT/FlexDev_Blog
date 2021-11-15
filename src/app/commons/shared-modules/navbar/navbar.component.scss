@@ -17,8 +17,12 @@ $text-color: #ffffff;
     font-family: 'Roboto', sans-serif;
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 40%;
     transform: translate(-50%, -50%);
+
+    h1 {
+      font-size: 3.5rem !important;
+    }
   }
 }
 
@@ -68,6 +72,14 @@ $text-color: #ffffff;
 @media only screen and (min-width: 1500px) {
   .banner {
     height: 50rem;
+    .title {
+      h1 {
+        font-size: 5rem !important;
+      }
+      h4 {
+        font-size: 3rem;
+      }
+    }
   }
 
 }

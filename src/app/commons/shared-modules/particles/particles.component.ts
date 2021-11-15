@@ -41,7 +41,7 @@ export class ParticlesComponent {
         enable: true,
         outMode: 'out',
         random: false,
-        speed: 2,
+        speed: 1,
         straight: false,
       },
       number: { density: { enable: true, area: 1000 }, value: 80 },
