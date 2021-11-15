@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ArticlesApiService {
-  baseUrl: string = 'http://localhost:3000/api/articles';
+  baseUrl: string = 'https://flexdev-blog.herokuapp.com/api/articles';
+  // baseUrl: string = 'http://localhost:3000/api/articles';
 
   constructor(private readonly http: HttpClient) {}
 
