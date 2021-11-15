@@ -211,7 +211,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
             () => {
               setTimeout(() => {
                 this.loadingSpinnerService.hideSpinner();
-                this.toastr.success('Success!', 'Delete Article completed!');
+                this.toastr.success('Success!', 'Delete article completed!');
                 this.redirectHome();
               }, 250);
             },
@@ -242,6 +242,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
   public submitForm(formValue: FormGroup) {
     this.isReset = Math.random();
     if (formValue.status === 'VALID') {
+      this.loadingSpinnerService.showSpinner();
       let commentObj = {
         comment: {
           body: formValue.value.content,
@@ -252,6 +253,10 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
         .subscribe(
           () => {
             this.getCommentsFromArticle(this.currentSlug);
+            setTimeout(() => {
+              this.loadingSpinnerService.hideSpinner();
+              this.toastr.success('Success!', 'Add comment completed!');
+            }, 250);
           },
           () => {}
         );
@@ -320,7 +325,7 @@ export class ArticleDetailsComponent implements OnInit, OnDestroy {
               this.commentsStateService.currentCommentsOfArticle$.next(data);
               setTimeout(() => {
                 this.loadingSpinnerService.hideSpinner();
-                this.toastr.success('Success!', 'Delete Comment completed!');
+                this.toastr.success('Success!', 'Delete comment completed!');
               }, 250);
             });
         });
