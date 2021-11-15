@@ -90,10 +90,10 @@
       </button>
     </div>
   </div>
-  <h1 class="text-white mt-4">{{ articleObj?.title }}</h1>
+  <h1 class="text-white mt-4 custom__text">{{ articleObj?.title }}</h1>
 </div>
 <div class="bg-white">
-  <div class="p-3 border border-top-0">
+  <div class="p-3 border border-top-0 custom__text">
     Description: {{ articleObj?.description }}
   </div>
   <div class="p-3 border border-top-0">
@@ -111,40 +111,40 @@
     class="p-3 border border-top-0 custom__over-flow"
     [innerHTML]="articleObj?.body | markdown"
   ></div>
-  <div class="mt-5 pl-0 pl-md-3">
-    <h3 class="text-info font-weight-bold m-0">Comments</h3>
-    <hr />
-  </div>
-  <div class="pl-0 pl-md-3 py-3 form-group mb-0">
-    <form [formGroup]="commentForm" (ngSubmit)="submitForm(commentForm)">
-      <div class="form-group mb-0">
-        <app-markdown-editor
-          [control]="contentRawControl"
-          [minRows]="minRowsMarkDown"
-          [resetSize]="isReset"
-          [showPreview]="showPreviewMarkdown"
-        ></app-markdown-editor>
+</div>
+<div class="mt-5 pl-0 pl-md-3">
+  <h3 class="text-info font-weight-bold m-0">Comments</h3>
+  <hr />
+</div>
+<div class="pl-0 pl-md-3 py-3 form-group mb-0">
+  <form [formGroup]="commentForm" (ngSubmit)="submitForm(commentForm)">
+    <div class="form-group mb-0">
+      <app-markdown-editor
+        [control]="contentRawControl"
+        [minRows]="minRowsMarkDown"
+        [resetSize]="isReset"
+        [showPreview]="showPreviewMarkdown"
+      ></app-markdown-editor>
+    </div>
+    <div
+      class="bg-light border border-top-0 d-flex justify-content-between p-3"
+    >
+      <div class="pl-2">
+        <img
+          [src]="
+            currentUserImage ||
+            'https://static.productionready.io/images/smiley-cyrus.jpg'
+          "
+          alt="avt"
+          width="40"
+          class="rounded-circle"
+        />
       </div>
-      <div
-        class="bg-light border border-top-0 d-flex justify-content-between p-3"
-      >
-        <div class="pl-2">
-          <img
-            [src]="
-              currentUserImage ||
-              'https://static.productionready.io/images/smiley-cyrus.jpg'
-            "
-            alt="avt"
-            width="40"
-            class="rounded-circle"
-          />
-        </div>
-        <button type="submit" class="btn btn-success d-flex align-items-center">
-          <span>Comment</span>
-        </button>
-      </div>
-    </form>
-  </div>
+      <button type="submit" class="btn btn-success d-flex align-items-center">
+        <span>Comment</span>
+      </button>
+    </div>
+  </form>
 </div>
 
 <div class="pl-0 pl-md-3 py-3 pr-0">
