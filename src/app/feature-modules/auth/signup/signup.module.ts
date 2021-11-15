@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SignUpRoutingModule } from './signup-routing.module';
 import { SignupComponent } from './signup.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ParticlesModule } from 'src/app/commons/shared-modules/particles/particles.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     SignUpRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ParticlesModule
   ],
 })
 export class SignUpModule {}

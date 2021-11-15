@@ -20,7 +20,15 @@ export class SignupComponent {
 
   signUpForm = this._fb.group(
     {
-      username: ['', [Validators.required, Validators.minLength(6)]],
+      username: ['',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          ValidatePassword.patternValidator(this.isWhitespace, {
+            hasWhitespace: true,
+          }),
+        ]
+      ],
       email: ['', [Validators.required, Validators.email]],
       password: [
         '',
@@ -81,19 +89,19 @@ export class SignupComponent {
           setTimeout(() => {
             this.spinner.hideSpinner();
             this.toastr.success('', 'Register Successful!');
-          }, 500);
+          }, 250);
           setTimeout(() => {
             this.route.navigate(['']);
             this.toastr.success(
               'Wellcome to FlexDev!',
               `Hi, ${res.user.username}`
             );
-          }, 1000);
+          }, 500);
         },
         (err) => {
           setTimeout(() => {
             this.spinner.hideSpinner();
-          }, 500);
+          }, 700);
           setTimeout(() => {
             const error = err.error.errors;
             if (error.username) {

@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { LoadingSpinnerService } from './../../../core/services/spinner/loading-spinner.service';
+import { ValidatePassword } from './../../../commons/validators/validate-password';
 
 @Component({
   selector: 'app-setting',
@@ -22,8 +23,19 @@ export class SettingComponent implements OnInit {
 
   modalOption: NgbModalOptions = {};
 
+  isWhitespace = /^[\S]*$/;
+
   settingForm = this._fb.group({
-    username: ['', [Validators.required, Validators.minLength(6)]],
+    username: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(6),
+        ValidatePassword.patternValidator(this.isWhitespace, {
+          hasWhitespace: true,
+        }),
+      ]
+    ],
     bio: [''],
     image: [''],
     email: [{value: '', disabled: true}]
@@ -88,24 +100,24 @@ export class SettingComponent implements OnInit {
     if(this.settingForm.valid){
       setTimeout(() => {
         this.spinner.showSpinner();
-      }, 500)
+      }, 250)
       this.authApiService.updateUser({user}).subscribe(res => {
         setTimeout(() => {
           this.spinner.hideSpinner();
           this.toastr.success('', 'Update Successfully!');
           this.authStateService.currentLoggedIn$.next(res.user.username);
-        }, 1000)
+        }, 500)
       }, err => {
         setTimeout(() => {
           this.spinner.hideSpinner();
-        }, 1000);
+        }, 700);
         setTimeout(() => {
           const error = err.error.errors;
           if (error.username) {
             this.username.setErrors({ usernameAlreadyTaken: true });
           }
           this.toastr.error('', 'Username is already taken!');
-        }, 1500)
+        }, 1000)
       });
     }
   }

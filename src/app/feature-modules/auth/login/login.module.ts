@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgxWebstorageModule } from 'ngx-webstorage';
+import { ParticlesModule } from 'src/app/commons/shared-modules/particles/particles.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +12,8 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
   imports: [
     CommonModule,
     LoginRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ParticlesModule
   ],
 })
 export class LoginModule {}

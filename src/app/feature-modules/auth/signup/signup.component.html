@@ -1,16 +1,19 @@
 <div class="mx-auto w-form">
-  <div class="mt-5 mb-4">
-    <h1 class="text-secondary text-center mb-3">Sign up</h1>
-  </div>
   <form class="d-flex flex-column" [formGroup]="signUpForm" (ngSubmit)="register()">
+    <div class="mt-5 mb-4">
+      <h1 class="text-secondary text-center mb-3">Sign up</h1>
+    </div>
     <div class="form-group">
       <input type="text" class="form-control py-4" placeholder="Username" formControlName="username" />
-      <div *ngIf="submitted || username.invalid && (username.touched || username.dirty)" class="text-danger mt-1">
+      <div *ngIf="submitted || username.invalid && (username.touched || username.dirty)" class="d-flex flex-column text-danger mt-1">
         <small *ngIf="username.errors?.required">
           Username is required!
         </small>
         <small *ngIf="username.errors?.minlength">
           Username must be at least 6 characters!
+        </small>
+        <small *ngIf="username.hasError('hasWhitespace')">
+          Username must not contain spaces!
         </small>
         <small *ngIf="username.hasError('usernameAlreadyTaken') && username.dirty">
           Username is already taken!
@@ -42,7 +45,7 @@
           Password must be at least 8 characters!
         </small>
         <small *ngIf="password.hasError('hasWhitespace')">
-          Password must not contain spaces!
+          Password must not contain a spaces!
         </small>
         <small *ngIf="password.hasError('hasLetter')">
           Password must contain at least 1 letter!

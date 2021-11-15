@@ -74,7 +74,7 @@ export class NavbarComponent implements OnInit {
       this.authStateService.currentLoggedIn$.next('Logout');
       this.spinner.hideSpinner();
       this.router.navigate(['login']);
-    }, 500);
+    }, 250);
   }
 
   display() {
