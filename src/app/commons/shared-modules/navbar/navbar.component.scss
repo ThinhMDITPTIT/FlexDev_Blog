@@ -4,6 +4,11 @@ $text-color: #ffffff;
 
 @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:ital,wght@1,500&display=swap');
 
+.navbar__z-index {
+  position: relative;
+  z-index: 10;
+}
+
 .banner {
   background-image: url('../../../../assets/images/banner.jpg');
   background-size: cover;

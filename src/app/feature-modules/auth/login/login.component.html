@@ -1,6 +1,7 @@
 <div class="mx-auto w-form">
-  <h1 class="text-center text-secondary my-5">Sign in</h1>
+  <app-particles></app-particles>
   <form class="d-flex flex-column" [formGroup]="signInForm" (ngSubmit)="login()">
+    <h1 class="text-center text-secondary my-5">Sign in</h1>
     <div class="form-group">
       <input type="email" class="form-control py-4" placeholder="Email" formControlName="email" />
       <div *ngIf="submitted || email.invalid && email.touched" class="text-danger mt-1">

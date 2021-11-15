@@ -15,6 +15,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgParticlesModule } from 'ng-particles';
+import { ParticlesModule } from './commons/shared-modules/particles/particles.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -40,7 +42,8 @@ import { ReactiveFormsModule } from '@angular/forms';
       newestOnTop: true,
     }),
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgParticlesModule
   ],
   providers: [
     {
