@@ -17,7 +17,6 @@ import { UserStateService } from 'src/app/core/services/states/user-state.servic
 import { LocalStorageService } from 'ngx-webstorage';
 import { ConfirmModalComponent } from 'src/app/commons/shared-modules/confirm-modal/confirm-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-article-details',

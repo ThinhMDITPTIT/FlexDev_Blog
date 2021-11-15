@@ -34,6 +34,9 @@ export class AuthItcInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       catchError((err) => {
+        if (err.status === 0) {
+          this.toastr.warning('', 'Unable to connect. Please check your network connection');
+        }
         if (err.status === 401) {
           this.localStorage.clear('token');
           this.toastr.warning('', 'You must to Login!');
@@ -43,6 +46,7 @@ export class AuthItcInterceptor implements HttpInterceptor {
         }
         if (err.status === 404) {
           this.toastr.error('Error!', 'Request Not Found!');
+          this.router.navigate(['404-not-found']);
         }
         return throwError(err);
       })

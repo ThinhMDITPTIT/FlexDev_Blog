@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -119,6 +119,7 @@ export class ArticleEditorDetailsComponent implements OnDestroy, CheckDeactivate
               this.toastr.success('Success!', 'Create new completed!');
               this.markdownForm.patchValue({title: '', description: '', content: '', tags: ''});
               this.markdownForm.markAsPristine();
+              this.markdownForm.markAsUntouched();
             }, 250);
           });
       } else {

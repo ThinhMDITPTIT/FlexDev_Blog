@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class UserApiService {
-  // baseUrl: string = 'https://api.realworld.io/api/profiles';
   baseUrl: string = 'http://localhost:3000/api/profiles';
 
   constructor(private readonly http: HttpClient) {}

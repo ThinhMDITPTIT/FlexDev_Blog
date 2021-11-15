@@ -4,7 +4,6 @@ import {
   Event,
   NavigationEnd,
   ActivatedRoute,
-  ParamMap,
   Params,
 } from '@angular/router';
 import { Subscription } from 'rxjs';

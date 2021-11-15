@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { TagsApiService } from 'src/app/core/services/apis/tags-api.service';
 import { TagsStateService } from 'src/app/core/services/states/tags-state.service';
 
 @Component({

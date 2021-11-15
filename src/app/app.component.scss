@@ -1,0 +1,23 @@
+.content {
+  margin-top: 5.5rem !important;
+}
+
+.scroll-to-top {
+  background-color: #17a2b8;
+  position: fixed;
+  bottom: 10%;
+  right: 10px;
+  opacity: 0;
+  transition: all .2s ease-in-out;
+  i {
+    color: #fff;
+  }
+  &:hover, &:active {
+    opacity: 1;
+  }
+ }
+ .show-scrollTop {
+  opacity: 0.6;
+  transition: all .2s ease-in-out;
+ }
+

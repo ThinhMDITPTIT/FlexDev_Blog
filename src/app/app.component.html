@@ -2,7 +2,7 @@
   <div>
     <app-navbar></app-navbar>
     <app-particles></app-particles>
-    <div class="container-lg">
+    <div class="container-lg content">
       <router-outlet></router-outlet>
     </div>
     <ngx-spinner
@@ -11,6 +11,11 @@
       type="square-jelly-box"
       size="medium"
     ></ngx-spinner>
+    <div class="rounded scroll-to-top" [ngClass]="{'show-scrollTop': windowScrolled}">
+      <button type="button" class="btn active" data-toggle="button" aria-pressed="true" (click)="scrollToTop()">
+          <i class="fas fa-chevron-up" ></i>
+      </button>
+    </div>
   </div>
   <app-footer></app-footer>
 </div>

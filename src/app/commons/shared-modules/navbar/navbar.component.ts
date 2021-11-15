@@ -2,16 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import {
   Router,
   Event,
-  NavigationEnd,
-  ActivatedRoute,
-  NavigationStart,
+  NavigationEnd
 } from '@angular/router';
 import { LocalStorageService } from 'ngx-webstorage';
 import { AuthStateService } from 'src/app/core/services/states/auth-state.service';
 import { LoadingSpinnerService } from 'src/app/core/services/spinner/loading-spinner.service';
 import { UserStateService } from 'src/app/core/services/states/user-state.service';
-import { map, switchMap } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navbar',
@@ -25,7 +22,7 @@ export class NavbarComponent implements OnInit {
   public imageUrl: string = '';
   public showBanner: boolean = false;
   public isHidden: boolean = false;
-  private currentRoute: any;
+  public currentRoute: any;
 
   constructor(
     private readonly router: Router,
@@ -40,7 +37,7 @@ export class NavbarComponent implements OnInit {
     this.displayInfo();
     this.router.events.subscribe((event: Event) => {
       if(event instanceof NavigationEnd){
-        this.currentRoute = event.url
+        this.currentRoute = event.url;
       }
     })
   }

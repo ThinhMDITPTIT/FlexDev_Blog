@@ -6,19 +6,18 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ArticlesApiService {
-  // baseUrl: string = 'https://api.realworld.io/api/articles';
   baseUrl: string = 'http://localhost:3000/api/articles';
 
   constructor(private readonly http: HttpClient) {}
 
   // need auth
   getFeed(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/feed`);
+    return this.http.get(`${this.baseUrl}/feed?limit=200`);
   }
 
   // no need auth
   getAllArticle(): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}?limit=100`);
+    return this.http.get<any>(`${this.baseUrl}?limit=200`);
   }
 
   // no need auth
