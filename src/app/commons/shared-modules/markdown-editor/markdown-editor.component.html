@@ -219,11 +219,7 @@
 </div>
 
 <div [class.dipslay__none]="!showPreview">
-  <!-- <label class="h6">
-    Content Preview
-    <span class="text-black-50"><em>(Read only)</em></span></label
-  > -->
-  <div class="border rounded p-3 markdown__preview">
+  <div class="border rounded p-3 markdown__preview bg-light">
     <markdown [data]="control.value"></markdown>
   </div>
 </div>
