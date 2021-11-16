@@ -79,7 +79,7 @@ export class SignupComponent {
   register() {
     const user = {
       username: this.username.value,
-      email: this.email.value,
+      email: String(this.email.value).toLowerCase(),
       password: this.password.value,
     };
     if (this.signUpForm.valid) {
