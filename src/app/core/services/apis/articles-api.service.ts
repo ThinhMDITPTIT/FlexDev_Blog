@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { BASEURL } from 'src/app/commons/enums/base-url.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ArticlesApiService {
-  baseUrl: string = 'https://flexdev-blog.herokuapp.com/api/articles';
-  // baseUrl: string = 'http://localhost:3000/api/articles';
+  baseUrl: string = BASEURL.LOCAL + 'articles';
 
   constructor(private readonly http: HttpClient) {}
 
