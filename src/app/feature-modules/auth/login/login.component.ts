@@ -41,7 +41,7 @@ export class LoginComponent {
       this.spinner.showSpinner();
       let userObj = {
         user: {
-          email: this.email.value,
+          email: String(this.email.value).toLowerCase(),
           password: this.password.value,
         },
       };
