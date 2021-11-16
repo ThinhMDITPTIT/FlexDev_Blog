@@ -99,7 +99,7 @@
         <a ngbDropdownItem [routerLink]="['']" routerLinkActive="router-link-active" >Home</a>
         <a *ngIf="isAuthenticated" ngbDropdownItem [routerLink]="['editor']" routerLinkActive="router-link-active" >New Article</a>
         <a *ngIf="isAuthenticated" ngbDropdownItem [routerLink]="['settings']" routerLinkActive="router-link-active" >Settings</a>
-        <a *ngIf="!isAuthenticated && !isHidden" ngbDropdownItem [routerLink]="['login']" routerLinkActive="router-link-active" >Sign In</a>
+        <a *ngIf="!isAuthenticated && !isHidden" ngbDropdownItem (click)="saveRoute()" [routerLink]="['login']" routerLinkActive="router-link-active" >Sign In</a>
         <a *ngIf="!isAuthenticated && !isHidden" ngbDropdownItem [routerLink]="['register']" routerLinkActive="router-link-active" >Sign Up</a>
         <button *ngIf="isAuthenticated" ngbDropdownItem (click)="logout()">Logout</button>
       </div>
