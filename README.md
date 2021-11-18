@@ -1,5 +1,7 @@
 # FlexdevBlog
 
+FlexDev is a social blogging website, allows users to post articles, blog posts on topics of programming, devops, IoT,...
+
 ## Link Demo: https://cicd-flexdev-blog.web.app/
 
 ### Contributors:
