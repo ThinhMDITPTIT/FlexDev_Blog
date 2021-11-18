@@ -1,6 +1,10 @@
 # FlexdevBlog
 
-## Team 08
+## Link Demo: https://cicd-flexdev-blog.web.app/
+
+### Contributors:
+- Mè Đức Thịnh - ThinhMD
+- Đặng Anh Huy - HuyDA
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.10.
 
