@@ -4,13 +4,13 @@ import { Observable } from 'rxjs';
 import { IUserLogin } from './../../../commons/models/IUserLogin';
 import { IUserRegister } from './../../../commons/models/IUserRegister';
 import { IUserDetails } from './../../../commons/models/IUserDetails';
+import { BASEURL } from 'src/app/commons/enums/base-url.enum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthApiService {
-  baseUrl: string = 'https://flexdev-blog.herokuapp.com/api';
-  // baseUrl: string = 'http://localhost:3000/api';
+  baseUrl: string = BASEURL.LOCAL;
 
   constructor(private readonly http: HttpClient) { }
 
