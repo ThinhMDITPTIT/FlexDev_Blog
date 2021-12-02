@@ -10,7 +10,7 @@ import { BASEURL } from 'src/app/commons/enums/base-url.enum';
   providedIn: 'root'
 })
 export class AuthApiService {
-  baseUrl: string = BASEURL.LOCAL;
+  baseUrl: string = BASEURL.MAIN;
 
   constructor(private readonly http: HttpClient) { }
 
