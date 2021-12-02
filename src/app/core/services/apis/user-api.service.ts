@@ -7,7 +7,7 @@ import { BASEURL } from 'src/app/commons/enums/base-url.enum';
   providedIn: 'root',
 })
 export class UserApiService {
-  baseUrl: string = BASEURL.LOCAL + 'profiles';
+  baseUrl: string = BASEURL.MAIN + 'profiles';
 
   constructor(private readonly http: HttpClient) {}
 
